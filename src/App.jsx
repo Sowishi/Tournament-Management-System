@@ -5,6 +5,7 @@ import Landing from "./pages/landing";
 import { Route, Routes } from "react-router-dom";
 import Login from "./pages/login";
 import Registration from "./pages/registration";
+import Forgot from "./pages/forgot";
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/registration" element={<Registration />} />
+        <Route path="/forgot" element={<Forgot />} />
       </Routes>
     </>
   );

@@ -57,9 +57,16 @@ const Registration = () => {
             </div>
 
             <div className="flex justify-end items-center mt-3">
-              <Button gradientMonochrome="info">NEXT</Button>
+              <Button gradientMonochrome="info">SUBMIT</Button>
             </div>
           </form>
+        )}
+        {steps == 3 && (
+          <div className="wrapper flex justify-center items-center h-52">
+            <h1 className="text-white text-3xl font-bold">
+              Registration Completed ✅
+            </h1>
+          </div>
         )}
       </div>
     </AuthLayout>
