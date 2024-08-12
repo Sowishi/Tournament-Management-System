@@ -6,6 +6,7 @@ import { Route, Routes } from "react-router-dom";
 import Login from "./pages/login";
 import Registration from "./pages/registration";
 import Forgot from "./pages/forgot";
+import Bracket from "./pages/bracket";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/registration" element={<Registration />} />
         <Route path="/forgot" element={<Forgot />} />
+        <Route path="/bracket" element={<Bracket />} />
       </Routes>
     </>
   );
