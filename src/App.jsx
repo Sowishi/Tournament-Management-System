@@ -4,6 +4,7 @@ import { TMSCarousel } from "./components/carousel";
 import Landing from "./pages/landing";
 import { Route, Routes } from "react-router-dom";
 import Login from "./pages/login";
+import Registration from "./pages/registration";
 
 const App = () => {
   return (
@@ -11,6 +12,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/registration" element={<Registration />} />
       </Routes>
     </>
   );
