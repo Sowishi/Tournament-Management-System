@@ -3,7 +3,7 @@ import logo from "../assets/logo2.png";
 
 const DefaultLayout = ({ children, hideHeader }) => {
   return (
-    <div className="w-full min-h-screen ">
+    <div className="w-full min-h-screen" style={{ background: "#FC8F76" }}>
       {hideHeader && (
         <div
           style={{

@@ -22,16 +22,16 @@ const TMSCalendar = () => {
   ];
   return (
     <DefaultLayout>
-      <div className="flex">
-        <div className="basis-8/12 p-5">
-          <Calendar
-            localizer={localizer}
-            events={events}
-            startAccessor="start"
-            endAccessor="end"
-            style={{ height: 500 }}
-          />
-        </div>
+      <div className="container mx-auto p-5">
+        <h1 className="font-bold text-3xl text-white my-3">Events Calendar</h1>
+        <Calendar
+          className="mx-5 bg-white rounded p-6"
+          localizer={localizer}
+          events={events}
+          startAccessor="start"
+          endAccessor="end"
+          style={{ height: 500 }}
+        />
       </div>
     </DefaultLayout>
   );
