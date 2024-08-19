@@ -5,7 +5,9 @@ import DefaultLayout from "../layout/defaultLayout";
 const Landing = () => {
   return (
     <DefaultLayout>
-      <TMSCarousel />
+      <div className="container mx-auto h-[30rem] flex justify-center items-center">
+        <TMSCarousel />
+      </div>
     </DefaultLayout>
   );
 };

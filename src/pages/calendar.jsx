@@ -23,7 +23,9 @@ const TMSCalendar = () => {
   return (
     <DefaultLayout>
       <div className="container mx-auto p-5">
-        <h1 className="font-bold text-3xl text-white my-3">Events Calendar</h1>
+        <h1 className="font-bold text-4xl text-white my-5 mb-10 text-center uppercase">
+          Events Calendar
+        </h1>
         <Calendar
           className="mx-5 bg-white rounded p-6"
           localizer={localizer}

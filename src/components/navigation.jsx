@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const Navigation = () => {
   const { setCurrentEvent, currentEvent } = useStore();
   return (
-    <div className="navs w-100 bg-white">
+    <div className="navs w-100 bg-white py-1">
       <Button.Group className="mx-3">
         <a href="/">
           <Button color="gray">Home</Button>
@@ -34,7 +34,7 @@ const Navigation = () => {
             <Link to={"/calendar"}>
               <Button color="gray">Calendar</Button>
             </Link>
-            <Button color="gray">Tournaments</Button>
+            <Button color="gray">Events</Button>
             <Button color="gray">Tally</Button>
             <Button color="gray">Participants</Button>
           </>

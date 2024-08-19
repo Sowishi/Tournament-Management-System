@@ -6,7 +6,7 @@ import img4 from "../assets/image 6.png";
 
 export function TMSCarousel() {
   return (
-    <div className="h-[28rem] mx-3 mt-2">
+    <div className="h-full mx-3 mt-5 w-full">
       <Carousel>
         <img src={img1} alt="..." />
         <img src={img2} alt="..." />
