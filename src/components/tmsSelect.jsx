@@ -12,7 +12,7 @@ const TmsSelect = ({ data, label, onChange, name }) => {
         />
       </div>
       <Select name={name} onChange={onChange}>
-        {data.map((item) => {
+        {data?.map((item) => {
           return <option value={item}>{item}</option>;
         })}
       </Select>

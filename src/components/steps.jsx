@@ -35,14 +35,11 @@ const Steps = ({ setSteps, steps }) => {
         </div>
         <div className="line w-[100px] h-[3px] bg-white"></div>
       </div>
-      <div
-        onClick={() => setSteps(3)}
-        className=" step-wrapper flex flex-row items-center"
-      >
+      <div className=" step-wrapper flex flex-row items-center">
         <div className="step flex justify-center items-center">
           <div
             style={{
-              cursor: "pointer",
+              cursor: "not-allowed",
               background: steps == 3 ? "#e2b001" : "#FF3734",
             }}
             className="wrapper w-10 h-10 rounded-full flex items-center justify-center"
