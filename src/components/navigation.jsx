@@ -1,5 +1,6 @@
 import { Button, Dropdown } from "flowbite-react";
 import { useStore } from "../zustand/store";
+import { Link } from "react-router-dom";
 
 const Navigation = () => {
   const { setCurrentEvent, currentEvent } = useStore();
@@ -30,7 +31,9 @@ const Navigation = () => {
         )}
         {currentEvent && (
           <>
-            <Button color="gray">Calendar</Button>
+            <Link to={"/calendar"}>
+              <Button color="gray">Calendar</Button>
+            </Link>
             <Button color="gray">Tournaments</Button>
             <Button color="gray">Tally</Button>
             <Button color="gray">Participants</Button>

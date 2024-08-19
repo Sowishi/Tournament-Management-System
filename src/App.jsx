@@ -7,6 +7,7 @@ import Login from "./pages/login";
 import Registration from "./pages/registration";
 import Forgot from "./pages/forgot";
 import Bracket from "./pages/bracket";
+import TMSCalendar from "./pages/calendar";
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/registration" element={<Registration />} />
         <Route path="/forgot" element={<Forgot />} />
+        <Route path="/calendar" element={<TMSCalendar />} />
         <Route path="/bracket" element={<Bracket />} />
       </Routes>
     </>
