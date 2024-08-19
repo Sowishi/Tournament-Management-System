@@ -163,9 +163,9 @@ const Registration = () => {
               <h1 className="text-white text-3xl font-bold">
                 Registration Completed ✅
               </h1>
-              <Button className="mt-5">
-                <Link to="/login">Login Now!</Link>
-              </Button>
+              <Link to="/login">
+                <Button className="mt-5">Login Now!</Button>
+              </Link>
             </div>
           )}
         </form>

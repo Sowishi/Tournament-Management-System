@@ -2,7 +2,7 @@ import DefaultLayout from "../layout/defaultLayout";
 
 const Bracket = () => {
   return (
-    <DefaultLayout hideHeader={true}>
+    <DefaultLayout>
       <div className="w-full mx-auto min-h-screen">
         <div
           className="wrapper h-screen mx-3 mt-5 rounded-lg p-5 mb-5"
