@@ -1,13 +1,22 @@
-import { Select } from "flowbite-react";
+import { Label, Select } from "flowbite-react";
 
-const TmsSelect = () => {
+const TmsSelect = ({ data, label, onChange, name }) => {
   return (
-    <Select>
-      <option>United States</option>
-      <option>Canada</option>
-      <option>France</option>
-      <option>Germany</option>
-    </Select>
+    <div>
+      <div className="mb-2 block my-3">
+        <Label
+          className="text-white"
+          color={"white"}
+          htmlFor="email1"
+          value={label}
+        />
+      </div>
+      <Select name={name} onChange={onChange}>
+        {data.map((item) => {
+          return <option value={item}>{item}</option>;
+        })}
+      </Select>
+    </div>
   );
 };
 

@@ -1,6 +1,6 @@
 import { Label, TextInput } from "flowbite-react";
 
-const TmsInput = ({ placeHolder, label }) => {
+const TmsInput = ({ placeHolder, label, value, onChange, name, type }) => {
   return (
     <div>
       <div className="mb-2 block my-3">
@@ -11,7 +11,15 @@ const TmsInput = ({ placeHolder, label }) => {
           value={label}
         />
       </div>
-      <TextInput id="email1" type="email" placeholder={placeHolder} required />
+      <TextInput
+        name={name}
+        onChange={onChange}
+        value={value}
+        id="email1"
+        type={type}
+        placeholder={placeHolder}
+        required
+      />
     </div>
   );
 };
