@@ -37,6 +37,18 @@ const Registration = () => {
     setSteps(3);
   };
 
+  function areAllFieldsFilled() {
+    for (const key in forms) {
+      if (forms.hasOwnProperty(key)) {
+        // Check if the field has a length property and is more than 1
+        if (forms[key].length <= 1) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
   return (
     <AuthLayout hideHeader={true}>
       <div className="wrapper">
@@ -152,7 +164,11 @@ const Registration = () => {
               </div>
 
               <div className="flex justify-end items-center mt-3">
-                <Button gradientMonochrome="info" onClick={handleSubmit}>
+                <Button
+                  disabled={!areAllFieldsFilled()}
+                  gradientMonochrome="info"
+                  onClick={handleSubmit}
+                >
                   SUBMIT
                 </Button>
               </div>
