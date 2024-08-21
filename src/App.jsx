@@ -8,6 +8,9 @@ import Registration from "./pages/registration";
 import Forgot from "./pages/forgot";
 import Bracket from "./pages/bracket";
 import TMSCalendar from "./pages/calendar";
+import Events from "./pages/events";
+import Participants from "./pages/participants";
+import Tally from "./pages/tally";
 
 const App = () => {
   return (
@@ -18,6 +21,12 @@ const App = () => {
         <Route path="/registration" element={<Registration />} />
         <Route path="/forgot" element={<Forgot />} />
         <Route path="/calendar" element={<TMSCalendar />} />
+        <Route path="/events" element={<Events />} />
+
+        <Route path="/participants" element={<Participants />} />
+
+        <Route path="/tally" element={<Tally />} />
+
         <Route path="/bracket" element={<Bracket />} />
       </Routes>
     </>

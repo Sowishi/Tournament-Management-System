@@ -34,9 +34,15 @@ const Navigation = () => {
             <Link to={"/calendar"}>
               <Button color="gray">Calendar</Button>
             </Link>
-            <Button color="gray">Events</Button>
-            <Button color="gray">Tally</Button>
-            <Button color="gray">Participants</Button>
+            <Link to={"/events"}>
+              <Button color="gray">Events</Button>
+            </Link>
+            <Link to={"/participants"}>
+              <Button color="gray">Participants</Button>
+            </Link>
+            <Link to={"/tally"}>
+              <Button color="gray">Tally</Button>
+            </Link>
           </>
         )}
       </Button.Group>
