@@ -1,11 +1,12 @@
 import { Button, Dropdown } from "flowbite-react";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo2.png";
 import Navigation from "./navigation";
 import { Link } from "react-router-dom";
 import { useStore } from "../zustand/store";
 import { eventsName } from "../constant";
 import { HiLogin } from "react-icons/hi";
 import { HiOutlineUserAdd } from "react-icons/hi";
+import { motion } from "framer-motion";
 
 const Header = () => {
   const { currentEvent } = useStore();
@@ -20,9 +21,13 @@ const Header = () => {
         }}
       >
         <div className="brand flex items-center justify-between p-3 mx-2">
-          <div className="wrapper flex items-center justify-start">
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            className="wrapper flex items-center justify-start"
+          >
             <img src={logo} alt="" style={{ width: "5rem", height: "5rem" }} />
-            <div className="title">
+            <div className="title ml-3">
               <h1
                 className="text-xl text-white font-bold "
                 style={{ letterSpacing: "3px" }}
@@ -44,26 +49,28 @@ const Header = () => {
                 </>
               )}
             </div>
-          </div>
+          </motion.div>
 
-          {!currentEvent && (
-            <div className="auth-links w-100 flex justify-end items-center mx-5">
-              <div className="flex mb-3">
-                <Link to={"/login"}>
-                  <Button gradientMonochrome="info" className="mx-3">
-                    <HiLogin className="mr-2 h-5 w-5" />
-                    Login
-                  </Button>
-                </Link>
-                <Link to={"/login"}>
-                  <Button gradientMonochrome="teal" className="mx-3">
-                    <HiOutlineUserAdd className="mr-2 h-5 w-5" />
-                    Register
-                  </Button>
-                </Link>
-              </div>
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            className="auth-links w-100 flex justify-end items-center mx-5"
+          >
+            <div className="flex mb-3">
+              <Link to={"/login"}>
+                <Button gradientMonochrome="info" className="mx-3">
+                  <HiLogin className="mr-2 h-5 w-5" />
+                  Login
+                </Button>
+              </Link>
+              <Link to={"/login"}>
+                <Button gradientMonochrome="teal" className="mx-3">
+                  <HiOutlineUserAdd className="mr-2 h-5 w-5" />
+                  Register
+                </Button>
+              </Link>
             </div>
-          )}
+          </motion.div>
         </div>
       </div>
 

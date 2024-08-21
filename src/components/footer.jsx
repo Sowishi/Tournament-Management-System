@@ -3,7 +3,13 @@ import logo from "../assets/logo2.png";
 
 export function TmsFooter() {
   return (
-    <Footer bgDark container>
+    <Footer
+      style={{
+        background:
+          "linear-gradient(87deg, rgba(255,51,50,1) 0%, rgba(255,131,76,1) 100%)",
+      }}
+      container
+    >
       <div className="w-full text-center">
         <div className="w-full justify-between sm:flex sm:items-center sm:justify-between">
           <div className="wrapper flex items-center justify-start">
@@ -33,7 +39,7 @@ export function TmsFooter() {
           className="text-white"
           href="#"
           by="Tournament Management System™"
-          year={2022}
+          year={2024}
         />
       </div>
     </Footer>

@@ -3,11 +3,8 @@ import logo from "../assets/logo.png";
 const SingleElimination = ({ teams }) => {
   const teamsHalf = teams.length / 2;
 
-  console.log(teamsHalf);
-
   const bracketA = teams.slice(0, teamsHalf);
   const bracketB = teams.slice(teamsHalf, teams.length + 1);
-  console.log(bracketA, bracketB);
 
   return (
     <div className="container border border-red-500 mx-auto bg-slate-700 min-h-[35rem]">

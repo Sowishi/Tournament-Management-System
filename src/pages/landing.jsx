@@ -3,6 +3,19 @@ import { TMSCarousel } from "../components/carousel";
 import Header from "../components/header";
 import LoadingScreen from "../components/loadingScreen";
 import DefaultLayout from "../layout/defaultLayout";
+import { motion } from "framer-motion";
+import Title from "../components/title";
+
+//  <div className="header flex m-5">
+//       <div className="wrapper ml-10 flex">
+//         <TmsSelect data={["Select Tournaments", "Bicol Meet"]} />
+//         <div className="mx-3">
+//           <TmsSelect data={["Select Category"]} />
+//         </div>
+//         <TmsSelect data={["Default"]} />
+//       </div>
+//     </div>
+//     <SingleElimination teams={teams} />
 
 const Landing = () => {
   const [loading, setLoading] = useState(true);
@@ -10,7 +23,7 @@ const Landing = () => {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-    }, 2000);
+    }, 1000);
   }, []);
 
   return (
@@ -19,15 +32,7 @@ const Landing = () => {
         <LoadingScreen />
       ) : (
         <DefaultLayout>
-          <div className="wrapper flex jsutify-center items-center  flex-col mb-5">
-            <h1 className="font-bold text-white text-5xl m-5 text-center">
-              Announcement
-            </h1>
-            <div
-              style={{ background: "#FFBD59" }}
-              className="line h-[5px] w-[250px]"
-            ></div>
-          </div>
+          <Title title={"Announcement"} />
 
           <div className="container mx-auto h-[30rem] flex justify-center items-center">
             <TMSCarousel />

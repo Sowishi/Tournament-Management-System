@@ -3,6 +3,7 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 const localizer = momentLocalizer(moment);
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import Title from "../components/title";
 
 const TMSCalendar = () => {
   const events = [
@@ -26,9 +27,7 @@ const TMSCalendar = () => {
         <div className="flex">
           <div className="basis-8/12"></div>
         </div>
-        <h1 className="font-bold text-4xl text-white my-5 mb-10 text-center uppercase">
-          Events Calendar
-        </h1>
+        <Title title={"calendar"} />
         <Calendar
           className="mx-5 bg-white rounded p-6"
           localizer={localizer}
