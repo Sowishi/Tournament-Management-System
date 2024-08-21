@@ -22,6 +22,7 @@ const Registration = () => {
     sportsInfo: "Provincial Meet",
     collegeName: "",
     position: "Student",
+    password: "",
   });
 
   const { addUser } = useAddUser();
@@ -149,17 +150,29 @@ const Registration = () => {
                 <h1 className="text-white text-lg font-bold">
                   Colleges/Institutions
                 </h1>
+                <div className="flex">
+                  <div className="basis-6/12 mr-2">
+                    <TmsInput
+                      name="collegeName"
+                      onChange={handleChange}
+                      placeHolder={"Name of school/Institution"}
+                      label={"College Name"}
+                    />
+                  </div>
+                  <div className="basis-6/12">
+                    <TmsSelect
+                      name="position"
+                      onChange={handleChange}
+                      label={"Position"}
+                      data={["Student", "Faculty", "Coach", "Others"]}
+                    />{" "}
+                  </div>
+                </div>
                 <TmsInput
-                  name="collegeName"
+                  name={"password"}
                   onChange={handleChange}
-                  placeHolder={"Name of school/Institution"}
-                  label={"College Name"}
-                />
-                <TmsSelect
-                  name="position"
-                  onChange={handleChange}
-                  label={"Position"}
-                  data={["Student", "Faculty", "Coach", "Others"]}
+                  placeHolder={"Password"}
+                  label={"Password"}
                 />{" "}
               </div>
 

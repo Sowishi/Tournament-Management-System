@@ -67,7 +67,7 @@ const Header = () => {
               </motion.div>
 
               <motion.div whileHover={{ scale: 1.1 }} onTap={{ scale: 1 }}>
-                <Link to={"/login"}>
+                <Link to={"/registration"}>
                   <Button gradientMonochrome="teal" className="mx-3">
                     <HiOutlineUserAdd className="mr-2 h-5 w-5" />
                     Register
