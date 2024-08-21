@@ -11,6 +11,8 @@ import TMSCalendar from "./pages/calendar";
 import Events from "./pages/events";
 import Participants from "./pages/participants";
 import Tally from "./pages/tally";
+import FAQ from "./pages/faqs";
+import About from "./pages/about";
 
 const App = () => {
   return (
@@ -26,8 +28,8 @@ const App = () => {
         <Route path="/participants" element={<Participants />} />
 
         <Route path="/tally" element={<Tally />} />
-
-        <Route path="/bracket" element={<Bracket />} />
+        <Route path="/faq" element={<FAQ />} />
+        <Route path="/about" element={<About />} />
       </Routes>
     </>
   );

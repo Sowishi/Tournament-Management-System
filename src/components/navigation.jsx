@@ -37,15 +37,21 @@ const Navigation = () => {
         </Dropdown>
         {!currentEvent && (
           <>
-            <Button color="gray">
-              <HiOutlineQuestionMarkCircle className="mr-2 h-5 w-5" />
-              FAQs
-            </Button>
-            <Button color="gray">
+            <Link to={"/faq"}>
               {" "}
-              <HiOutlineMap className="mr-2 h-5 w-5" />
-              About Us
-            </Button>
+              <Button color="gray">
+                <HiOutlineQuestionMarkCircle className="mr-2 h-5 w-5" />
+                FAQs
+              </Button>
+            </Link>
+
+            <Link to={"/about"}>
+              <Button color="gray">
+                {" "}
+                <HiOutlineMap className="mr-2 h-5 w-5" />
+                About Us
+              </Button>
+            </Link>
           </>
         )}
         {currentEvent && (
