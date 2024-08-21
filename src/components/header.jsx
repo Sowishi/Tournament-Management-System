@@ -4,12 +4,12 @@ import Navigation from "./navigation";
 import { Link } from "react-router-dom";
 import { useStore } from "../zustand/store";
 import { eventsName } from "../constant";
-import { HiLogin } from "react-icons/hi";
+import { HiLogin, HiUser } from "react-icons/hi";
 import { HiOutlineUserAdd } from "react-icons/hi";
 import { motion } from "framer-motion";
 
 const Header = () => {
-  const { currentEvent } = useStore();
+  const { currentEvent, currentUser } = useStore();
 
   return (
     <>
@@ -51,31 +51,52 @@ const Header = () => {
             </div>
           </motion.div>
 
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            className="auth-links w-100 flex justify-end items-center mx-5"
-          >
-            <div className="flex mb-3">
-              <motion.div whileHover={{ scale: 1.1 }} onTap={{ scale: 1 }}>
-                <Link to={"/login"}>
-                  <Button gradientMonochrome="info" className="mx-3">
-                    <HiLogin className="mr-2 h-5 w-5" />
-                    Login
-                  </Button>
-                </Link>
-              </motion.div>
+          {!currentUser && (
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              className="auth-links w-100 flex justify-end items-center mx-5"
+            >
+              <div className="flex mb-3">
+                <motion.div whileHover={{ scale: 1.1 }} onTap={{ scale: 1 }}>
+                  <a href={"/login"}>
+                    <Button gradientMonochrome="info" className="mx-3">
+                      <HiLogin className="mr-2 h-5 w-5" />
+                      Login
+                    </Button>
+                  </a>
+                </motion.div>
 
-              <motion.div whileHover={{ scale: 1.1 }} onTap={{ scale: 1 }}>
-                <Link to={"/registration"}>
-                  <Button gradientMonochrome="teal" className="mx-3">
-                    <HiOutlineUserAdd className="mr-2 h-5 w-5" />
-                    Register
-                  </Button>
-                </Link>
-              </motion.div>
-            </div>
-          </motion.div>
+                <motion.div whileHover={{ scale: 1.1 }} onTap={{ scale: 1 }}>
+                  <a href={"/registration"}>
+                    <Button gradientMonochrome="teal" className="mx-3">
+                      <HiOutlineUserAdd className="mr-2 h-5 w-5" />
+                      Register
+                    </Button>
+                  </a>
+                </motion.div>
+              </div>
+            </motion.div>
+          )}
+
+          {currentUser && (
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              className="auth-links w-100 flex justify-end items-center mx-5"
+            >
+              <div className="flex mb-3">
+                <motion.div whileHover={{ scale: 1.1 }} onTap={{ scale: 1 }}>
+                  <a href={"/login"}>
+                    <Button gradientMonochrome="info" className="mx-3">
+                      <HiUser className="mr-2 h-5 w-5" />
+                      Account
+                    </Button>
+                  </a>
+                </motion.div>
+              </div>
+            </motion.div>
+          )}
         </div>
       </div>
 

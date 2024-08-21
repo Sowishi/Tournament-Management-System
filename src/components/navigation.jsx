@@ -15,13 +15,13 @@ const Navigation = () => {
   return (
     <div className="navs w-100 bg-white py-1">
       <Button.Group className="mx-3">
-        <a href="/">
-          <Button color="gray">
+        <Link to="/">
+          <Button color="grLinky">
             {" "}
             <HiOutlineHome className="mr-2 h-5 w-5" />
             Home
           </Button>
-        </a>
+        </Link>
         <Dropdown color={"gray"} label={currentEvent ? currentEvent : "Events"}>
           {" "}
           <Dropdown.Item onClick={() => setCurrentEvent("RSCUAA")}>
