@@ -1,14 +1,26 @@
 import { Button, Dropdown } from "flowbite-react";
 import { useStore } from "../zustand/store";
 import { Link } from "react-router-dom";
-
+import {
+  HiOutlineHome,
+  HiOutlineQuestionMarkCircle,
+  HiOutlineMap,
+  HiOutlineCalendar,
+  HiOutlineRss,
+  HiOutlineUserGroup,
+  HiViewBoards,
+} from "react-icons/hi";
 const Navigation = () => {
   const { setCurrentEvent, currentEvent } = useStore();
   return (
     <div className="navs w-100 bg-white py-1">
       <Button.Group className="mx-3">
         <a href="/">
-          <Button color="gray">Home</Button>
+          <Button color="gray">
+            {" "}
+            <HiOutlineHome className="mr-2 h-5 w-5" />
+            Home
+          </Button>
         </a>
         <Dropdown color={"gray"} label={currentEvent ? currentEvent : "Events"}>
           {" "}
@@ -25,23 +37,46 @@ const Navigation = () => {
         </Dropdown>
         {!currentEvent && (
           <>
-            <Button color="gray">FAQs</Button>
-            <Button color="gray">About Us</Button>
+            <Button color="gray">
+              <HiOutlineQuestionMarkCircle className="mr-2 h-5 w-5" />
+              FAQs
+            </Button>
+            <Button color="gray">
+              {" "}
+              <HiOutlineMap className="mr-2 h-5 w-5" />
+              About Us
+            </Button>
           </>
         )}
         {currentEvent && (
           <>
             <Link to={"/calendar"}>
-              <Button color="gray">Calendar</Button>
+              <Button color="gray">
+                {" "}
+                <HiOutlineCalendar className="mr-2 h-5 w-5" />
+                Calendar
+              </Button>
             </Link>
             <Link to={"/events"}>
-              <Button color="gray">Events</Button>
+              <Button color="gray">
+                {" "}
+                <HiOutlineRss className="mr-2 h-5 w-5" />
+                Events
+              </Button>
             </Link>
             <Link to={"/participants"}>
-              <Button color="gray">Participants</Button>
+              <Button color="gray">
+                {" "}
+                <HiOutlineUserGroup className="mr-2 h-5 w-5" />
+                Participants
+              </Button>
             </Link>
             <Link to={"/tally"}>
-              <Button color="gray">Tally</Button>
+              <Button color="gray">
+                {" "}
+                <HiViewBoards className="mr-2 h-5 w-5" />
+                Tally
+              </Button>
             </Link>
           </>
         )}

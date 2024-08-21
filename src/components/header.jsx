@@ -57,18 +57,23 @@ const Header = () => {
             className="auth-links w-100 flex justify-end items-center mx-5"
           >
             <div className="flex mb-3">
-              <Link to={"/login"}>
-                <Button gradientMonochrome="info" className="mx-3">
-                  <HiLogin className="mr-2 h-5 w-5" />
-                  Login
-                </Button>
-              </Link>
-              <Link to={"/login"}>
-                <Button gradientMonochrome="teal" className="mx-3">
-                  <HiOutlineUserAdd className="mr-2 h-5 w-5" />
-                  Register
-                </Button>
-              </Link>
+              <motion.div whileHover={{ scale: 1.1 }} onTap={{ scale: 1 }}>
+                <Link to={"/login"}>
+                  <Button gradientMonochrome="info" className="mx-3">
+                    <HiLogin className="mr-2 h-5 w-5" />
+                    Login
+                  </Button>
+                </Link>
+              </motion.div>
+
+              <motion.div whileHover={{ scale: 1.1 }} onTap={{ scale: 1 }}>
+                <Link to={"/login"}>
+                  <Button gradientMonochrome="teal" className="mx-3">
+                    <HiOutlineUserAdd className="mr-2 h-5 w-5" />
+                    Register
+                  </Button>
+                </Link>
+              </motion.div>
             </div>
           </motion.div>
         </div>

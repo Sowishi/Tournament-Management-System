@@ -13,11 +13,15 @@ const AuthLayout = ({ children, hideHeader }) => {
         <div className="wrapper">
           {!hideHeader && (
             <div className="header flex flex-row">
-              <img
-                className="w-[150px] h-[150px] object-contain"
-                src={logo}
-                alt=""
-              />
+              <a href="/">
+                {" "}
+                <img
+                  className="w-[150px] h-[150px] object-contain"
+                  src={logo}
+                  alt=""
+                />
+              </a>
+
               <div className="wrapper">
                 <h1 className="text-5xl font-bold">WELCOME</h1>
                 <p className="text-lg">
