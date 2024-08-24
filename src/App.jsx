@@ -13,20 +13,20 @@ import Participants from "./pages/participants";
 import Tally from "./pages/tally";
 import FAQ from "./pages/faqs";
 import About from "./pages/about";
+import SuperLanding from "./pages/superLanding";
 
 const App = () => {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Landing />} />
+        <Route path="/" element={<SuperLanding />} />
+        <Route path="/home" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/registration" element={<Registration />} />
         <Route path="/forgot" element={<Forgot />} />
         <Route path="/calendar" element={<TMSCalendar />} />
         <Route path="/events" element={<Events />} />
-
         <Route path="/participants" element={<Participants />} />
-
         <Route path="/tally" element={<Tally />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/about" element={<About />} />

@@ -1,0 +1,9 @@
+.tms-card:hover {
+  transform: scale(1.1);
+  filter: blur(0);
+}
+.tms-card {
+  transition: 0.5s;
+  cursor: pointer;
+  filter: grayscale(100);
+}
