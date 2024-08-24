@@ -8,6 +8,7 @@ const TmsInput = ({
   name,
   type,
   secured,
+  addOn,
 }) => {
   return (
     <div>
@@ -20,6 +21,7 @@ const TmsInput = ({
         />
       </div>
       <TextInput
+        addon={addOn}
         name={name}
         onChange={onChange}
         value={value}

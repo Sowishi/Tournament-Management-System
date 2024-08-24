@@ -1,6 +1,5 @@
 import { Button, Label, TextInput } from "flowbite-react";
 import logo from "../assets/logo2.png";
-import img19 from "../assets/image 19.png";
 import TmsInput from "../components/tmsInput";
 import AuthLayout from "../layout/authLayout";
 import { Link, useNavigate } from "react-router-dom";
@@ -24,7 +23,7 @@ const Login = () => {
       if (user.email == email && user.password == password) {
         setCurrentUser(user);
         userFound = true;
-        navigate("/");
+        navigate("/home");
       }
     });
 
@@ -35,10 +34,20 @@ const Login = () => {
 
   return (
     <AuthLayout>
-      <div className="container mx-auto ">
-        <h1 className="text-white font-bold text-2xl text-center">
-          Login to your account
-        </h1>
+      <div
+        className="container mx-aut0 w-6/12 rounded-lg p-14"
+        style={{
+          background:
+            "linear-gradient(87deg, rgba(255,51,50,1) 0%, rgba(255,131,76,1) 100%)",
+        }}
+      >
+        <div className="flex justify-center items-center">
+          <h1 className="text-white font-bold text-2xl text-center uppercase">
+            Login to your web-based tournament management system
+          </h1>
+          <img src={logo} width={100} alt="" />
+        </div>
+
         <TmsInput
           onChange={(event) => setEmail(event.target.value)}
           placeHolder="Enter your email"
@@ -56,13 +65,16 @@ const Login = () => {
           </Link>
         </div>
 
-        <Button
-          onClick={handleLogin}
-          className="w-full mt-5"
-          gradientMonochrome="info"
-        >
-          Login
-        </Button>
+        <div className="flex justify-center items-center">
+          <Button
+            onClick={handleLogin}
+            className="w-8/12 mt-5 py-2"
+            gradientMonochrome="info"
+          >
+            Login
+          </Button>
+        </div>
+
         <div className="flex justify-between items-center mt-5">
           <div className="wrapper flex items-center "></div>
           <div className="wrapper flex items-center ">
