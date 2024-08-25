@@ -5,8 +5,8 @@ import useGetUsers from "../hooks/useGetUsers";
 import useUpdateUser from "../hooks/useUpdateUser";
 import useCrudAdmin from "../hooks/useCrudAdmin";
 
-export function AdminTable({ handleUpdateForms }) {
-  const { data, deleteAdmin } = useCrudAdmin();
+export function AdminTable({ handleUpdateForms, data }) {
+  const { deleteAdmin } = useCrudAdmin();
 
   const getBadgeColor = (status) => {
     if (status == "Pending") {

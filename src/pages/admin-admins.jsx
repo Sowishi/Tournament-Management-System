@@ -16,9 +16,10 @@ const AdminAdmins = () => {
     password: "",
     role: "Event Admin",
   });
+  const [currentRole, setCurrentRole] = useState("All");
   const [isUpdate, setIsUpdate] = useState(false);
 
-  const { addAdmin, updateAdmin } = useCrudAdmin();
+  const { addAdmin, updateAdmin, data } = useCrudAdmin();
 
   const handleChange = (event) => {
     const { value, name } = event.target;
@@ -43,6 +44,11 @@ const AdminAdmins = () => {
     setCreateModal(true);
   };
 
+  const filterData = data.filter((item) => {
+    if (item.role == currentRole) {
+      return item;
+    }
+  });
   return (
     <AdminLayout>
       <TmsModal
@@ -90,10 +96,26 @@ const AdminAdmins = () => {
         <h1 className="text-white text-4xl font-bold">All Admins</h1>
         <div className="wrapper mt-10 flex justify-between items-center ">
           <div className="wrapper flex">
-            <Button color={"info"} className="mx-3">
+            <Button
+              onClick={() => setCurrentRole("All")}
+              color={currentRole == "All" ? "info" : "light"}
+              className="mx-3"
+            >
+              All
+            </Button>
+            <Button
+              onClick={() => setCurrentRole("Event Admin")}
+              color={currentRole == "Event Admin" ? "info" : "light"}
+              className="mx-3"
+            >
               Event Admin
             </Button>
-            <Button color={"light"}>Document Admin</Button>
+            <Button
+              onClick={() => setCurrentRole("Document Admin")}
+              color={currentRole == "Document Admin" ? "info" : "light"}
+            >
+              Document Admin
+            </Button>
           </div>
           <Button
             onClick={() => {
@@ -110,7 +132,10 @@ const AdminAdmins = () => {
             Create Admin
           </Button>
         </div>
-        <AdminTable handleUpdateForms={handleUpdateForms} />
+        <AdminTable
+          data={currentRole == "All" ? data : filterData}
+          handleUpdateForms={handleUpdateForms}
+        />
       </div>
     </AdminLayout>
   );
