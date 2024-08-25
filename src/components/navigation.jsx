@@ -10,8 +10,11 @@ import {
   HiOutlineUserGroup,
   HiViewBoards,
 } from "react-icons/hi";
+import useGetEventName from "../hooks/useGetEventName";
 const Navigation = () => {
   const { setCurrentEvent, currentEvent } = useStore();
+  const { data: eventNameData } = useGetEventName();
+
   return (
     <div className="navs w-100 bg-white py-1">
       <Button.Group className="mx-3">
@@ -23,17 +26,16 @@ const Navigation = () => {
           </Button>
         </Link>
         <Dropdown color={"gray"} label={currentEvent ? currentEvent : "Events"}>
-          {" "}
-          <Dropdown.Item onClick={() => setCurrentEvent("RSCUAA")}>
-            RSCUAA
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => setCurrentEvent("Provincial Meet")}>
-            {" "}
-            Provincial Meet
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => setCurrentEvent("Bicol Meet")}>
-            Bicol Meet
-          </Dropdown.Item>
+          {eventNameData?.map((event) => {
+            return (
+              <Dropdown.Item
+                key={event.id}
+                onClick={() => setCurrentEvent(event.eventName)}
+              >
+                {event.eventName}
+              </Dropdown.Item>
+            );
+          })}
         </Dropdown>
         {!currentEvent && (
           <>

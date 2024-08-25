@@ -14,6 +14,8 @@ import Tally from "./pages/tally";
 import FAQ from "./pages/faqs";
 import About from "./pages/about";
 import SuperLanding from "./pages/superLanding";
+import AdminHome from "./pages/admin-home";
+import AdminUsers from "./pages/admin-users";
 
 const App = () => {
   return (
@@ -30,6 +32,8 @@ const App = () => {
         <Route path="/tally" element={<Tally />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/about" element={<About />} />
+        <Route path="/admin/home" element={<AdminHome />} />
+        <Route path="/admin/users" element={<AdminUsers />} />
       </Routes>
     </>
   );

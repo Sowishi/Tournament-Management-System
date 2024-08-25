@@ -46,7 +46,7 @@ const Login = () => {
         </div>
         <div className="basis-6/12 flex justify-center items-center ">
           <div
-            className="container mx-auto rounded-lg p-14 mx-10"
+            className="container rounded-lg p-14 mx-10"
             style={{
               background:
                 "linear-gradient(87deg, rgba(255,51,50,1) 0%, rgba(255,131,76,1) 100%)",
