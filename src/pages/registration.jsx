@@ -39,7 +39,8 @@ const Registration = () => {
     event.preventDefault();
 
     if (forms.password !== forms.confirmPassword) {
-      toast.error("Password does not much");
+      toast.error("Password does not match");
+      return;
     } else {
       addUser(forms);
       toast.success("Successfully Registered");
