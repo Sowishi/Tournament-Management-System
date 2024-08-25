@@ -48,6 +48,9 @@ export default function AdminLayout({ children }) {
                     <Link to="/admin/users">
                       <Sidebar.Item>Users Management</Sidebar.Item>
                     </Link>
+                    <Link to="/admin/admins">
+                      <Sidebar.Item>Admins Management</Sidebar.Item>
+                    </Link>
                   </Sidebar.ItemGroup>
                   <Sidebar.ItemGroup>
                     <Sidebar.Item

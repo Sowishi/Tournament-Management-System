@@ -16,7 +16,7 @@ export function TmsModal({
         <Modal.Header>{title}</Modal.Header>
         {children}
         <Modal.Footer className="flex justify-end">
-          <Button onClick={onSubmit}>I accept</Button>
+          <Button onClick={onSubmit}>Submit</Button>
           <Button color="gray" onClick={handleClose}>
             Decline
           </Button>

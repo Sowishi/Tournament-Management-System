@@ -16,6 +16,7 @@ import About from "./pages/about";
 import SuperLanding from "./pages/superLanding";
 import AdminHome from "./pages/admin-home";
 import AdminUsers from "./pages/admin-users";
+import AdminAdmins from "./pages/admin-admins";
 
 const App = () => {
   return (
@@ -34,6 +35,7 @@ const App = () => {
         <Route path="/about" element={<About />} />
         <Route path="/admin/home" element={<AdminHome />} />
         <Route path="/admin/users" element={<AdminUsers />} />
+        <Route path="/admin/admins" element={<AdminAdmins />} />
       </Routes>
     </>
   );
