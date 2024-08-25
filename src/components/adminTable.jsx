@@ -5,8 +5,8 @@ import useGetUsers from "../hooks/useGetUsers";
 import useUpdateUser from "../hooks/useUpdateUser";
 import useCrudAdmin from "../hooks/useCrudAdmin";
 
-export function AdminTable() {
-  const { data } = useCrudAdmin();
+export function AdminTable({ handleUpdateForms }) {
+  const { data, deleteAdmin } = useCrudAdmin();
 
   const getBadgeColor = (status) => {
     if (status == "Pending") {
@@ -52,8 +52,14 @@ export function AdminTable() {
                 <Table.Cell className="font-bold">{user.role}</Table.Cell>
                 <Table.Cell className="font-bold">
                   <div className="wrappe flex">
-                    <Button>Update</Button>{" "}
-                    <Button color={"failure"} className="mx-3">
+                    <Button onClick={() => handleUpdateForms(user)}>
+                      Update
+                    </Button>{" "}
+                    <Button
+                      onClick={() => deleteAdmin(user)}
+                      color={"failure"}
+                      className="mx-3"
+                    >
                       Delete
                     </Button>
                   </div>

@@ -1,4 +1,11 @@
-import { addDoc, collection, onSnapshot } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "../../firebase";
 import { useEffect, useState } from "react";
 
@@ -19,8 +26,14 @@ const useCrudAdmin = () => {
   const addAdmin = (forms) => {
     addDoc(colRef, forms);
   };
+  const updateAdmin = (forms) => {
+    updateDoc(doc(db, "admins", forms.id), forms);
+  };
+  const deleteAdmin = (forms) => {
+    deleteDoc(doc(db, "admins", forms.id));
+  };
 
-  return { data, addAdmin };
+  return { data, addAdmin, updateAdmin, deleteAdmin };
 };
 
 export default useCrudAdmin;
