@@ -17,8 +17,13 @@ import SuperLanding from "./pages/superLanding";
 import AdminHome from "./pages/admin-home";
 import AdminUsers from "./pages/admin-users";
 import AdminAdmins from "./pages/admin-admins";
+import AdminLogin from "./pages/admin-login";
+import { useStore } from "./zustand/store";
+import AdminCalendar from "./pages/admin-calendar";
 
 const App = () => {
+  const { currentUser } = useStore();
+
   return (
     <>
       <Routes>
@@ -33,9 +38,23 @@ const App = () => {
         <Route path="/tally" element={<Tally />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/about" element={<About />} />
-        <Route path="/admin/home" element={<AdminHome />} />
-        <Route path="/admin/users" element={<AdminUsers />} />
-        <Route path="/admin/admins" element={<AdminAdmins />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route
+          path="/admin/home"
+          element={currentUser ? <AdminHome /> : <AdminLogin />}
+        />
+        <Route
+          path="/admin/users"
+          element={currentUser ? <AdminUsers /> : <AdminLogin />}
+        />
+        <Route
+          path="/admin/admins"
+          element={currentUser ? <AdminAdmins /> : <AdminLogin />}
+        />{" "}
+        <Route
+          path="/admin/calendar"
+          element={currentUser ? <AdminCalendar /> : <AdminLogin />}
+        />
       </Routes>
     </>
   );

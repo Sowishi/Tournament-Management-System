@@ -14,9 +14,9 @@ const SuperLanding = () => {
       <div className="flex z-10 absolute w-full">
         <div
           onClick={() => navigate("/home")}
-          className="tms-card basis-6/12 h-screen flex justify-center items-center "
+          className="tms-card basis-4/12 h-screen flex justify-center items-center "
         >
-          <div className="w-7/12 h-[20rem] bg-[#7695FF] shadow-lg rounded-lg flex justify-center items-center">
+          <div className="w-10/12 h-[20rem] bg-[#7695FF] shadow-lg rounded-lg flex justify-center items-center">
             <div className="flex flex-col items-center justify-center">
               <h1 className="text-white font-bold text-3xl mb-5">
                 View Tournament
@@ -27,12 +27,25 @@ const SuperLanding = () => {
         </div>
         <div
           onClick={() => navigate("/login")}
-          className="tms-card basis-6/12 h-screen flex justify-center items-center "
+          className="tms-card basis-4/12 h-screen flex justify-center items-center "
         >
-          <div className="w-7/12 h-[20rem] bg-[#FF9874] shadow-lg rounded-lg flex justify-center items-center">
+          <div className="w-10/12 h-[20rem] bg-[#FF9874] shadow-lg rounded-lg flex justify-center items-center">
             <div className="flex flex-col items-center justify-center">
               <h1 className="text-white font-bold text-3xl mb-5">
                 Login to your account
+              </h1>
+              <img src={logo} width={150} />
+            </div>
+          </div>
+        </div>
+        <div
+          onClick={() => navigate("/admin/login")}
+          className="tms-card basis-4/12 h-screen flex justify-center items-center "
+        >
+          <div className="w-10/12 h-[20rem] bg-slate-700 shadow-lg rounded-lg flex justify-center items-center">
+            <div className="flex flex-col items-center justify-center">
+              <h1 className="text-white font-bold text-3xl mb-5">
+                Admin Login
               </h1>
               <img src={logo} width={150} />
             </div>

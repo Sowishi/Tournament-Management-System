@@ -12,12 +12,32 @@ import {
   HiUsers,
   HiMenu,
 } from "react-icons/hi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useStore } from "../zustand/store";
 
 export default function AdminLayout({ children }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleClose = () => setIsOpen(false);
+  const { currentUser, setCurrentUser } = useStore();
+
+  const isMasterAdmin = currentUser?.role == "Master Admin";
+  const isEventAdmin = currentUser?.role == "Event Admin";
+  const isDocumentAdmin = currentUser?.role == "Document Admin";
+  const navigation = useNavigate();
+
+  const getAdminRole = (role) => {
+    if (role == "Master Admin") {
+      return "Master Admin";
+    }
+    if (role == "Event Admin") {
+      return "Event Admin";
+    }
+
+    if (role == "Document Admin") {
+      return "Document Admin";
+    }
+  };
 
   return (
     <>
@@ -40,38 +60,77 @@ export default function AdminLayout({ children }) {
                   />
                 </form>
                 <Sidebar.Items>
-                  <Sidebar.ItemGroup>
-                    <Link to="/admin/home">
-                      <Sidebar.Item>Admin Home Page</Sidebar.Item>
-                    </Link>
-
-                    <Link to="/admin/users">
-                      <Sidebar.Item>Users Management</Sidebar.Item>
-                    </Link>
-                    <Link to="/admin/admins">
-                      <Sidebar.Item>Admins Management</Sidebar.Item>
-                    </Link>
-                  </Sidebar.ItemGroup>
-                  <Sidebar.ItemGroup>
-                    <Sidebar.Item
-                      href="https://github.com/themesberg/flowbite-react/"
-                      icon={HiClipboard}
-                    >
-                      Docs
-                    </Sidebar.Item>
-                    <Sidebar.Item
-                      href="https://flowbite-react.com/"
-                      icon={HiCollection}
-                    >
-                      Components
-                    </Sidebar.Item>
-                    <Sidebar.Item
-                      href="https://github.com/themesberg/flowbite-react/issues"
-                      icon={HiInformationCircle}
-                    >
-                      Help
-                    </Sidebar.Item>
-                  </Sidebar.ItemGroup>
+                  {isMasterAdmin && (
+                    <Sidebar.ItemGroup>
+                      <a href="/home" target="_blank">
+                        <Sidebar.Item>View Site</Sidebar.Item>
+                      </a>
+                      <Link to="/admin/home">
+                        <Sidebar.Item>Admin Home Page</Sidebar.Item>
+                      </Link>
+                      <Link to="/admin/users">
+                        <Sidebar.Item>Users Management</Sidebar.Item>
+                      </Link>
+                      <Link to="/admin/admins">
+                        <Sidebar.Item>Admins Management</Sidebar.Item>
+                      </Link>{" "}
+                      <Link to="/admin/calendar">
+                        <Sidebar.Item>Calendar</Sidebar.Item>
+                      </Link>
+                      <Link to="/admin/admins">
+                        <Sidebar.Item>Tournament</Sidebar.Item>
+                      </Link>
+                      <Link to="/admin/login">
+                        <Sidebar.Item>Logout</Sidebar.Item>
+                      </Link>
+                    </Sidebar.ItemGroup>
+                  )}
+                  {isEventAdmin && (
+                    <Sidebar.ItemGroup>
+                      {" "}
+                      <a href="/home" target="_blank">
+                        <Sidebar.Item>View Site</Sidebar.Item>
+                      </a>
+                      <Link to="/admin/home">
+                        <Sidebar.Item>Admin Home Page</Sidebar.Item>
+                      </Link>
+                      <Link to="/admin/users">
+                        <Sidebar.Item>Users Management</Sidebar.Item>
+                      </Link>
+                      <Link to="/admin/admins">
+                        <Sidebar.Item>Calendar</Sidebar.Item>
+                      </Link>
+                      <Link to="/admin/admins">
+                        <Sidebar.Item>Tournament</Sidebar.Item>
+                      </Link>
+                      <Sidebar.Item
+                        onClick={() => {
+                          setCurrentUser(null);
+                        }}
+                      >
+                        Logout
+                      </Sidebar.Item>
+                    </Sidebar.ItemGroup>
+                  )}
+                  {isDocumentAdmin && (
+                    <Sidebar.ItemGroup>
+                      <a href="/home" target="_blank">
+                        <Sidebar.Item>View Site</Sidebar.Item>
+                      </a>
+                      <Link to="/admin/home">
+                        <Sidebar.Item>Admin Home Page</Sidebar.Item>
+                      </Link>
+                      <Link to="/admin/users">
+                        <Sidebar.Item>Users Management</Sidebar.Item>
+                      </Link>
+                      <Link to="/admin/admins">
+                        <Sidebar.Item>Documents</Sidebar.Item>
+                      </Link>
+                      <Link to="/admin/login">
+                        <Sidebar.Item>Logout</Sidebar.Item>
+                      </Link>
+                    </Sidebar.ItemGroup>
+                  )}
                 </Sidebar.Items>
               </div>
             </div>
@@ -88,7 +147,9 @@ export default function AdminLayout({ children }) {
           />
           <div className="wrapper mx-10">
             <h1 className="text-white text-2xl">Admin Dashboard</h1>
-            <p className="text-blue-500">Logged in as: Super Admin</p>
+            <p className="text-blue-500">
+              Logged in as: {getAdminRole(currentUser?.role)}
+            </p>
           </div>
         </div>
         {children}
