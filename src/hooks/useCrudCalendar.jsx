@@ -1,4 +1,10 @@
-import { addDoc, collection, onSnapshot } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  onSnapshot,
+} from "firebase/firestore";
 import { db } from "../../firebase";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -22,7 +28,12 @@ const useCrudCalendar = () => {
     const colRef = collection(db, "calendar");
     addDoc(colRef, forms);
   };
-  return { addCalendar, data };
+
+  const deleteCalendar = (forms) => {
+    const docRef = doc(db, "calendar", forms.id);
+    deleteDoc(docRef);
+  };
+  return { addCalendar, data, deleteCalendar };
 };
 
 export default useCrudCalendar;

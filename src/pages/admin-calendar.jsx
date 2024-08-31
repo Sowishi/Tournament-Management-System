@@ -16,7 +16,8 @@ const AdminCalendar = () => {
   const [addModal, setAddModal] = useState(false);
   const { data: eventNames } = useGetEventName();
   const [selectedEvent, setSelectedEvent] = useState("RSCUAA");
-  const { addCalendar, data } = useCrudCalendar();
+  const { addCalendar, data, deleteCalendar } = useCrudCalendar();
+  const [deleteModal, setDeleteModal] = useState(false);
 
   const [forms, setForms] = useState({
     title: "",
@@ -55,12 +56,34 @@ const AdminCalendar = () => {
   return (
     <AdminLayout>
       <TmsModal
+        hideFooter
+        title={"Delete Calendar"}
+        openModal={deleteModal}
+        handleClose={() => setDeleteModal(false)}
+      >
+        <div className="container">
+          {data.map((item) => {
+            return (
+              <div className="wrapperf flex justify-between items-center">
+                <div className="wrapper">
+                  <h1 className="text-2xl font-bold">{item.title}</h1>
+                  <h1>{item.eventName}</h1>
+                </div>
+                <Button onClick={() => deleteCalendar(item)} color={"failure"}>
+                  Delete
+                </Button>
+              </div>
+            );
+          })}
+        </div>
+      </TmsModal>
+      <TmsModal
         title={"Add Event Name"}
         openModal={addModal}
         handleClose={() => setAddModal(false)}
         onSubmit={handleAddCalendar}
       >
-        <div className="container p-10">
+        <div className="container">
           <TmsInput
             name={"title"}
             onChange={handleChange}
@@ -98,7 +121,16 @@ const AdminCalendar = () => {
           data={filterEvent}
           onChange={(e) => setSelectedEvent(e.target.value)}
         />
-        <Button onClick={() => setAddModal(true)}>Add Calendar</Button>
+        <div className="wrapper flex items-center justify-start">
+          <Button onClick={() => setAddModal(true)}>Add Calendar</Button>
+          <Button
+            className="mx-3"
+            color={"failure"}
+            onClick={() => setDeleteModal(true)}
+          >
+            Delete Calendar
+          </Button>
+        </div>
       </div>
 
       <div className="container mx-auto py-5 ">
