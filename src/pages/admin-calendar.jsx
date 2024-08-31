@@ -22,7 +22,7 @@ const AdminCalendar = () => {
     title: "",
     start: "",
     end: "",
-    eventName: "TSCUAA",
+    eventName: "RSCUAA",
   });
 
   const filterEvent = eventNames.map((item) => {
