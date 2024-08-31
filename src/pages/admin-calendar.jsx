@@ -1,35 +1,118 @@
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import AdminLayout from "../layout/adminLayout";
 import moment from "moment";
+import { TmsModal } from "../components/tmsModal";
+import { useState } from "react";
+import { Button } from "flowbite-react";
+import TmsSelect from "../components/tmsSelect";
+import useGetEventName from "../hooks/useGetEventName";
+import TmsInput from "../components/tmsInput";
+import useCrudCalendar from "../hooks/useCrudCalendar";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const AdminCalendar = () => {
   const localizer = momentLocalizer(moment);
+  const [addModal, setAddModal] = useState(false);
+  const { data: eventNames } = useGetEventName();
+  const [selectedEvent, setSelectedEvent] = useState("RSCUAA");
+  const { addCalendar, data } = useCrudCalendar();
 
-  const events = [
-    {
-      id: 1,
-      title: "Meeting with Team",
-      start: new Date(2024, 7, 20, 10, 0), // August 20, 2024, 10:00 AM
-      end: new Date(2024, 7, 20, 12, 0), // August 20, 2024, 12:00 PM
-    },
+  const [forms, setForms] = useState({
+    title: "",
+    start: "",
+    end: "",
+    eventName: "TSCUAA",
+  });
 
-    {
-      id: 2,
-      title: "Doctor Appointment",
-      start: new Date(2024, 7, 21, 14, 0), // August 21, 2024, 2:00 PM
-      end: new Date(2024, 7, 21, 15, 0), // August 21, 2024, 3:00 PM
-    },
-  ];
+  const filterEvent = eventNames.map((item) => {
+    return item.eventName;
+  });
+
+  const handleAddCalendar = () => {
+    const startDateMoment = moment(forms.start).format("LLL");
+    const endDateMoment = moment(forms.end).format("LLL");
+    const output = {
+      ...forms,
+      ["start"]: startDateMoment,
+      ["end"]: endDateMoment,
+    };
+    addCalendar(output);
+    setAddModal(false);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForms({ ...forms, [name]: value });
+  };
+
+  const filterCalendarData = data.map((item) => {
+    if (item.eventName == selectedEvent) {
+      return item;
+    }
+  });
+
   return (
     <AdminLayout>
-      <Calendar
-        className="mx-5 bg-white rounded p-6"
-        localizer={localizer}
-        events={events}
-        startAccessor="start"
-        endAccessor="end"
-        style={{ height: 500 }}
-      />
+      <TmsModal
+        title={"Add Event Name"}
+        openModal={addModal}
+        handleClose={() => setAddModal(false)}
+        onSubmit={handleAddCalendar}
+      >
+        <div className="container p-10">
+          <TmsInput
+            name={"title"}
+            onChange={handleChange}
+            dark={true}
+            label={"Title "}
+          />
+          <div className="wrapper">
+            <h1>Start Date</h1>
+            <DatePicker
+              selected={forms.start}
+              showTimeSelect
+              onChange={(date) => setForms({ ...forms, ["start"]: date })}
+            />
+          </div>
+          <div className="wrapper">
+            <h1>End Date</h1>{" "}
+            <DatePicker
+              selected={forms.end}
+              showTimeSelect
+              onChange={(date) => setForms({ ...forms, ["end"]: date })}
+            />
+          </div>
+
+          <TmsSelect
+            label={"Event Name"}
+            dark={true}
+            name={"eventName"}
+            data={filterEvent}
+            onChange={handleChange}
+          />
+        </div>
+      </TmsModal>
+      <div className="wrapper flex justify-between   items-center mx-12 my-5">
+        <TmsSelect
+          data={filterEvent}
+          onChange={(e) => setSelectedEvent(e.target.value)}
+        />
+        <Button onClick={() => setAddModal(true)}>Add Calendar</Button>
+      </div>
+
+      <div className="container mx-auto py-5 ">
+        <h1 className="text-white text-3xl mx-5">Calendar: {selectedEvent}</h1>
+        <Calendar
+          views={["month", "agenda"]}
+          className="mx-5 bg-white rounded p-6"
+          localizer={localizer}
+          events={filterCalendarData}
+          startAccessor="start"
+          endAccessor="end"
+          style={{ height: 500 }}
+        />
+      </div>
     </AdminLayout>
   );
 };

@@ -1,12 +1,16 @@
 "use client";
 
-import { Badge, Dropdown, Table } from "flowbite-react";
+import { Badge, Button, Dropdown, Table } from "flowbite-react";
 import useGetUsers from "../hooks/useGetUsers";
 import useUpdateUser from "../hooks/useUpdateUser";
+import useGetEventName from "../hooks/useGetEventName";
+import { useState } from "react";
 
 export function UsersTable() {
   const { data } = useGetUsers();
+  const { data: eventNames } = useGetEventName();
   const { approveUser, rejectUser, deleteUser } = useUpdateUser();
+  const [selectedEvent, setSelectedEvent] = useState("all");
 
   const getBadgeColor = (status) => {
     if (status == "Pending") {
@@ -18,8 +22,37 @@ export function UsersTable() {
     }
   };
 
+  const filter = data.filter((item) => {
+    if (selectedEvent == "all") {
+      return item;
+    }
+    if (item.sportsInfo == selectedEvent) {
+      return item;
+    }
+  });
   return (
     <div className="overflow-x-auto mt-10">
+      <div className="wrapper flex mb-3 py-3">
+        <Button
+          color={selectedEvent == "all" ? "info" : "gray"}
+          onClick={() => setSelectedEvent("all")}
+          className="mx-3"
+        >
+          All
+        </Button>
+        {eventNames.map((event) => {
+          return (
+            <Button
+              key={event.id}
+              color={selectedEvent == event.eventName ? "info" : "gray"}
+              className="mx-3"
+              onClick={() => setSelectedEvent(event.eventName)}
+            >
+              {event.eventName}
+            </Button>
+          );
+        })}
+      </div>
       <Table>
         <Table.Head className="bg-slate-800">
           <Table.HeadCell className="bg-slate-800 text-white">
@@ -35,6 +68,9 @@ export function UsersTable() {
             Position
           </Table.HeadCell>
           <Table.HeadCell className="bg-slate-800 text-white">
+            Events
+          </Table.HeadCell>
+          <Table.HeadCell className="bg-slate-800 text-white">
             Status
           </Table.HeadCell>
           <Table.HeadCell className="bg-slate-800 text-white">
@@ -42,7 +78,7 @@ export function UsersTable() {
           </Table.HeadCell>
         </Table.Head>
         <Table.Body className="divide-y">
-          {data?.map((user) => {
+          {filter?.map((user) => {
             return (
               <Table.Row
                 key={user.id}
@@ -54,6 +90,7 @@ export function UsersTable() {
                 </Table.Cell>
                 <Table.Cell className="font-bold">{user.email}</Table.Cell>
                 <Table.Cell className="font-bold">{user.position}</Table.Cell>
+                <Table.Cell className="font-bold">{user.sportsInfo}</Table.Cell>
                 <Table.Cell className="font-bold">
                   <Badge
                     color={getBadgeColor(user.status ? user.status : "Pending")}
@@ -61,7 +98,6 @@ export function UsersTable() {
                     {user.status ? user.status : "Pending"}
                   </Badge>
                 </Table.Cell>
-
                 <Table.Cell className="font-bold">
                   <Dropdown label="Action" placement="left">
                     <Dropdown.Item onClick={() => approveUser(user.id)}>
