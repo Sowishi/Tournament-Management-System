@@ -9,6 +9,7 @@ import {
   HiOutlineRss,
   HiOutlineUserGroup,
   HiViewBoards,
+  HiOutlineUser,
 } from "react-icons/hi";
 import useGetEventName from "../hooks/useGetEventName";
 const Navigation = () => {
@@ -83,8 +84,10 @@ const Navigation = () => {
         )}
         {currentUser && (
           <Link to={"/user"}>
+            {" "}
             <Button gradientMonochrome="info" className="mx-3">
-              Account
+              <HiOutlineUser className="mr-2 h-5 w-5" />
+              User Account
             </Button>
           </Link>
         )}

@@ -7,6 +7,7 @@ const TmsModal = ({
   children,
   onSubmit,
   hideFooter,
+  disableButton,
 }) => {
   return (
     <>
@@ -17,7 +18,9 @@ const TmsModal = ({
 
         {!hideFooter && (
           <Modal.Footer className="flex justify-end">
-            <Button onClick={onSubmit}>Submit</Button>
+            <Button disabled={disableButton} onClick={onSubmit}>
+              Submit
+            </Button>
             <Button color="gray" onClick={handleClose}>
               Decline
             </Button>

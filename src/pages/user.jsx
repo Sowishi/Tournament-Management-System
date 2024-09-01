@@ -10,15 +10,16 @@ import useUpdateUser from "../hooks/useUpdateUser";
 import { toast } from "react-toastify";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../firebase";
-import DocViewer from "react-doc-viewer";
 import TmsModal from "../components/tmsModal";
+import { HiDocument } from "react-icons/hi";
 
 const User = () => {
   const { currentUser, setCurrentUser } = useStore();
-  const { updateUser } = useUpdateUser();
-  const [image, setImage] = useState(null);
-  const [documents, setDocuments] = useState(null);
+  const { updateUser, addDocument, documents } = useUpdateUser(currentUser.id);
   const [documentModal, setDocumentModal] = useState(false);
+  const [addDocumentModal, setAddDocumentModal] = useState(false);
+  const [file, setFile] = useState(undefined);
+  const [fileLabel, setFileLabel] = useState();
 
   const [forms, setForms] = useState({
     fullName: currentUser?.fullName,
@@ -87,23 +88,11 @@ const User = () => {
     });
   };
 
-  const uploadDoc = async () => {
-    updateUser({
-      ...forms,
-      id: currentUser.id,
-      collegeLogoURL: image ? image : currentUser.collegeLogoURL,
-      documentsURL: documents ? documents : currentUser.documentsURL,
-    });
-    setCurrentUser({
-      ...currentUser,
-      ...forms,
-      collegeLogoURL: image ? image : currentUser.collegeLogoURL,
-      documentsURL: documents ? documents : currentUser.documentsURL,
-    });
-
-    toast.success("Documents of user added Successfully");
+  const handleUploadDocument = () => {
+    addDocument(file, fileLabel, currentUser.id);
+    toast.success("Uploaded Successfully");
+    setAddDocumentModal(false);
   };
-
   return (
     <DefaultLayout>
       <Title title={"Users Account"} />
@@ -122,51 +111,76 @@ const User = () => {
           ></iframe>
         </div>
       </TmsModal>
+      <TmsModal
+        disableButton={file == undefined}
+        onSubmit={handleUploadDocument}
+        title={"Add Documents"}
+        openModal={addDocumentModal}
+        handleClose={() => setAddDocumentModal(false)}
+      >
+        <div className="container">
+          <TmsInput
+            dark={true}
+            name="label"
+            onChange={(e) => setFileLabel(e.target.value)}
+            placeHolder={"Label"}
+            label={"Label"}
+          />
+          <TmsInput
+            dark={true}
+            name="Document"
+            type={"file"}
+            onChange={async (e) => {
+              const output = await uploadImage(e.target.files[0]);
+              setFile(output);
+            }}
+            placeHolder={"Document"}
+            label={"Document"}
+          />
+        </div>
+      </TmsModal>
       <div className="container mx-auto">
-        <div className="container flex justify-between items-center px-10">
+        <div className="wrapper flex w-full justify-between items-center px-10 my-10">
           <div className="wrapper">
-            <h1 className="text-3xl text-white uppercase flex flex-">
-              Account Status:
-              <span className="text-blue-950">
-                {" "}
-                {currentUser.status ? currentUser.status : "Pending"}
-              </span>
+            <h1 className="text-white text-3xl">
+              Account Status:{" "}
+              <span className="font-bold">{currentUser.status}</span>
             </h1>
-            <Button onClick={() => setDocumentModal(true)} className="mt-5">
-              View Document
-            </Button>
+            <div className="wrapper flex items-center justify-start">
+              <h1 className="text-white text-3xl">
+                College Name:{" "}
+                <span className="font-bold">{currentUser.collegeName}</span>
+              </h1>
+              <img
+                className="ml-3"
+                width={70}
+                height={70}
+                src={currentUser.collegeLogoURL}
+                alt=""
+              />
+            </div>
           </div>
-          <img width={100} src={currentUser.collegeLogoURL} alt="" />
+          <Button onClick={() => setAddDocumentModal(true)}>
+            Add Documents
+          </Button>
+        </div>
+        <div className="wrapper pb-20">
+          <h1 className="text-white font-bold text-3xl mt-10">
+            Attached Documents
+          </h1>
+          <div className="flex py-5 flex-wrap">
+            {documents.map((item) => {
+              return (
+                <div className="wrapper basis-4/12 flex items-center justify-center flex-col">
+                  {/* <HiDocument color="white" size={100} /> */}
+                  <iframe src={item.file} />
+                  <h1 className="text-white">{item.fileLabel}</h1>
+                </div>
+              );
+            })}
+          </div>
         </div>
         <form onSubmit={handleSubmit}>
-          <h1 className="text-white font-bold text-3xl mt-10">Documents</h1>
-          <div className="flex mx-3 flex-col">
-            <TmsInput
-              required={false}
-              name="collegeLogo"
-              onChange={async (e) => {
-                const output = await uploadImage(e.target.files[0]);
-                setImage(output);
-              }}
-              type={"file"}
-              placeHolder={"Name of school/Institution"}
-              label={"College Logo"}
-            />
-            <TmsInput
-              required={false}
-              name="collegeLogo"
-              onChange={async (e) => {
-                const output = await uploadImage(e.target.files[0]);
-                setDocuments(output);
-              }}
-              type={"file"}
-              placeHolder={"Name of school/Institution"}
-              label={"Documents"}
-            />
-          </div>
-          <Button onClick={uploadDoc} className="w-full mt-3 py-3">
-            Upload Document
-          </Button>
           <h1 className="text-white font-bold text-3xl mt-5">
             Personal Details
           </h1>
