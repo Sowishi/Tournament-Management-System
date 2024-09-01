@@ -12,7 +12,7 @@ import {
 } from "react-icons/hi";
 import useGetEventName from "../hooks/useGetEventName";
 const Navigation = () => {
-  const { setCurrentEvent, currentEvent } = useStore();
+  const { setCurrentEvent, currentEvent, currentUser } = useStore();
   const { data: eventNameData } = useGetEventName();
 
   return (
@@ -37,16 +37,9 @@ const Navigation = () => {
             );
           })}
         </Dropdown>
+
         {!currentEvent && (
           <>
-            <Link to={"/faq"}>
-              {" "}
-              <Button color="gray">
-                <HiOutlineQuestionMarkCircle className="mr-2 h-5 w-5" />
-                FAQs
-              </Button>
-            </Link>
-
             <Link to={"/about"}>
               <Button color="gray">
                 {" "}
@@ -87,6 +80,13 @@ const Navigation = () => {
               </Button>
             </Link>
           </>
+        )}
+        {currentUser && (
+          <Link to={"/user"}>
+            <Button gradientMonochrome="info" className="mx-3">
+              Account
+            </Button>
+          </Link>
         )}
       </Button.Group>
     </div>

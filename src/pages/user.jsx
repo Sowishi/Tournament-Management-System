@@ -1,32 +1,29 @@
-import { Button, Toast } from "flowbite-react";
-import Steps from "../components/steps";
+import DefaultLayout from "../layout/defaultLayout";
+import Title from "../components/title";
+import { useStore } from "../zustand/store";
 import TmsInput from "../components/tmsInput";
-import AuthLayout from "../layout/authLayout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TmsSelect from "../components/tmsSelect";
-import useAddUser from "../hooks/useAddUser";
-import { Link, useNavigate } from "react-router-dom";
-import logo from "../assets/logo2.png";
+import { Button } from "flowbite-react";
+import useUpdateUser from "../hooks/useUpdateUser";
 import { toast } from "react-toastify";
 
-const Registration = () => {
+const User = () => {
+  const { currentUser, setCurrentUser } = useStore();
+  const { updateUser } = useUpdateUser();
   const [forms, setForms] = useState({
-    fullName: "",
-    birthDate: "",
-    gender: "Male",
-    email: "",
-    contactNumber: "",
-    address: "",
-    sportsInfo: "Provincial Meet",
-    collegeName: "",
-    position: "Student",
-    password: "",
-    confirmPassword: "",
+    fullName: currentUser?.fullName,
+    birthDate: currentUser?.birthDate,
+    gender: currentUser?.gender,
+    email: currentUser?.email,
+    contactNumber: currentUser?.contactNumber,
+    address: currentUser?.address,
+    sportsInfo: currentUser?.sportsInfo,
+    collegeName: currentUser?.collegeName,
+    position: currentUser?.position,
+    password: currentUser?.password,
+    confirmPassword: currentUser?.confirmPassword,
   });
-
-  const { addUser } = useAddUser();
-
-  const navigate = useNavigate();
 
   const handleChange = (event) => {
     const { value, name } = event.target;
@@ -36,44 +33,18 @@ const Registration = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
-    if (forms.password !== forms.confirmPassword) {
-      toast.error("Password does not match");
-      return;
-    } else {
-      addUser(forms);
-      toast.success("Successfully Registered");
-      navigate("/login");
-    }
+    updateUser({ ...forms, id: currentUser.id });
+    setCurrentUser({ ...currentUser, ...forms });
+    toast.success("Update User Successfully");
   };
 
-  function areAllFieldsFilled() {
-    for (const key in forms) {
-      if (forms.hasOwnProperty(key)) {
-        // Check if the field has a length property and is more than 1
-        if (forms[key].length <= 1) {
-          return false;
-        }
-      }
-    }
-    return true;
-  }
-
   return (
-    <AuthLayout hideHeader={true}>
-      <div
-        className="wrapper p-14 m-20 w-full rounded-lg"
-        style={{
-          background:
-            "linear-gradient(87deg, rgba(255,51,50,1) 0%, rgba(255,131,76,1) 100%)",
-        }}
-      >
-        <div className="text-center flex justify-center items-center">
-          <h1 className="text-white text-5xl font-bold mb-3 mr-5">
-            Registration
-          </h1>
-          <img src={logo} width={100} alt="" />
-        </div>
+    <DefaultLayout>
+      <Title title={"Users Account"} />
+      <div className="container mx-auto">
+        <h1 className="text-3xl text-white uppercase text-center">
+          Status: <span>Pending</span>
+        </h1>
         <form onSubmit={handleSubmit}>
           <h1 className="text-white font-bold text-3xl">Personal Details</h1>
           <div className="flex">
@@ -81,12 +52,13 @@ const Registration = () => {
               <TmsInput
                 name="fullName"
                 onChange={handleChange}
-                value={forms.fullName}
+                value={forms?.fullName}
                 placeHolder={"Full Name"}
                 label={"Full Name"}
               />
               <TmsInput
                 onChange={handleChange}
+                value={forms?.birthDate}
                 name={"birthDate"}
                 type={"date"}
                 placeHolder={"Birthdate"}
@@ -94,6 +66,7 @@ const Registration = () => {
               />
               <TmsSelect
                 name="gender"
+                value={forms?.gender}
                 onChange={handleChange}
                 label={"Gender"}
                 data={["Male", "Female"]}
@@ -101,6 +74,7 @@ const Registration = () => {
             </div>
             <div className="basis-6/12 mx-3">
               <TmsInput
+                value={forms?.email}
                 type={"email"}
                 name={"email"}
                 onChange={handleChange}
@@ -109,12 +83,14 @@ const Registration = () => {
               />
               <TmsInput
                 addOn="+63"
+                value={forms?.contactNumber}
                 onChange={handleChange}
                 name={"contactNumber"}
                 placeHolder={"Contact Number"}
                 label={"Contact Number"}
               />{" "}
               <TmsInput
+                value={forms?.address}
                 name={"address"}
                 onChange={handleChange}
                 placeHolder={"Address"}
@@ -127,18 +103,21 @@ const Registration = () => {
           </h1>
           <div className="flex mx-3 flex-col">
             <TmsSelect
+              value={forms?.sportsInfo}
               name="sportsInfo"
               onChange={handleChange}
               label={"Sports Information"}
               data={["Provincial Meet", "RSCUAA", "Bicol Meet"]}
             />
             <TmsInput
+              value={forms?.collegeName}
               name="collegeName"
               onChange={handleChange}
               placeHolder={"Name of school/Institution"}
               label={"College Name"}
             />
             <TmsSelect
+              value={forms?.position}
               name="position"
               onChange={handleChange}
               label={"Position"}
@@ -146,41 +125,29 @@ const Registration = () => {
             />
           </div>
 
-          <div className="flex">
-            <div className="basis-6/12 mx-3">
-              <TmsInput
-                type={"password"}
-                name={"password"}
-                onChange={handleChange}
-                placeHolder={"Password"}
-                label={"Password"}
-              />
-            </div>
-            <div className="basis-6/12 mx-3">
-              <TmsInput
-                type={"password"}
-                name={"confirmPassword"}
-                onChange={handleChange}
-                placeHolder={"Confirm Password"}
-                label={"Confirm Password"}
-              />
-            </div>
-          </div>
-
           <div className="flex justify-center items-center mt-10">
             <Button
+              onClick={() => {
+                setCurrentUser(null);
+              }}
               className="w-full mx-3 py-4"
-              disabled={!areAllFieldsFilled()}
+              gradientMonochrome="failure"
+              type="submit"
+            >
+              Logout
+            </Button>
+            <Button
+              className="w-full mx-3 py-4"
               gradientMonochrome="info"
               type="submit"
             >
-              SUBMIT
+              Update User Account
             </Button>
           </div>
-        </form>
+        </form>{" "}
       </div>
-    </AuthLayout>
+    </DefaultLayout>
   );
 };
 
-export default Registration;
+export default User;

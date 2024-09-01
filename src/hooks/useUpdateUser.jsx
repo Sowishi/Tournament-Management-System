@@ -16,7 +16,12 @@ const useUpdateUser = () => {
     deleteDoc(docRef);
   };
 
-  return { approveUser, rejectUser, deleteUser };
+  const updateUser = (forms) => {
+    const docRef = doc(db, "users", forms.id);
+    updateDoc(docRef, forms);
+  };
+
+  return { approveUser, rejectUser, deleteUser, updateUser };
 };
 
 export default useUpdateUser;

@@ -20,6 +20,7 @@ import AdminAdmins from "./pages/admin-admins";
 import AdminLogin from "./pages/admin-login";
 import { useStore } from "./zustand/store";
 import AdminCalendar from "./pages/admin-calendar";
+import User from "./pages/user";
 
 const App = () => {
   const { currentUser } = useStore();
@@ -37,7 +38,8 @@ const App = () => {
         <Route path="/participants" element={<Participants />} />
         <Route path="/tally" element={<Tally />} />
         <Route path="/faq" element={<FAQ />} />
-        <Route path="/about" element={<About />} />
+        <Route path="/about" element={<About />} />{" "}
+        <Route path="/user" element={currentUser ? <User /> : <Login />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route
           path="/admin/home"
