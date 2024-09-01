@@ -10,6 +10,7 @@ const TmsInput = ({
   secured,
   addOn,
   dark,
+  required,
 }) => {
   return (
     <div>
@@ -29,7 +30,7 @@ const TmsInput = ({
         id="email1"
         type={type}
         placeholder={placeHolder}
-        required
+        required={required}
       />
     </div>
   );

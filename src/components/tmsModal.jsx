@@ -1,13 +1,13 @@
 import { Button, Modal } from "flowbite-react";
 
-export function TmsModal({
+const TmsModal = ({
   openModal,
   handleClose,
   title,
   children,
   onSubmit,
   hideFooter,
-}) {
+}) => {
   return (
     <>
       <Modal show={openModal} onClose={handleClose}>
@@ -26,4 +26,6 @@ export function TmsModal({
       </Modal>
     </>
   );
-}
+};
+
+export default TmsModal;

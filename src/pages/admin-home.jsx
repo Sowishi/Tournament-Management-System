@@ -1,7 +1,6 @@
 import { Button, ListGroup, Spinner } from "flowbite-react";
 import AdminLayout from "../layout/adminLayout";
 import { useState } from "react";
-import { TmsModal } from "../components/tmsModal";
 import TmsInput from "../components/tmsInput";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../firebase";
@@ -12,6 +11,7 @@ import useDeleteCarouselPic from "../hooks/useDeleteCarouselPic";
 import useAddEventName from "../hooks/useAddEventName";
 import useGetEventName from "../hooks/useGetEventName";
 import useDeleteEventName from "../hooks/useDeleteEventName";
+import TmsModal from "../components/tmsModal";
 
 const AdminHome = () => {
   const [addPicModal, setAddPicModal] = useState(false);

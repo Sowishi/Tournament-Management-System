@@ -1,12 +1,12 @@
 import { Button } from "flowbite-react";
 import { AdminTable } from "../components/adminTable";
 import AdminLayout from "../layout/adminLayout";
-import { TmsModal } from "../components/tmsModal";
 import { useState } from "react";
 import TmsInput from "../components/tmsInput";
 import TmsSelect from "../components/tmsSelect";
 import useCrudAdmin from "../hooks/useCrudAdmin";
 import { toast } from "react-toastify";
+import TmsModal from "../components/tmsModal";
 
 const AdminAdmins = () => {
   const [createModal, setCreateModal] = useState(false);

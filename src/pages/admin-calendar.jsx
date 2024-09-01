@@ -1,7 +1,6 @@
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import AdminLayout from "../layout/adminLayout";
 import moment from "moment";
-import { TmsModal } from "../components/tmsModal";
 import { useState } from "react";
 import { Button } from "flowbite-react";
 import TmsSelect from "../components/tmsSelect";
@@ -10,6 +9,7 @@ import TmsInput from "../components/tmsInput";
 import useCrudCalendar from "../hooks/useCrudCalendar";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import TmsModal from "../components/tmsModal";
 
 const AdminCalendar = () => {
   const localizer = momentLocalizer(moment);
