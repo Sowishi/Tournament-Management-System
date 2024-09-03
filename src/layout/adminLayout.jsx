@@ -19,11 +19,11 @@ export default function AdminLayout({ children }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleClose = () => setIsOpen(false);
-  const { currentUser, setCurrentUser } = useStore();
+  const { currentAdmin, setCurrentUser, setCurrentAdmin } = useStore();
 
-  const isMasterAdmin = currentUser?.role == "Master Admin";
-  const isEventAdmin = currentUser?.role == "Event Admin";
-  const isDocumentAdmin = currentUser?.role == "Document Admin";
+  const isMasterAdmin = currentAdmin?.role == "Master Admin";
+  const isEventAdmin = currentAdmin?.role == "Event Admin";
+  const isDocumentAdmin = currentAdmin?.role == "Document Admin";
   const navigation = useNavigate();
 
   const getAdminRole = (role) => {
@@ -80,7 +80,12 @@ export default function AdminLayout({ children }) {
                       <Link to="/admin/admins">
                         <Sidebar.Item>Tournament</Sidebar.Item>
                       </Link>
-                      <Link to="/admin/login">
+                      <Link
+                        onClick={() => {
+                          setCurrentAdmin(null);
+                          localStorage.removeItem("admin");
+                        }}
+                      >
                         <Sidebar.Item>Logout</Sidebar.Item>
                       </Link>
                     </Sidebar.ItemGroup>
@@ -103,13 +108,14 @@ export default function AdminLayout({ children }) {
                       <Link to="/admin/admins">
                         <Sidebar.Item>Tournament</Sidebar.Item>
                       </Link>
-                      <Sidebar.Item
+                      <Link
                         onClick={() => {
-                          setCurrentUser(null);
+                          setCurrentAdmin(null);
+                          localStorage.removeItem("admin");
                         }}
                       >
-                        Logout
-                      </Sidebar.Item>
+                        <Sidebar.Item>Logout</Sidebar.Item>
+                      </Link>
                     </Sidebar.ItemGroup>
                   )}
                   {isDocumentAdmin && (
@@ -126,7 +132,12 @@ export default function AdminLayout({ children }) {
                       <Link to="/admin/admins">
                         <Sidebar.Item>Documents</Sidebar.Item>
                       </Link>
-                      <Link to="/admin/login">
+                      <Link
+                        onClick={() => {
+                          setCurrentAdmin(null);
+                          localStorage.removeItem("admin");
+                        }}
+                      >
                         <Sidebar.Item>Logout</Sidebar.Item>
                       </Link>
                     </Sidebar.ItemGroup>
@@ -148,7 +159,7 @@ export default function AdminLayout({ children }) {
           <div className="wrapper mx-10">
             <h1 className="text-white text-2xl">Admin Dashboard</h1>
             <p className="text-blue-500">
-              Logged in as: {getAdminRole(currentUser?.role)}
+              Logged in as: {getAdminRole(currentAdmin?.role)}
             </p>
           </div>
         </div>

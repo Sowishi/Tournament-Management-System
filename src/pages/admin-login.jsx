@@ -3,7 +3,7 @@ import logo from "../assets/logo2.png";
 import TmsInput from "../components/tmsInput";
 import AuthLayout from "../layout/authLayout";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useGetUsers from "../hooks/useGetUsers";
 import { useStore } from "../zustand/store";
 import { toast } from "react-toastify";
@@ -16,7 +16,7 @@ const AdminLogin = () => {
   const [password, setPassword] = useState("");
 
   const { data } = useGetAdmin();
-  const { setCurrentUser } = useStore();
+  const { setCurrentAdmin } = useStore();
 
   const navigate = useNavigate();
 
@@ -24,7 +24,8 @@ const AdminLogin = () => {
     let userFound = false;
     data?.map((user) => {
       if (user.email == email && user.password == password) {
-        setCurrentUser(user);
+        localStorage.setItem("admin", JSON.stringify(user));
+        setCurrentAdmin(user);
         userFound = true;
         navigate("/admin/home");
       }
@@ -34,6 +35,19 @@ const AdminLogin = () => {
       toast.error("Invalid email or password");
     }
   };
+
+  useEffect(() => {
+    const getUsers = async () => {
+      const res = localStorage.getItem("admin");
+      const user = await JSON.parse(res);
+      console.log(user);
+      if (user) {
+        setCurrentAdmin(user);
+      }
+    };
+
+    getUsers();
+  }, []);
 
   return (
     <AuthLayout>

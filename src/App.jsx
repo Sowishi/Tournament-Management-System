@@ -23,7 +23,7 @@ import AdminCalendar from "./pages/admin-calendar";
 import User from "./pages/user";
 
 const App = () => {
-  const { currentUser, guest } = useStore();
+  const { currentUser, guest, currentAdmin } = useStore();
 
   return (
     <>
@@ -61,22 +61,23 @@ const App = () => {
           element={currentUser || guest ? <About /> : <Login />}
         />{" "}
         <Route path="/user" element={currentUser ? <User /> : <Login />} />
+        {/* //Admin */}
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route
           path="/admin/home"
-          element={currentUser ? <AdminHome /> : <AdminLogin />}
+          element={currentAdmin ? <AdminHome /> : <AdminLogin />}
         />
         <Route
           path="/admin/users"
-          element={currentUser ? <AdminUsers /> : <AdminLogin />}
+          element={currentAdmin ? <AdminUsers /> : <AdminLogin />}
         />
         <Route
           path="/admin/admins"
-          element={currentUser ? <AdminAdmins /> : <AdminLogin />}
+          element={currentAdmin ? <AdminAdmins /> : <AdminLogin />}
         />{" "}
         <Route
           path="/admin/calendar"
-          element={currentUser ? <AdminCalendar /> : <AdminLogin />}
+          element={currentAdmin ? <AdminCalendar /> : <AdminLogin />}
         />
       </Routes>
     </>
