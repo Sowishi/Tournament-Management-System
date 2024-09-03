@@ -15,7 +15,8 @@ import { HiDocument } from "react-icons/hi";
 
 const User = () => {
   const { currentUser, setCurrentUser } = useStore();
-  const { updateUser, addDocument, documents } = useUpdateUser(currentUser.id);
+  const { updateUser, addDocument, deleteDocument, documents } =
+    useUpdateUser();
   const [documentModal, setDocumentModal] = useState(false);
   const [addDocumentModal, setAddDocumentModal] = useState(false);
   const [file, setFile] = useState(undefined);
@@ -93,6 +94,13 @@ const User = () => {
     toast.success("Uploaded Successfully");
     setAddDocumentModal(false);
   };
+
+  const documentsFilter = documents.filter((doc) => {
+    if (doc.owner == currentUser.id) {
+      return doc;
+    }
+  });
+
   return (
     <DefaultLayout>
       <Title title={"Users Account"} />
@@ -169,12 +177,24 @@ const User = () => {
             Attached Documents
           </h1>
           <div className="flex py-5 flex-wrap">
-            {documents.map((item) => {
+            {documentsFilter?.map((item) => {
               return (
                 <div className="wrapper basis-4/12 flex items-center justify-center flex-col">
                   {/* <HiDocument color="white" size={100} /> */}
                   <iframe src={item.file} />
-                  <h1 className="text-white">{item.fileLabel}</h1>
+
+                  <div className="wrapper flex items-center justify-center">
+                    <h1 className="text-white font-bold my-5">
+                      {item.fileLabel}
+                    </h1>
+                    <Button
+                      onClick={() => deleteDocument(item.id)}
+                      className="ml-3"
+                      color={"failure"}
+                    >
+                      Remove
+                    </Button>
+                  </div>
                 </div>
               );
             })}

@@ -9,7 +9,7 @@ import { db } from "../../firebase";
 import { addDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
-const useUpdateUser = (userID) => {
+const useUpdateUser = () => {
   const [documents, setDocuments] = useState([]);
 
   useEffect(() => {
@@ -47,12 +47,18 @@ const useUpdateUser = (userID) => {
     addDoc(colRef, { file, fileLabel, owner: id });
   };
 
+  const deleteDocument = (id) => {
+    const docRef = doc(db, "documents", id);
+    deleteDoc(docRef);
+  };
+
   return {
     approveUser,
     rejectUser,
     deleteUser,
     updateUser,
     addDocument,
+    deleteDocument,
     documents,
   };
 };

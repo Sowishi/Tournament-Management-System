@@ -5,12 +5,17 @@ import useGetUsers from "../hooks/useGetUsers";
 import useUpdateUser from "../hooks/useUpdateUser";
 import useGetEventName from "../hooks/useGetEventName";
 import { useState } from "react";
+import TmsModal from "./tmsModal";
+import { useStore } from "../zustand/store";
 
 export function UsersTable() {
   const { data } = useGetUsers();
   const { data: eventNames } = useGetEventName();
-  const { approveUser, rejectUser, deleteUser } = useUpdateUser();
+  const { approveUser, rejectUser, deleteUser, documents } = useUpdateUser();
   const [selectedEvent, setSelectedEvent] = useState("all");
+  const [documentModal, setDocumentModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(false);
+  const { currentUser } = useStore();
 
   const getBadgeColor = (status) => {
     if (status == "Pending") {
@@ -30,8 +35,48 @@ export function UsersTable() {
       return item;
     }
   });
+
+  const documentsFilter = documents.filter((doc) => {
+    if (doc.owner == selectedUser) {
+      return doc;
+    }
+  });
+
   return (
     <div className="overflow-x-auto mt-10">
+      <TmsModal
+        title={"Documents"}
+        openModal={documentModal}
+        handleClose={() => {
+          setDocumentModal(false);
+          setSelectedUser(null);
+        }}
+      >
+        {documentsFilter?.map((item) => {
+          return (
+            <div className="wrapper basis-4/12 flex items-center justify-center flex-col">
+              <iframe src={item.file} />
+
+              <div className="wrapper flex items-center justify-center">
+                <h1 className="text-dark font-bold my-5">{item.fileLabel}</h1>
+                <Button className="ml-3">
+                  <a href={item.file} target="_blank" rel="noopener noreferrer">
+                    View Document
+                  </a>
+                </Button>
+              </div>
+            </div>
+          );
+        })}
+        {documentsFilter.length <= 0 && (
+          <>
+            <h1 className="text-dark text-center font-bold my-5">
+              No Documents Provided
+            </h1>
+          </>
+        )}
+      </TmsModal>
+
       <div className="wrapper flex mb-3 py-3">
         <Button
           color={selectedEvent == "all" ? "info" : "gray"}
@@ -100,6 +145,14 @@ export function UsersTable() {
                 </Table.Cell>
                 <Table.Cell className="font-bold">
                   <Dropdown label="Action" placement="left">
+                    <Dropdown.Item
+                      onClick={() => {
+                        setDocumentModal(true);
+                        setSelectedUser(user.id);
+                      }}
+                    >
+                      View Documetns
+                    </Dropdown.Item>
                     <Dropdown.Item onClick={() => approveUser(user.id)}>
                       Accept User
                     </Dropdown.Item>
