@@ -15,7 +15,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   const { data } = useGetUsers();
-  const { setCurrentUser } = useStore();
+  const { setCurrentUser, setGuest } = useStore();
 
   const navigate = useNavigate();
 
@@ -39,8 +39,11 @@ const Login = () => {
     const getUsers = async () => {
       const res = localStorage.getItem("user");
       const user = await JSON.parse(res);
-      console.log(user);
-      setCurrentUser(user);
+      if (user) {
+        setCurrentUser(user);
+      } else {
+        setGuest(true);
+      }
     };
 
     getUsers();
@@ -90,8 +93,15 @@ const Login = () => {
 
             <div className="flex justify-center items-center">
               <Button
-                onClick={handleLogin}
+                onClick={() => navigate("/")}
                 className="w-8/12 mt-5 py-2"
+                gradientMonochrome="success"
+              >
+                Main Menu
+              </Button>
+              <Button
+                onClick={handleLogin}
+                className="w-8/12 mt-5 py-2 mx-3"
                 gradientMonochrome="info"
               >
                 Login

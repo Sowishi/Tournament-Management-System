@@ -1,8 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo2.png";
 import "../tms.css";
+import { useStore } from "../zustand/store";
 const SuperLanding = () => {
   const navigate = useNavigate();
+  const { setGuest } = useStore();
   return (
     <div className="flex-1 h-screen bg-red-500 relative">
       <div className="absolute top-10">
@@ -13,7 +15,10 @@ const SuperLanding = () => {
 
       <div className="flex z-10 absolute w-full">
         <div
-          onClick={() => navigate("/home")}
+          onClick={() => {
+            navigate("/home");
+            setGuest(true);
+          }}
           className="tms-card basis-4/12 h-screen flex justify-center items-center "
         >
           <div className="w-10/12 h-[20rem] bg-[#7695FF] shadow-lg rounded-lg flex justify-center items-center">

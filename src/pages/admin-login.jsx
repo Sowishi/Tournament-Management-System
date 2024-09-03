@@ -73,8 +73,15 @@ const AdminLogin = () => {
 
             <div className="flex justify-center items-center">
               <Button
-                onClick={handleLogin}
+                onClick={() => navigate("/")}
                 className="w-8/12 mt-5 py-2"
+                gradientMonochrome="success"
+              >
+                Main Menu
+              </Button>
+              <Button
+                onClick={handleLogin}
+                className="w-8/12 mt-5 py-2 ml-3"
                 gradientMonochrome="info"
               >
                 Login

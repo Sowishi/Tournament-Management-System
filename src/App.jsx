@@ -23,30 +23,42 @@ import AdminCalendar from "./pages/admin-calendar";
 import User from "./pages/user";
 
 const App = () => {
-  const { currentUser } = useStore();
+  const { currentUser, guest } = useStore();
 
   return (
     <>
       <Routes>
         <Route path="/" element={<SuperLanding />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/home" element={currentUser ? <Landing /> : <Login />} />
         <Route path="/registration" element={<Registration />} />
         <Route path="/forgot" element={<Forgot />} />
         <Route
-          path="/calendar"
-          element={currentUser ? <TMSCalendar /> : <Login />}
+          path="/home"
+          element={currentUser || guest ? <Landing /> : <Login />}
         />
-        <Route path="/events" element={currentUser ? <Events /> : <Login />} />
+        <Route
+          path="/calendar"
+          element={currentUser || guest ? <TMSCalendar /> : <Login />}
+        />
+        <Route
+          path="/events"
+          element={currentUser || guest ? <Events /> : <Login />}
+        />
         <Route
           path="/participants"
-          element={currentUser ? <Participants /> : <Login />}
+          element={currentUser || guest ? <Participants /> : <Login />}
         />
-        <Route path="/tally" element={currentUser ? <Tally /> : <Login />} />
-        <Route path="/faq" element={currentUser ? <FAQ /> : <Login />} />
+        <Route
+          path="/tally"
+          element={currentUser || guest ? <Tally /> : <Login />}
+        />
+        <Route
+          path="/faq"
+          element={currentUser || guest ? <FAQ /> : <Login />}
+        />
         <Route
           path="/about"
-          element={currentUser ? <About /> : <Login />}
+          element={currentUser || guest ? <About /> : <Login />}
         />{" "}
         <Route path="/user" element={currentUser ? <User /> : <Login />} />
         <Route path="/admin/login" element={<AdminLogin />} />
