@@ -35,7 +35,7 @@ const AdminHome = () => {
     if (!file) return;
 
     // Create a reference to the storage location
-    const storageRef = ref(storage, `images/${file.name}`);
+    const storageRef = ref(storage, `carousel/${file.name}`);
 
     // Create an upload task
     const uploadTask = uploadBytesResumable(storageRef, file);

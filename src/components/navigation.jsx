@@ -20,6 +20,9 @@ const Navigation = () => {
     <div className="navs w-100 bg-white py-1">
       <Button.Group className="mx-3">
         <Link to="/">
+          <Button color="grLinky">Main Menu</Button>
+        </Link>
+        <Link to="/home">
           <Button color="grLinky">
             {" "}
             <HiOutlineHome className="mr-2 h-5 w-5" />

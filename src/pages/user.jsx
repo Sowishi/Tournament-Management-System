@@ -52,6 +52,13 @@ const User = () => {
       ...currentUser,
       ...forms,
     });
+    localStorage.setItem(
+      "user",
+      JSON.stringify({
+        ...currentUser,
+        ...forms,
+      })
+    );
     toast.success("Update User Successfully");
   };
 
@@ -198,6 +205,15 @@ const User = () => {
                 </div>
               );
             })}
+            {documentsFilter.length <= 0 && (
+              <>
+                <div className="flex justify-center items-center w-full">
+                  <h1 className="text-white text-center font-bold my-5">
+                    No Documents Provided
+                  </h1>
+                </div>
+              </>
+            )}
           </div>
         </div>
         <form onSubmit={handleSubmit}>
@@ -294,6 +310,7 @@ const User = () => {
             <Button
               onClick={() => {
                 setCurrentUser(null);
+                localStorage.removeItem("user");
               }}
               className="w-full mx-3 py-4"
               gradientMonochrome="failure"

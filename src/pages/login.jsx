@@ -3,7 +3,7 @@ import logo from "../assets/logo2.png";
 import TmsInput from "../components/tmsInput";
 import AuthLayout from "../layout/authLayout";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useGetUsers from "../hooks/useGetUsers";
 import { useStore } from "../zustand/store";
 import { toast } from "react-toastify";
@@ -23,6 +23,7 @@ const Login = () => {
     let userFound = false;
     data?.map((user) => {
       if (user.email == email && user.password == password) {
+        localStorage.setItem("user", JSON.stringify(user));
         setCurrentUser(user);
         userFound = true;
         navigate("/home");
@@ -33,6 +34,17 @@ const Login = () => {
       toast.error("Invalid email or password");
     }
   };
+
+  useEffect(() => {
+    const getUsers = async () => {
+      const res = localStorage.getItem("user");
+      const user = await JSON.parse(res);
+      console.log(user);
+      setCurrentUser(user);
+    };
+
+    getUsers();
+  }, []);
 
   return (
     <AuthLayout>

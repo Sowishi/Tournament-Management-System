@@ -29,16 +29,25 @@ const App = () => {
     <>
       <Routes>
         <Route path="/" element={<SuperLanding />} />
-        <Route path="/home" element={<Landing />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/home" element={currentUser ? <Landing /> : <Login />} />
         <Route path="/registration" element={<Registration />} />
         <Route path="/forgot" element={<Forgot />} />
-        <Route path="/calendar" element={<TMSCalendar />} />
-        <Route path="/events" element={<Events />} />
-        <Route path="/participants" element={<Participants />} />
-        <Route path="/tally" element={<Tally />} />
-        <Route path="/faq" element={<FAQ />} />
-        <Route path="/about" element={<About />} />{" "}
+        <Route
+          path="/calendar"
+          element={currentUser ? <TMSCalendar /> : <Login />}
+        />
+        <Route path="/events" element={currentUser ? <Events /> : <Login />} />
+        <Route
+          path="/participants"
+          element={currentUser ? <Participants /> : <Login />}
+        />
+        <Route path="/tally" element={currentUser ? <Tally /> : <Login />} />
+        <Route path="/faq" element={currentUser ? <FAQ /> : <Login />} />
+        <Route
+          path="/about"
+          element={currentUser ? <About /> : <Login />}
+        />{" "}
         <Route path="/user" element={currentUser ? <User /> : <Login />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route
