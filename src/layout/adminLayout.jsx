@@ -39,6 +39,19 @@ export default function AdminLayout({ children }) {
     }
   };
 
+  const getHeaderBackground = (role) => {
+    if (role == "Master Admin") {
+      return "bg-slate-800";
+    }
+    if (role == "Event Admin") {
+      return "bg-green-800";
+    }
+
+    if (role == "Document Admin") {
+      return "bg-red-800";
+    }
+  };
+
   return (
     <>
       <Drawer open={isOpen} onClose={handleClose}>
@@ -149,7 +162,11 @@ export default function AdminLayout({ children }) {
         </Drawer.Items>
       </Drawer>
       <div className="w-full bg-slate-950 min-h-screen">
-        <div className="header bg-slate-800 py-3 flex justify-between items-center px-10">
+        <div
+          className={`header ${getHeaderBackground(
+            currentAdmin?.role
+          )} py-3 flex justify-between items-center px-10`}
+        >
           <HiMenu
             className="cursor-pointer"
             onClick={() => setIsOpen(true)}

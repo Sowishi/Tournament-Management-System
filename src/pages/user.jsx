@@ -131,7 +131,7 @@ const User = () => {
 
   return (
     <DefaultLayout>
-      <Title title={"Users Account"} />
+      <Title title={"User Account"} />
       <TmsModal
         hideFooter
         title={"Documents"}
@@ -199,7 +199,9 @@ const User = () => {
           <div className="wrapper">
             <h1 className="text-white text-3xl">
               Account Status:{" "}
-              <span className="font-bold">{currentUser.status}</span>
+              <span className="font-bold">
+                {currentUser.status ? currentUser.status : "Pending"}
+              </span>
             </h1>
             <div className="wrapper flex items-center justify-start">
               <h1 className="text-white text-3xl">
