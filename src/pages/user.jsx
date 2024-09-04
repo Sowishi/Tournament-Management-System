@@ -15,12 +15,14 @@ import { HiDocument } from "react-icons/hi";
 
 const User = () => {
   const { currentUser, setCurrentUser } = useStore();
-  const { updateUser, addDocument, deleteDocument, documents } =
+  const { updateUser, addDocument, deleteDocument, documents, uploadLogo } =
     useUpdateUser();
   const [documentModal, setDocumentModal] = useState(false);
   const [addDocumentModal, setAddDocumentModal] = useState(false);
+  const [addLogoModal, setAddLogoModal] = useState(false);
   const [file, setFile] = useState(undefined);
   const [fileLabel, setFileLabel] = useState();
+  const [logoFile, setLogoFile] = useState();
 
   const [forms, setForms] = useState({
     fullName: currentUser?.fullName,
@@ -102,6 +104,25 @@ const User = () => {
     setAddDocumentModal(false);
   };
 
+  const handleUploadLogo = () => {
+    uploadLogo(currentUser, logoFile);
+    setCurrentUser({
+      ...currentUser,
+      ...forms,
+      collegeLogoURL: logoFile,
+    });
+    localStorage.setItem(
+      "user",
+      JSON.stringify({
+        ...currentUser,
+        ...forms,
+        collegeLogoURL: logoFile,
+      })
+    );
+    setAddLogoModal(false);
+    toast.success("Successfully added logo");
+  };
+
   const documentsFilter = documents.filter((doc) => {
     if (doc.owner == currentUser.id) {
       return doc;
@@ -124,6 +145,25 @@ const User = () => {
             src={currentUser.documentsURL}
             frameborder="0"
           ></iframe>
+        </div>
+      </TmsModal>
+      <TmsModal
+        onSubmit={handleUploadLogo}
+        title={"Add Logo"}
+        openModal={addLogoModal}
+        handleClose={() => setAddLogoModal(false)}
+      >
+        <div className="container">
+          <div className="flex justify-center items-center">
+            <img style={{ width: 150 }} src={logoFile} />
+          </div>
+          <TmsInput
+            onChange={async (e) => {
+              const output = await uploadImage(e.target.files[0]);
+              setLogoFile(output);
+            }}
+            type={"file"}
+          />
         </div>
       </TmsModal>
       <TmsModal
@@ -167,7 +207,7 @@ const User = () => {
                 <span className="font-bold">{currentUser.collegeName}</span>
               </h1>
               <img
-                className="ml-3"
+                className="ml-3 rounded-full"
                 width={70}
                 height={70}
                 src={currentUser.collegeLogoURL}
@@ -175,9 +215,18 @@ const User = () => {
               />
             </div>
           </div>
-          <Button onClick={() => setAddDocumentModal(true)}>
-            Add Documents
-          </Button>
+          <div className="wrapper flex">
+            <Button
+              color={"success"}
+              className="mx-3"
+              onClick={() => setAddLogoModal(true)}
+            >
+              Add Logo
+            </Button>
+            <Button onClick={() => setAddDocumentModal(true)}>
+              Add Documents
+            </Button>
+          </div>
         </div>
         <div className="wrapper pb-20">
           <h1 className="text-white font-bold text-3xl mt-10">
@@ -186,7 +235,10 @@ const User = () => {
           <div className="flex py-5 flex-wrap">
             {documentsFilter?.map((item) => {
               return (
-                <div className="wrapper basis-4/12 flex items-center justify-center flex-col">
+                <div
+                  key={item.id}
+                  className="wrapper basis-4/12 flex items-center justify-center flex-col"
+                >
                   {/* <HiDocument color="white" size={100} /> */}
                   <iframe src={item.file} />
 

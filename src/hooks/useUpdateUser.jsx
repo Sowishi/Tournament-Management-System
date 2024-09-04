@@ -52,6 +52,12 @@ const useUpdateUser = () => {
     deleteDoc(docRef);
   };
 
+  const uploadLogo = (forms, logoFile) => {
+    const docRef = doc(db, "users", forms.id);
+    const updated = { ...forms, collegeLogoURL: logoFile };
+    updateDoc(docRef, updated);
+  };
+
   return {
     approveUser,
     rejectUser,
@@ -59,6 +65,7 @@ const useUpdateUser = () => {
     updateUser,
     addDocument,
     deleteDocument,
+    uploadLogo,
     documents,
   };
 };
