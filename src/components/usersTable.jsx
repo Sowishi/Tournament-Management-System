@@ -45,6 +45,7 @@ export function UsersTable() {
   return (
     <div className="overflow-x-auto mt-10">
       <TmsModal
+        size="5xl"
         title={"Documents"}
         openModal={documentModal}
         handleClose={() => {
@@ -52,22 +53,32 @@ export function UsersTable() {
           setSelectedUser(null);
         }}
       >
-        {documentsFilter?.map((item) => {
-          return (
-            <div className="wrapper basis-4/12 flex items-center justify-center flex-col">
-              <iframe src={item.file} />
+        <div className="flex flex-wrap m-5">
+          {documentsFilter?.map((item) => {
+            return (
+              <div
+                key={item.id}
+                className="wrapper basis-4/12 flex items-center justify-center flex-col"
+              >
+                <iframe src={item.file} />
 
-              <div className="wrapper flex items-center justify-center">
-                <h1 className="text-dark font-bold my-5">{item.fileLabel}</h1>
-                <Button className="ml-3">
-                  <a href={item.file} target="_blank" rel="noopener noreferrer">
-                    View Document
-                  </a>
-                </Button>
+                <div className="wrapper flex items-center justify-center">
+                  <h1 className="text-dark font-bold my-5">{item.fileLabel}</h1>
+                  <Button className="ml-3">
+                    <a
+                      href={item.file}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      View Document
+                    </a>
+                  </Button>
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
+
         {documentsFilter.length <= 0 && (
           <>
             <h1 className="text-dark text-center font-bold my-5">

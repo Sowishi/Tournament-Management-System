@@ -8,10 +8,11 @@ const TmsModal = ({
   onSubmit,
   hideFooter,
   disableButton,
+  size,
 }) => {
   return (
     <>
-      <Modal show={openModal} onClose={handleClose}>
+      <Modal size={size} show={openModal} onClose={handleClose}>
         <Modal.Header>{title}</Modal.Header>
 
         <Modal.Body>{children}</Modal.Body>
