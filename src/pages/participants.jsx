@@ -2,26 +2,33 @@ import DefaultLayout from "../layout/defaultLayout";
 import Title from "../components/title";
 import { ListGroup } from "flowbite-react";
 import logo from "../assets/logo2.png";
+import useGetUsers from "../hooks/useGetUsers";
 
 const Participants = () => {
-  const data = [
-    "Bicol University",
-    "Camarines Norte State College",
-    "Catanduanes State University",
-    "Sorsogon State University",
-  ];
+  const { data } = useGetUsers();
+
+  const filterData = data.filter((user) => {
+    if (user.status == "Approve") {
+      return user;
+    }
+  });
+
   return (
     <DefaultLayout>
       <Title title="Events  Participants" />
       <div className="container mx-auto">
         <div className="flex justify-center">
           <ListGroup className="w-full">
-            {data?.map((item) => {
+            {filterData?.map((item) => {
               return (
-                <ListGroup.Item key={item}>
+                <ListGroup.Item key={item.id}>
                   <div className="wrapper flex justify-between items-center w-full">
-                    <h1 className=" text-3xl">{item}</h1>
-                    <img src={logo} style={{ width: "50px" }} alt="" />
+                    <h1 className=" text-3xl">{item.collegeName}</h1>
+                    <img
+                      src={item.collegeLogoURL}
+                      style={{ width: "50px" }}
+                      alt=""
+                    />
                   </div>
                 </ListGroup.Item>
               );
