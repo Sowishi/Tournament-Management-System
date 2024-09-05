@@ -5,7 +5,7 @@ import TmsInput from "../components/tmsInput";
 
 import { useEffect, useState } from "react";
 import TmsSelect from "../components/tmsSelect";
-import { Button } from "flowbite-react";
+import { Badge, Button } from "flowbite-react";
 import useUpdateUser from "../hooks/useUpdateUser";
 import { toast } from "react-toastify";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
@@ -129,6 +129,16 @@ const User = () => {
     }
   });
 
+  const getStatusColor = (status) => {
+    if (status == "Pending") {
+      return "info";
+    } else if (status == "Approve") {
+      return "success";
+    } else {
+      return "failure";
+    }
+  };
+
   return (
     <DefaultLayout>
       <Title title={"User Account"} />
@@ -197,12 +207,18 @@ const User = () => {
       <div className="container mx-auto">
         <div className="wrapper flex w-full justify-between items-center px-10 my-10">
           <div className="wrapper">
-            <h1 className="text-white text-3xl">
-              Account Status:{" "}
-              <span className="font-bold">
+            <div className="flex items-center justify-start">
+              <h1 className="text-white text-3xl">Account Status: </h1>
+              <Badge
+                color={getStatusColor(
+                  currentUser.status ? currentUser.status : "Pending"
+                )}
+                className={`font-bold ml-3 text-2xl `}
+              >
                 {currentUser.status ? currentUser.status : "Pending"}
-              </span>
-            </h1>
+              </Badge>
+            </div>
+
             <div className="wrapper flex items-center justify-start">
               <h1 className="text-white text-3xl">
                 College Name:{" "}
