@@ -36,7 +36,15 @@ const Registration = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    if (forms.password.length < 8) {
+      toast.error("Password must be at least 8 characters long");
+      return;
+    }
 
+    if (forms.contactNumber.length !== 10 || forms.contactNumber[0] !== "9") {
+      toast.error("Phone number must be 10 digits long and start with '9'");
+      return;
+    }
     if (forms.password !== forms.confirmPassword) {
       toast.error("Password does not match");
       return;
