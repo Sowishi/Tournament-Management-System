@@ -146,12 +146,6 @@ const Registration = () => {
               placeHolder={"Name of school/Institution"}
               label={"College Name"}
             />
-            <TmsSelect
-              name="position"
-              onChange={handleChange}
-              label={"Position"}
-              data={["Student", "Faculty", "Coach", "Others"]}
-            />
           </div>
 
           <div className="flex">
