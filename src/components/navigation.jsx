@@ -12,9 +12,14 @@ import {
   HiOutlineUser,
 } from "react-icons/hi";
 import useGetEventName from "../hooks/useGetEventName";
+import { useEffect } from "react";
 const Navigation = () => {
   const { setCurrentEvent, currentEvent, currentUser } = useStore();
   const { data: eventNameData } = useGetEventName();
+
+  useEffect(() => {
+    setCurrentEvent(currentUser.sportsInfo);
+  }, []);
 
   return (
     <div className="navs w-100 bg-white py-1">
@@ -29,18 +34,6 @@ const Navigation = () => {
             Home
           </Button>
         </Link>
-        <Dropdown color={"gray"} label={currentEvent ? currentEvent : "Events"}>
-          {eventNameData?.map((event) => {
-            return (
-              <Dropdown.Item
-                key={event.id}
-                onClick={() => setCurrentEvent(event.eventName)}
-              >
-                {event.eventName}
-              </Dropdown.Item>
-            );
-          })}
-        </Dropdown>
 
         {!currentEvent && (
           <>
