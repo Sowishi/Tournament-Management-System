@@ -49,6 +49,12 @@ const AdminAdmins = () => {
       return item;
     }
   });
+
+  const filterWithoutMasterAdmin = data.filter((item) => {
+    if (item.role !== "Master Admin") {
+      return item;
+    }
+  });
   return (
     <AdminLayout>
       <TmsModal
@@ -133,7 +139,7 @@ const AdminAdmins = () => {
           </Button>
         </div>
         <AdminTable
-          data={currentRole == "All" ? data : filterData}
+          data={currentRole == "All" ? filterWithoutMasterAdmin : filterData}
           handleUpdateForms={handleUpdateForms}
         />
       </div>
