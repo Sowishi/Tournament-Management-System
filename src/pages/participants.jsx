@@ -3,12 +3,14 @@ import Title from "../components/title";
 import { ListGroup } from "flowbite-react";
 import logo from "../assets/logo2.png";
 import useGetUsers from "../hooks/useGetUsers";
+import { useStore } from "../zustand/store";
 
 const Participants = () => {
   const { data } = useGetUsers();
+  const { currentEvent } = useStore();
 
   const filterData = data.filter((user) => {
-    if (user.status == "Approve") {
+    if (user.status == "Approve" && user.sportsInfo == currentEvent) {
       return user;
     }
   });
