@@ -18,7 +18,7 @@ const Navigation = () => {
   const { data: eventNameData } = useGetEventName();
 
   useEffect(() => {
-    setCurrentEvent(currentUser.sportsInfo);
+    setCurrentEvent(currentUser?.sportsInfo);
   }, []);
 
   return (
