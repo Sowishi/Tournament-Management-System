@@ -13,6 +13,7 @@ import useGetEventName from "../hooks/useGetEventName";
 import useDeleteEventName from "../hooks/useDeleteEventName";
 import TmsModal from "../components/tmsModal";
 import ConfirmationModals from "../components/confirmationModal";
+import { HiOutlineTrash } from "react-icons/hi";
 
 const AdminHome = () => {
   const [addPicModal, setAddPicModal] = useState(false);
@@ -155,15 +156,22 @@ const AdminHome = () => {
           {data?.map((pic) => {
             return (
               <div key={pic.id} className="basis-3/12 my-3">
-                <div className="wrapper flex flex-col">
-                  <img src={pic.url} alt="" />
+                <div className="wrapper flex flex-col justify-center items-center">
+                  <img
+                    style={{ width: 300, height: 250, objectFit: "cover" }}
+                    src={pic.url}
+                    alt=""
+                  />
                   <Button
+                    style={{ marginTop: 10 }}
                     color={"failure"}
                     onClick={() => {
                       setSelectedCarousel(pic.id);
                       setDeleteCarouselModal(true);
                     }}
                   >
+                    {" "}
+                    <HiOutlineTrash className="mr-2 h-5 w-5" />
                     Delete Picture
                   </Button>
                 </div>
@@ -189,6 +197,7 @@ const AdminHome = () => {
                   className="ml-10"
                   color={"failure"}
                 >
+                  <HiOutlineTrash className="mr-2 h-5 w-5" />
                   Delete
                 </Button>
                 <div className="ml-10">
