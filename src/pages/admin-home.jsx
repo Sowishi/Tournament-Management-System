@@ -158,6 +158,7 @@ const AdminHome = () => {
               <div key={pic.id} className="basis-3/12 my-3">
                 <div className="wrapper flex flex-col justify-center items-center">
                   <img
+                    className="rounded-md"
                     style={{ width: 300, height: 250, objectFit: "cover" }}
                     src={pic.url}
                     alt=""

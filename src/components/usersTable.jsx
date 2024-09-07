@@ -7,6 +7,8 @@ import useGetEventName from "../hooks/useGetEventName";
 import { useState } from "react";
 import TmsModal from "./tmsModal";
 import { useStore } from "../zustand/store";
+import ConfirmationModals from "./confirmationModal";
+import { toast } from "react-toastify";
 
 export function UsersTable() {
   const { data } = useGetUsers();
@@ -16,6 +18,7 @@ export function UsersTable() {
   const [documentModal, setDocumentModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(false);
   const { currentUser } = useStore();
+  const [deleteModal, setDeleteModal] = useState(false);
 
   const getBadgeColor = (status) => {
     if (status == "Pending") {
@@ -109,6 +112,17 @@ export function UsersTable() {
           );
         })}
       </div>
+
+      <ConfirmationModals
+        title={"Are you sure to delete this user?"}
+        handleSubmit={() => {
+          deleteUser(selectedUser);
+          setDeleteModal(false);
+          toast.success("Successfully Deleted User");
+        }}
+        openModal={deleteModal}
+        handleClose={() => setDeleteModal(false)}
+      />
       <Table>
         <Table.Head className="bg-slate-800">
           <Table.HeadCell className="bg-slate-800 text-white">
@@ -170,7 +184,12 @@ export function UsersTable() {
                     <Dropdown.Item onClick={() => rejectUser(user.id)}>
                       Reject User
                     </Dropdown.Item>
-                    <Dropdown.Item onClick={() => deleteUser(user.id)}>
+                    <Dropdown.Item
+                      onClick={() => {
+                        setDeleteModal(true);
+                        setSelectedUser(user.id);
+                      }}
+                    >
                       Delete User
                     </Dropdown.Item>
                   </Dropdown>
