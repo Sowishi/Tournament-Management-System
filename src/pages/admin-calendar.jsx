@@ -10,6 +10,8 @@ import useCrudCalendar from "../hooks/useCrudCalendar";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import TmsModal from "../components/tmsModal";
+import ConfirmationModals from "../components/confirmationModal";
+import { toast } from "react-toastify";
 
 const AdminCalendar = () => {
   const localizer = momentLocalizer(moment);
@@ -18,7 +20,8 @@ const AdminCalendar = () => {
   const [selectedEvent, setSelectedEvent] = useState("RSCUAA");
   const { addCalendar, data, deleteCalendar } = useCrudCalendar();
   const [deleteModal, setDeleteModal] = useState(false);
-
+  const [confirmationModal, setCofirmationModal] = useState(false);
+  const [selectedCalendar, setSelectedCalendar] = useState();
   const [forms, setForms] = useState({
     title: "",
     start: "",
@@ -62,6 +65,11 @@ const AdminCalendar = () => {
         handleClose={() => setDeleteModal(false)}
       >
         <div className="container">
+          {data.length <= 0 && (
+            <h1 className="text-center text-3xl my-20">
+              There's no calendar events yet
+            </h1>
+          )}
           {data.map((item) => {
             return (
               <div className="wrapperf flex justify-between items-center">
@@ -69,7 +77,13 @@ const AdminCalendar = () => {
                   <h1 className="text-2xl font-bold">{item.title}</h1>
                   <h1>{item.eventName}</h1>
                 </div>
-                <Button onClick={() => deleteCalendar(item)} color={"failure"}>
+                <Button
+                  onClick={() => {
+                    setCofirmationModal(true);
+                    setSelectedCalendar(item);
+                  }}
+                  color={"failure"}
+                >
                   Delete
                 </Button>
               </div>
@@ -132,6 +146,17 @@ const AdminCalendar = () => {
           </Button>
         </div>
       </div>
+
+      <ConfirmationModals
+        title={"Are you sure to delete this calendar event?"}
+        handleSubmit={() => {
+          deleteCalendar(selectedCalendar);
+          setCofirmationModal(false);
+          toast.success("Successfully Deleted Calendar");
+        }}
+        openModal={confirmationModal}
+        handleClose={() => setCofirmationModal(false)}
+      />
 
       <div className="container mx-auto py-5 ">
         <h1 className="text-white text-3xl mx-5">Calendar: {selectedEvent}</h1>
