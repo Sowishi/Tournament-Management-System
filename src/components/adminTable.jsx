@@ -4,22 +4,27 @@ import { Badge, Button, Dropdown, Table } from "flowbite-react";
 import useGetUsers from "../hooks/useGetUsers";
 import useUpdateUser from "../hooks/useUpdateUser";
 import useCrudAdmin from "../hooks/useCrudAdmin";
+import ConfirmationModals from "./confirmationModal";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
 export function AdminTable({ handleUpdateForms, data }) {
   const { deleteAdmin } = useCrudAdmin();
-
-  const getBadgeColor = (status) => {
-    if (status == "Pending") {
-      return "info";
-    } else if (status == "Approve") {
-      return "success";
-    } else {
-      return "failure";
-    }
-  };
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [selectedAdmin, setSelectedAdmin] = useState();
 
   return (
     <div className="overflow-x-auto mt-10">
+      <ConfirmationModals
+        title={"Are you sure to delete this admin?"}
+        handleSubmit={() => {
+          deleteAdmin({ id: selectedAdmin });
+          setDeleteModal(false);
+          toast.success("Successfully Deleted Admin");
+        }}
+        openModal={deleteModal}
+        handleClose={() => setDeleteModal(false)}
+      />
       <Table>
         <Table.Head className="bg-slate-800">
           <Table.HeadCell className="bg-slate-800 text-white">
@@ -56,7 +61,10 @@ export function AdminTable({ handleUpdateForms, data }) {
                       Update
                     </Button>{" "}
                     <Button
-                      onClick={() => deleteAdmin(user)}
+                      onClick={() => {
+                        setSelectedAdmin(user.id);
+                        setDeleteModal(true);
+                      }}
                       color={"failure"}
                       className="mx-3"
                     >
