@@ -9,17 +9,6 @@ const Events = () => {
   return (
     <DefaultLayout>
       <Title title={"Events Display"} />
-
-      <div className="header flex m-5">
-        <div className="wrapper ml-10 flex">
-          <TmsSelect data={["Select Tournament", "Bicol Meet"]} />
-          <div className="mx-3">
-            <TmsSelect data={["Category"]} />
-          </div>
-          <TmsSelect data={["Default"]} />
-        </div>
-      </div>
-      <SingleElimination teams={teams} />
     </DefaultLayout>
   );
 };

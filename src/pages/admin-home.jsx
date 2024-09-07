@@ -12,10 +12,15 @@ import useAddEventName from "../hooks/useAddEventName";
 import useGetEventName from "../hooks/useGetEventName";
 import useDeleteEventName from "../hooks/useDeleteEventName";
 import TmsModal from "../components/tmsModal";
+import ConfirmationModals from "../components/confirmationModal";
 
 const AdminHome = () => {
   const [addPicModal, setAddPicModal] = useState(false);
   const [addEventModal, setAddEventModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState();
+  const [deleteCarouselModal, setDeleteCarouselModal] = useState(false);
+  const [selectedCarousel, setSelectedCarousel] = useState();
+  const [selectedEvent, setSelectedEvent] = useState();
 
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(null);
@@ -106,7 +111,25 @@ const AdminHome = () => {
             <TmsInput onChange={handleImageChange} type={"file"} />
           </div>
         )}
-      </TmsModal>{" "}
+      </TmsModal>
+      <ConfirmationModals
+        title={"Are you sure to delete this event name?"}
+        handleSubmit={() => {
+          deleteEventName(selectedEvent);
+          setDeleteModal(false);
+        }}
+        openModal={deleteModal}
+        handleClose={() => setDeleteModal(false)}
+      />
+      <ConfirmationModals
+        title={"Are you sure to delete this carousel picture?"}
+        handleSubmit={() => {
+          deleteCarouselPic(selectedCarousel);
+          setDeleteCarouselModal(false);
+        }}
+        openModal={deleteCarouselModal}
+        handleClose={() => setDeleteCarouselModal(false)}
+      />
       <TmsModal
         onSubmit={handlUploadEvent}
         title="Add Event Modal"
@@ -136,7 +159,10 @@ const AdminHome = () => {
                   <img src={pic.url} alt="" />
                   <Button
                     color={"failure"}
-                    onClick={() => deleteCarouselPic(pic.id)}
+                    onClick={() => {
+                      setSelectedCarousel(pic.id);
+                      setDeleteCarouselModal(true);
+                    }}
                   >
                     Delete Picture
                   </Button>
@@ -156,7 +182,10 @@ const AdminHome = () => {
             return (
               <ListGroup.Item key={event.id}>
                 <Button
-                  onClick={() => deleteEventName(event.id)}
+                  onClick={() => {
+                    setSelectedEvent(event.id);
+                    setDeleteModal(true);
+                  }}
                   className="ml-10"
                   color={"failure"}
                 >
