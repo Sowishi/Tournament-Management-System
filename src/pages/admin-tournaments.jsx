@@ -12,7 +12,7 @@ const AdminTournament = () => {
   const [createModal, setCreateModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selectedTournament, setSelectedTournament] = useState();
-  const { addTournament, data } = useCrudTournament();
+  const { addTournament, data, deleteTournament } = useCrudTournament();
 
   const [forms, setForms] = useState({
     tournamentName: "",
@@ -96,6 +96,7 @@ const AdminTournament = () => {
             return (
               <div key={item} className="basis-3/12 my-5 p-5">
                 <TournamentCard
+                  deleteTournament={deleteTournament}
                   setShowModal={setShowModal}
                   setSelectedTournament={setSelectedTournament}
                   tournament={item}

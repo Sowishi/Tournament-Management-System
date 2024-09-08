@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { json } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const useCrudTournament = () => {
@@ -33,7 +34,19 @@ const useCrudTournament = () => {
     const output = await res.json();
     return output;
   };
-  return { addTournament, data };
+
+  const deleteTournament = async (forms) => {
+    const res = await fetch("http://localhost:5000/delete-tournament", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json", // Set the Content-Type header
+      },
+      body: JSON.stringify(forms.tournament),
+    });
+    const output = await res.json();
+    return output;
+  };
+  return { addTournament, data, deleteTournament };
 };
 
 export default useCrudTournament;

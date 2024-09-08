@@ -33,7 +33,6 @@ app.get("/get-tournaments", async (req, res) => {
     }
 
     const tournaments = await response.json();
-    console.log(tournaments);
 
     // Send the fetched tournaments data to the client
     res.json({
@@ -94,6 +93,39 @@ app.post("/create-tournament", async (req, res) => {
     // Send error response
     res.status(500).json({
       message: "Error creating tournament",
+      error: error.message,
+    });
+  }
+});
+
+app.delete("/delete-tournament", async (req, res) => {
+  const { id } = req.body;
+  try {
+    const response = await fetch(
+      `https://api.challonge.com/v1/tournaments/${id}.json?api_key=RloHpyQkc1CVVlZvv48DtBqq16d8XTAYUhNVLau7`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      // If the response status is not OK, throw an error
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const output = await response.json();
+    // Send success response
+    res.json({
+      message: "Tournament deleted successfully",
+      data: output,
+    });
+  } catch (error) {
+    // Handle any errors
+    console.error("Error deleting tournament:", error);
+    // Send error response
+    res.status(500).json({
+      message: "Error deleting tournament",
       error: error.message,
     });
   }
