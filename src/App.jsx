@@ -21,6 +21,7 @@ import AdminLogin from "./pages/admin-login";
 import { useStore } from "./zustand/store";
 import AdminCalendar from "./pages/admin-calendar";
 import User from "./pages/user";
+import AdminTournament from "./pages/admin-tournaments";
 
 const App = () => {
   const { currentUser, guest, currentAdmin } = useStore();
@@ -78,6 +79,10 @@ const App = () => {
         <Route
           path="/admin/calendar"
           element={currentAdmin ? <AdminCalendar /> : <AdminLogin />}
+        />
+        <Route
+          path="/admin/tournament"
+          element={currentAdmin ? <AdminTournament /> : <AdminLogin />}
         />
       </Routes>
     </>

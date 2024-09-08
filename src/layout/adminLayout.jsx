@@ -90,7 +90,7 @@ export default function AdminLayout({ children }) {
                       <Link to="/admin/calendar">
                         <Sidebar.Item>Calendar</Sidebar.Item>
                       </Link>
-                      <Link to="/admin/admins">
+                      <Link to="/admin/tournament">
                         <Sidebar.Item>Tournament</Sidebar.Item>
                       </Link>
                       <Link
