@@ -9,12 +9,47 @@ const corsOption = {
   origin: "http://localhost:5173",
 };
 
-app.use(cors(corsOption)); // Enable CORS
-app.use(bodyParser.json()); // Parse JSON bodies
+app.use(cors(corsOption));
+app.use(bodyParser.json());
 
-// Define a simple route
 app.get("/", (req, res) => {
   res.send("Hello from Express!");
+});
+
+app.get("/get-tournaments", async (req, res) => {
+  try {
+    const response = await fetch(
+      "https://api.challonge.com/v1/tournaments.json?api_key=RloHpyQkc1CVVlZvv48DtBqq16d8XTAYUhNVLau7",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const tournaments = await response.json();
+    console.log(tournaments);
+
+    // Send the fetched tournaments data to the client
+    res.json({
+      message: "Tournaments fetched successfully",
+      data: tournaments,
+    });
+  } catch (error) {
+    // Handle any errors
+    console.error("Error fetching tournaments:", error);
+
+    // Send error response
+    res.status(500).json({
+      message: "Error fetching tournaments",
+      error: error.message,
+    });
+  }
 });
 
 // Define an endpoint to create a tournament
