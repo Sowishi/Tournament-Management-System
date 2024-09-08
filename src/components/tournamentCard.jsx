@@ -2,7 +2,11 @@
 
 import { Button, Card } from "flowbite-react";
 
-export default function TournamentCard({ tournament, setSelectedTournament }) {
+export default function TournamentCard({
+  tournament,
+  setSelectedTournament,
+  setShowModal,
+}) {
   const { tournament: data } = tournament;
   return (
     <Card className="max-w-sm">
@@ -15,7 +19,12 @@ export default function TournamentCard({ tournament, setSelectedTournament }) {
       <p className="font-normal text-gray-700 dark:text-gray-400">
         {data.tournament_type}
       </p>
-      <Button onClick={() => setSelectedTournament(data)}>
+      <Button
+        onClick={() => {
+          setSelectedTournament(data);
+          setShowModal(true);
+        }}
+      >
         View Tournament
         <svg
           className="-mr-1 ml-2 h-4 w-4"

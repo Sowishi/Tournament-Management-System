@@ -10,6 +10,7 @@ import TournamentCard from "../components/tournamentCard";
 
 const AdminTournament = () => {
   const [createModal, setCreateModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [selectedTournament, setSelectedTournament] = useState();
   const { addTournament, data } = useCrudTournament();
 
@@ -34,8 +35,6 @@ const AdminTournament = () => {
     toast.success(res.message);
     setCreateModal(false);
   };
-
-  console.log(data);
 
   return (
     <AdminLayout>
@@ -69,7 +68,22 @@ const AdminTournament = () => {
           />
         </form>
       </TmsModal>
-      <iframe src={selectedTournament} frameborder="0"></iframe>
+      <TmsModal
+        hideFooter
+        title={"View Tournament"}
+        openModal={showModal}
+        handleClose={() => setShowModal(false)}
+        size={"7xl"}
+      >
+        <iframe
+          src={`${selectedTournament?.full_challonge_url}/module`}
+          width="100%"
+          height="500"
+          frameborder="0"
+          scrolling="auto"
+          allowtransparency="true"
+        ></iframe>{" "}
+      </TmsModal>
       <div className="container  mx-auto my-10">
         <div className="wrapper flex justify-between items-center">
           <h1 className="text-white text-4xl font-bold mb-5">Tournament</h1>
@@ -80,8 +94,9 @@ const AdminTournament = () => {
         <div className="flex flex-wrap">
           {data.map((item) => {
             return (
-              <div key={item.id} className="basis-3/12 my-5 p-5">
+              <div key={item} className="basis-3/12 my-5 p-5">
                 <TournamentCard
+                  setShowModal={setShowModal}
                   setSelectedTournament={setSelectedTournament}
                   tournament={item}
                 />
