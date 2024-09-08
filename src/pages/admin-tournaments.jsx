@@ -34,8 +34,10 @@ const AdminTournament = () => {
     }
     toast.success(res.message);
     setCreateModal(false);
+    window.location.reload();
   };
 
+  console.log(selectedTournament);
   return (
     <AdminLayout>
       <TmsModal
@@ -75,6 +77,21 @@ const AdminTournament = () => {
         handleClose={() => setShowModal(false)}
         size={"7xl"}
       >
+        {selectedTournament?.state == "complete" && (
+          <div className="flex flex-col justify-center items-center  mb-5">
+            <h1 className="text-4xl font-bold text-center">
+              Tournament Completed! 🎉{" "}
+            </h1>
+            <Button className="my-2">
+              <a
+                href={`https://challonge.com/${selectedTournament.url}`}
+                target="_blank"
+              >
+                View Challonge Offical Result
+              </a>
+            </Button>
+          </div>
+        )}
         <iframe
           src={`${selectedTournament?.full_challonge_url}/module`}
           width="100%"
