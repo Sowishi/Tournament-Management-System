@@ -14,7 +14,8 @@ const ViewTournament = () => {
   const navigation = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const { getParticipants, addParticipant } = useCrudParticipants();
+  const { getParticipants, addParticipant, deleteParticipant } =
+    useCrudParticipants();
   const tournament = {
     name: queryParams.get("name"),
     date: queryParams.get("date"),
@@ -38,6 +39,14 @@ const ViewTournament = () => {
     if (!output.error) {
       toast.success(output.message);
       setAddModal(false);
+      window.location.reload();
+    }
+  };
+
+  const handleDeleteParticipant = async (userID) => {
+    const output = await deleteParticipant(id, userID);
+    if (!output.error) {
+      toast.success(output.message);
       window.location.reload();
     }
   };
@@ -97,7 +106,7 @@ const ViewTournament = () => {
             <h1 className="text-white text-3xl font-bold">
               Tournament Participants
             </h1>
-            <Badge className="ml-3">{tournament.participants_count}</Badge>
+            <Badge className="ml-3">{participants.length}</Badge>
           </div>
           {participants.length <= 0 && (
             <h1 className="text-white text-center text-3xl">
@@ -105,7 +114,10 @@ const ViewTournament = () => {
             </h1>
           )}
           {participants.length >= 1 && (
-            <ParticipantsTables participants={participants} />
+            <ParticipantsTables
+              handleDeleteParticipant={handleDeleteParticipant}
+              participants={participants}
+            />
           )}
         </div>
       </div>

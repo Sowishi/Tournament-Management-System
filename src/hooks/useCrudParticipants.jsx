@@ -37,7 +37,26 @@ const useCrudParticipants = () => {
     }
   };
 
-  return { getParticipants, addParticipant };
+  const deleteParticipant = async (tourID, id) => {
+    try {
+      const res = await fetch("http://localhost:5000/delete-participant", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json", // Set the Content-Type header
+        },
+        body: JSON.stringify({ tourID, userID: id }),
+      });
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      const output = await res.json();
+      return output;
+    } catch (error) {
+      toast.error(`Error deleting participant`);
+    }
+  };
+
+  return { getParticipants, addParticipant, deleteParticipant };
 };
 
 export default useCrudParticipants;
