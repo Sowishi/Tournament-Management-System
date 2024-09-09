@@ -37,7 +37,6 @@ const AdminTournament = () => {
     window.location.reload();
   };
 
-  console.log(selectedTournament);
   return (
     <AdminLayout>
       <TmsModal

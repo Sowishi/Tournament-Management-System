@@ -1,6 +1,7 @@
 "use client";
 
 import { Button, Card } from "flowbite-react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export default function TournamentCard({
@@ -10,6 +11,7 @@ export default function TournamentCard({
   deleteTournament,
 }) {
   const { tournament: data } = tournament;
+  const navigation = useNavigate();
   return (
     <Card className="max-w-sm">
       <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
@@ -24,8 +26,11 @@ export default function TournamentCard({
       <div className="flex">
         <Button
           onClick={() => {
+            const queryString = new URLSearchParams(data).toString();
+            console.log(data);
             setSelectedTournament(data);
             setShowModal(true);
+            navigation(`/admin/tournament/${data.url}?details=${queryString}`);
           }}
         >
           View Tournament

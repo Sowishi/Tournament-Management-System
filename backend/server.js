@@ -71,7 +71,7 @@ app.post("/create-tournament", async (req, res) => {
             description: description,
             show_rounds: true,
             review_before_finalizing: false,
-            ranked_by: "match wins",
+            ranked_by: "match wins  ",
           },
         }),
       }
