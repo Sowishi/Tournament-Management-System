@@ -16,6 +16,37 @@ app.get("/", (req, res) => {
   res.send("Hello from Express!");
 });
 
+app.get("/get-participants", async (req, res) => {
+  const id = req.query.id;
+  try {
+    const response = await fetch(
+      `https://api.challonge.com/v1/tournaments/${id}/participants.json?api_key=RloHpyQkc1CVVlZvv48DtBqq16d8XTAYUhNVLau7`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const tournaments = await response.json();
+    res.json({
+      message: "Participants fetched successfully",
+      data: tournaments,
+    });
+  } catch (error) {
+    console.error("Error fetching participants:", error);
+    res.status(500).json({
+      message: "Error fetching participants",
+      error: error.message,
+    });
+  }
+});
+
+//Tournament
+
 app.get("/get-tournaments", async (req, res) => {
   try {
     const response = await fetch(
@@ -51,7 +82,6 @@ app.get("/get-tournaments", async (req, res) => {
   }
 });
 
-// Define an endpoint to create a tournament
 app.post("/create-tournament", async (req, res) => {
   const { tournamentName, tournamentType, description } = req.body;
 
@@ -133,6 +163,7 @@ app.delete("/delete-tournament", async (req, res) => {
     });
   }
 });
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
