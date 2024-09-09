@@ -45,6 +45,52 @@ app.get("/get-participants", async (req, res) => {
   }
 });
 
+app.post("/add-participant", async (req, res) => {
+  const { users, id } = req.body;
+  const names = users
+    .filter((user) => user.fullName)
+    .map((user) => {
+      return { name: user.collegeName };
+    });
+  console.log(id, names);
+  try {
+    const response = await fetch(
+      `https://api.challonge.com/v1/tournaments/${id}/participants/bulk_add.json?api_key=RloHpyQkc1CVVlZvv48DtBqq16d8XTAYUhNVLau7`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          participants: names,
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      // If the response status is not OK, throw an error
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const output = await response.json();
+
+    // Send success response
+    res.json({
+      message: "Participants Added successfully",
+      data: output,
+    });
+  } catch (error) {
+    // Handle any errors
+    console.error("Error adding participants:", error);
+
+    // Send error response
+    res.status(500).json({
+      message: "Error adding participants",
+      error: error.message,
+    });
+  }
+});
+
 //Tournament
 
 app.get("/get-tournaments", async (req, res) => {

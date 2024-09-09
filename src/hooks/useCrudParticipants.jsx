@@ -18,7 +18,26 @@ const useCrudParticipants = () => {
     }
   };
 
-  return { getParticipants };
+  const addParticipant = async (users, id) => {
+    try {
+      const res = await fetch("http://localhost:5000/add-participant", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // Set the Content-Type header
+        },
+        body: JSON.stringify({ users, id }),
+      });
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      const output = await res.json();
+      return output;
+    } catch (error) {
+      toast.error(`Error adding participant`);
+    }
+  };
+
+  return { getParticipants, addParticipant };
 };
 
 export default useCrudParticipants;

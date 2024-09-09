@@ -4,14 +4,17 @@ import { Badge, Button } from "flowbite-react";
 import useCrudParticipants from "../hooks/useCrudParticipants";
 import { useEffect, useState } from "react";
 import ParticipantsTables from "../components/participantsTable";
+import TmsModal from "../components/tmsModal";
+import useGetUsers from "../hooks/useGetUsers";
+import AddParticipantsTable from "../components/addParticipantsTable";
+import { toast } from "react-toastify";
 
 const ViewTournament = () => {
   const { id } = useParams();
   const navigation = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const { getParticipants } = useCrudParticipants();
-  const [participants, setParticipants] = useState([]);
+  const { getParticipants, addParticipant } = useCrudParticipants();
   const tournament = {
     name: queryParams.get("name"),
     date: queryParams.get("date"),
@@ -19,20 +22,44 @@ const ViewTournament = () => {
     description: queryParams.get("description"),
     participants_count: queryParams.get("participants_count"),
   };
+  const { data: users } = useGetUsers();
+  const [selectedUsers, setSelectedUsers] = useState([]);
+
+  const [participants, setParticipants] = useState([]);
+  const [addModal, setAddModal] = useState(false);
 
   const handleGetParticipants = async () => {
     const output = await getParticipants(id);
     setParticipants(output.data);
   };
 
+  const handleAddParticpant = async () => {
+    const output = await addParticipant(selectedUsers, id);
+    if (!output.error) {
+      toast.success(output.message);
+      setAddModal(false);
+      window.location.reload();
+    }
+  };
+
   useEffect(() => {
     handleGetParticipants();
   }, []);
 
-  console.log(participants);
-
   return (
     <AdminLayout>
+      <TmsModal
+        onSubmit={handleAddParticpant}
+        title={"Add Participant"}
+        size={"5xl"}
+        openModal={addModal}
+        handleClose={() => setAddModal(false)}
+      >
+        <AddParticipantsTable
+          setSelectedUsers={setSelectedUsers}
+          users={users}
+        />
+      </TmsModal>
       <div className="container mx-auto mt-10 pb-20">
         <div className="wrapper flex items-center justify-between mb-5">
           <div className="wrapper flex items-center">
@@ -49,7 +76,13 @@ const ViewTournament = () => {
               {tournament.tournament_type}
             </Badge>
           </div>
-          <Button>Add Participants</Button>
+          <Button
+            onClick={() => {
+              setAddModal(true);
+            }}
+          >
+            Add Participants
+          </Button>
         </div>
         <iframe
           src={`https://challonge.com/${id}/module`}
