@@ -169,7 +169,25 @@ const ViewTournament = () => {
           scrolling="auto"
           allowtransparency="true"
         ></iframe>
-        <div className="participants">
+        {matches.length >= 1 && (
+          <div className="matches my-20">
+            <div className="wrapper flex items-center my-5">
+              <h1 className="text-white text-3xl font-bold">
+                Tournament Matches
+              </h1>
+              <Badge className="ml-3">{matches.length}</Badge>
+            </div>
+            <div className="flex flex-wrap">
+              {matches.map((item) => {
+                const { match } = item;
+
+                return <MatchCard id={id} key={match.id} match={match} />;
+              })}
+            </div>
+          </div>
+        )}
+
+        <div className="participants my-20">
           <div className="wrapper flex items-center my-5">
             <h1 className="text-white text-3xl font-bold">
               Tournament Participants
@@ -187,21 +205,6 @@ const ViewTournament = () => {
               participants={participants}
             />
           )}
-        </div>
-        <div className="matches">
-          <div className="wrapper flex items-center my-5">
-            <h1 className="text-white text-3xl font-bold">
-              Tournament Matches
-            </h1>
-            <Badge className="ml-3">{matches.length}</Badge>
-          </div>
-          <div className="flex flex-wrap">
-            {matches.map((item) => {
-              const { match } = item;
-
-              return <MatchCard id={id} key={match.id} match={match} />;
-            })}
-          </div>
         </div>
       </div>
     </AdminLayout>

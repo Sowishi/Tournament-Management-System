@@ -1,14 +1,16 @@
 "use client";
 
-import { Badge, Button, Card } from "flowbite-react";
+import { Badge, Button, Card, Tooltip } from "flowbite-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import logo from "../assets/logo2.png";
 import useCrudParticipants from "../hooks/useCrudParticipants";
 import { useEffect, useState } from "react";
+import useCrudMatches from "../hooks/useCrudMatches";
 
 export default function MatchCard({ match, id }) {
   const { showParticipant } = useCrudParticipants();
+  const { updateMatchWinner } = useCrudMatches();
   const [player1, setPlayer1] = useState(null);
   const [player2, setPlayer2] = useState(null);
 
@@ -57,69 +59,92 @@ export default function MatchCard({ match, id }) {
         </Badge>
       </div>
 
-      <div className="oponents">
-        <h5 className="text-lg font-bold tracking-tight my-3 text-gray-900 dark:text-white">
-          {player1?.name ? (
-            player1?.name
-          ) : (
-            <Badge className="flex my-2" size={"lg"}>
-              Waiting for opponent
-            </Badge>
+      {match?.state !== "complete" && (
+        <>
+          <div className="oponents">
+            <h5 className="text-lg font-bold tracking-tight my-3 text-gray-900 dark:text-white">
+              {player1?.name ? (
+                player1?.name
+              ) : (
+                <Badge className="flex my-2" size={"lg"}>
+                  Waiting for opponent
+                </Badge>
+              )}
+            </h5>
+            <h5 className="text-2xl font-bold tracking-tight my-3 text-gray-900 dark:text-white">
+              <span className="text-blue-500">V</span>
+              <span className="text-red-500">S</span>
+            </h5>
+            <h5 className="text-lg font-bold tracking-tight text-gray-900 dark:text-white">
+              {player2?.name ? (
+                player2?.name
+              ) : (
+                <Badge className="flex my-2" size={"lg"}>
+                  Waiting for opponent
+                </Badge>
+              )}
+            </h5>
+          </div>
+          <h5 className="text-lg text-white border-b-2 border-t-2 mb-2 pb-2">
+            Who is the winner?
+          </h5>
+          <div className="flex justify-around items-center">
+            <Tooltip content={`${player1?.name}`}>
+              <Button
+                onClick={() => {
+                  updateMatchWinner(id, match.id, match.player1_id);
+                  setTimeout(() => {
+                    window.location.reload();
+                  }, 2000);
+                }}
+                disabled={match.state != "open"}
+                className="w-full px-5"
+              >
+                Player 1
+              </Button>
+            </Tooltip>
+            <Tooltip content={`${player2?.name}`}>
+              <Button
+                onClick={() => {
+                  updateMatchWinner(id, match.id, match.player2_id);
+                  setTimeout(() => {
+                    window.location.reload();
+                  }, 2000);
+                }}
+                disabled={match.state != "open"}
+                color={"pink"}
+                className="w-full px-5"
+              >
+                Player 2
+              </Button>
+            </Tooltip>
+          </div>
+        </>
+      )}
+      {match?.state == "complete" && (
+        <>
+          {match.winner_id == player1?.id && (
+            <>
+              <h5 className="text-2xl border-b-4 pb-5 font-bold tracking-tight text-gray-900 dark:text-white">
+                Winner 🎉🎉🎉
+              </h5>
+              <h5 className="text-4xl text-center font-bold tracking-tight text-gray-900 dark:text-white">
+                {player1?.name}
+              </h5>
+            </>
           )}
-        </h5>
-        <h5 className="text-2xl font-bold tracking-tight my-3 text-gray-900 dark:text-white">
-          <span className="text-blue-500">V</span>
-          <span className="text-red-500">S</span>
-        </h5>
-        <h5 className="text-lg font-bold tracking-tight text-gray-900 dark:text-white">
-          {player2?.name ? (
-            player2?.name
-          ) : (
-            <Badge className="flex my-2" size={"lg"}>
-              Waiting for opponent
-            </Badge>
+          {match.winner_id == player2?.id && (
+            <>
+              <h5 className="text-2xl border-b-4 pb-5 font-bold tracking-tight text-gray-900 dark:text-white">
+                Winner 🎉🎉🎉
+              </h5>
+              <h5 className="text-4xl text-center font-bold tracking-tight text-gray-900 dark:text-white">
+                {player2?.name}
+              </h5>
+            </>
           )}
-        </h5>
-      </div>
-
-      {/* <div className="flex">
-        <Button
-          onClick={() => {
-            setSelectedTournament(data);
-            setShowModal(true);
-            navigation(`/admin/tournament/${data.url}`);
-          }}
-        >
-          View Tournament
-          <svg
-            className="-mr-1 ml-2 h-4 w-4"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fillRule="evenodd"
-              d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </Button>
-        <Button
-          color={"failure"}
-          className="mx-3"
-          onClick={async () => {
-            const res = await deleteTournament(tournament);
-            if (res.error) {
-              toast.error(res.message);
-              return;
-            }
-            toast.success(res.message);
-            window.location.reload();
-          }}
-        >
-          Delete
-        </Button>
-      </div> */}
+        </>
+      )}
     </Card>
   );
 }

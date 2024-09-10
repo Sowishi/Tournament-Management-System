@@ -374,6 +374,48 @@ app.get("/get-matches", async (req, res) => {
   }
 });
 
+app.put("/update-match-winner", async (req, res) => {
+  const { tourID, winnerID, matchID } = req.query;
+
+  const data = {
+    api_key: "RloHpyQkc1CVVlZvv48DtBqq16d8XTAYUhNVLau7",
+    match: {
+      scores_csv: "1-0",
+      winner_id: winnerID,
+    },
+  };
+  try {
+    const response = await fetch(
+      `https://api.challonge.com/v1/tournaments/${tourID}/matches/${matchID}.json`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const matches = await response.json();
+    console.log(matches);
+    // Send the fetched matches data to the client
+    res.json({
+      message: "matches fetched successfully",
+      data: matches,
+    });
+  } catch (error) {
+    // Handle any errors
+    console.error("Error fetching matches:", error);
+    // Send error response
+    res.status(500).json({
+      message: "Error fetching matches",
+      error: error.message,
+    });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
