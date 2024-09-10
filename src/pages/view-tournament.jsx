@@ -1,6 +1,6 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import AdminLayout from "../layout/adminLayout";
-import { Badge, Button } from "flowbite-react";
+import { Badge, Button, Table } from "flowbite-react";
 import useCrudParticipants from "../hooks/useCrudParticipants";
 import { useEffect, useState } from "react";
 import ParticipantsTables from "../components/participantsTable";
@@ -14,7 +14,6 @@ const ViewTournament = () => {
   const { id } = useParams();
   const navigation = useNavigate();
   const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
   const { getParticipants, addParticipant, deleteParticipant } =
     useCrudParticipants();
   const { showTournament } = useCrudTournament();
@@ -90,15 +89,6 @@ const ViewTournament = () => {
           </div>
           <div className="wrapper flex items-center justify-center">
             <Button
-              className="mr-5"
-              color={"success"}
-              onClick={() => {
-                setAddModal(true);
-              }}
-            >
-              Start Tournament
-            </Button>
-            <Button
               onClick={() => {
                 setAddModal(true);
               }}
@@ -106,6 +96,37 @@ const ViewTournament = () => {
               Add Participants
             </Button>
           </div>
+        </div>
+        <div className="mb-5">
+          <Table hoverable>
+            <Table.Head>
+              <Table.HeadCell className="text-center bg-slate-900 text-white font-bold border">
+                Tournament State
+              </Table.HeadCell>
+              <Table.HeadCell className="text-center bg-slate-900 text-white font-bold border">
+                Registered Event
+              </Table.HeadCell>
+              <Table.HeadCell className="text-center bg-slate-900 text-white font-bold border">
+                Tournament Start Date
+              </Table.HeadCell>
+            </Table.Head>
+            <Table.Body className="divide-y">
+              <Table.Cell className="text-center flex items-center justify-center">
+                <Badge size={"lg"} className="px-10">
+                  <h1 className="text-lg"> {tournament?.state}</h1>
+                </Badge>
+              </Table.Cell>
+              <Table.Cell className="text-center">
+                <h1 className="text-lg text-white">
+                  {" "}
+                  {tournament?.description}
+                </h1>
+              </Table.Cell>
+              <Table.Cell className="text-center">
+                <h1 className="text-lg text-white">Aug 28, 2024</h1>
+              </Table.Cell>
+            </Table.Body>
+          </Table>
         </div>
         <iframe
           src={`https://challonge.com/${id}/module`}
