@@ -18,7 +18,8 @@ const ViewTournament = () => {
   const location = useLocation();
   const { getParticipants, addParticipant, deleteParticipant } =
     useCrudParticipants();
-  const { showTournament, startTournament } = useCrudTournament();
+  const { showTournament, startTournament, finalizeTournament } =
+    useCrudTournament();
   const { getMatches } = useCrudMatches();
 
   const { data: users } = useGetUsers();
@@ -58,6 +59,14 @@ const ViewTournament = () => {
 
   const handleStartTournament = async () => {
     const output = await startTournament(id);
+    if (!output.error) {
+      toast.success(output.message);
+      window.location.reload();
+    }
+  };
+
+  const handleFinalizeTournament = async () => {
+    const output = await finalizeTournament(id);
     if (!output.error) {
       toast.success(output.message);
       window.location.reload();
@@ -107,26 +116,41 @@ const ViewTournament = () => {
             </Badge>
           </div>
           <div className="wrapper flex items-center justify-center">
-            <Tooltip content="Add Participants in the tournament">
-              <Button
-                onClick={() => {
-                  setAddModal(true);
-                }}
-              >
-                Add Participants
-              </Button>
-            </Tooltip>
+            {tournament?.state == "pending" && (
+              <Tooltip content="Add Participants in the tournament">
+                <Button
+                  disabled={tournament?.state == "underway"}
+                  onClick={() => {
+                    setAddModal(true);
+                  }}
+                >
+                  Add Participants
+                </Button>
+              </Tooltip>
+            )}
 
-            <Tooltip content="Start the tournament">
-              <Button
-                disabled={tournament?.state !== "pending"}
-                color={"success"}
-                className="ml-5"
-                onClick={handleStartTournament}
-              >
-                Start Tournament
-              </Button>
-            </Tooltip>
+            {tournament?.state == "pending" && (
+              <Tooltip content="Start the tournament">
+                <Button
+                  color={"success"}
+                  className="ml-5"
+                  onClick={handleStartTournament}
+                >
+                  Start Tournament
+                </Button>
+              </Tooltip>
+            )}
+            {tournament?.state == "awaiting_review" && (
+              <Tooltip content="Finalize tournament">
+                <Button
+                  color={"success"}
+                  className="ml-5"
+                  onClick={handleFinalizeTournament}
+                >
+                  Finalize Tournament
+                </Button>
+              </Tooltip>
+            )}
           </div>
         </div>
         <div className="mb-5">
@@ -201,6 +225,7 @@ const ViewTournament = () => {
           )}
           {participants.length >= 1 && (
             <ParticipantsTables
+              tournament={tournament}
               handleDeleteParticipant={handleDeleteParticipant}
               participants={participants}
             />

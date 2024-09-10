@@ -56,6 +56,25 @@ const useCrudTournament = () => {
     }
   };
 
+  const finalizeTournament = async (id) => {
+    try {
+      const res = await fetch(
+        `http://localhost:5000/finalize-tournament?id=${id}`,
+        {
+          method: "POST",
+        }
+      );
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      const output = await res.json();
+      return output;
+    } catch (error) {
+      toast.error(`Error fetching data: ${error.message}`);
+      console.error("Error fetching data:", error);
+    }
+  };
+
   const addTournament = async (forms) => {
     const res = await fetch("http://localhost:5000/create-tournament", {
       method: "POST",
@@ -85,6 +104,7 @@ const useCrudTournament = () => {
     deleteTournament,
     showTournament,
     startTournament,
+    finalizeTournament,
   };
 };
 

@@ -308,6 +308,39 @@ app.post("/start-tournament", async (req, res) => {
   }
 });
 
+app.post("/finalize-tournament", async (req, res) => {
+  const id = req.query.id;
+
+  try {
+    const response = await fetch(
+      `https://api.challonge.com/v1/tournaments/${id}/finalize.json?api_key=RloHpyQkc1CVVlZvv48DtBqq16d8XTAYUhNVLau7`,
+      {
+        method: "POST",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const output = await response.json();
+    // Send success response
+    res.json({
+      message: "Tournament finalize successfully",
+      data: output,
+    });
+  } catch (error) {
+    // Handle any errors
+    console.error("Error finalizing tournament:", error);
+
+    // Send error response
+    res.status(500).json({
+      message: "Error finalizing tournament",
+      error: error.message,
+    });
+  }
+});
+
 app.delete("/delete-tournament", async (req, res) => {
   const { id } = req.body;
   try {

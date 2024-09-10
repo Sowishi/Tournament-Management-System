@@ -5,6 +5,7 @@ import { Button, Table } from "flowbite-react";
 export default function ParticipantsTables({
   participants,
   handleDeleteParticipant,
+  tournament,
 }) {
   return (
     <div className="overflow-x-auto">
@@ -38,6 +39,7 @@ export default function ParticipantsTables({
                 </Table.Cell>
                 <Table.Cell className="text-white flex justify-center items-center">
                   <Button
+                    disabled={tournament?.state != "pending"}
                     onClick={() => handleDeleteParticipant(participant.id)}
                     color={"failure"}
                   >

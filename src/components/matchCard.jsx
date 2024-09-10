@@ -16,9 +16,12 @@ export default function MatchCard({ match, id }) {
 
   const getBadgeColor = (state) => {
     if (state == "pending") {
-      return "warning";
+      return "info";
     }
     if (state == "open") {
+      return "warning";
+    }
+    if (state == "complete") {
       return "success";
     }
   };
@@ -128,7 +131,7 @@ export default function MatchCard({ match, id }) {
               <h5 className="text-2xl border-b-4 pb-5 font-bold tracking-tight text-gray-900 dark:text-white">
                 Winner 🎉🎉🎉
               </h5>
-              <h5 className="text-4xl text-center font-bold tracking-tight text-gray-900 dark:text-white">
+              <h5 className="text-3xl text-center font-bold tracking-tight text-gray-900 dark:text-white">
                 {player1?.name}
               </h5>
             </>
@@ -138,7 +141,7 @@ export default function MatchCard({ match, id }) {
               <h5 className="text-2xl border-b-4 pb-5 font-bold tracking-tight text-gray-900 dark:text-white">
                 Winner 🎉🎉🎉
               </h5>
-              <h5 className="text-4xl text-center font-bold tracking-tight text-gray-900 dark:text-white">
+              <h5 className="text-3xl text-center font-bold tracking-tight text-gray-900 dark:text-white">
                 {player2?.name}
               </h5>
             </>
