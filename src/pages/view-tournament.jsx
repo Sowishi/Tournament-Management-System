@@ -9,6 +9,8 @@ import useGetUsers from "../hooks/useGetUsers";
 import AddParticipantsTable from "../components/addParticipantsTable";
 import { toast } from "react-toastify";
 import useCrudTournament from "../hooks/useCrudTournament";
+import useCrudMatches from "../hooks/useCrudMatches";
+import MatchCard from "../components/matchCard";
 
 const ViewTournament = () => {
   const { id } = useParams();
@@ -17,10 +19,12 @@ const ViewTournament = () => {
   const { getParticipants, addParticipant, deleteParticipant } =
     useCrudParticipants();
   const { showTournament, startTournament } = useCrudTournament();
+  const { getMatches } = useCrudMatches();
 
   const { data: users } = useGetUsers();
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [participants, setParticipants] = useState([]);
+  const [matches, setMatches] = useState([]);
   const [addModal, setAddModal] = useState(false);
   const [tournament, setTournament] = useState();
 
@@ -54,12 +58,22 @@ const ViewTournament = () => {
 
   const handleStartTournament = async () => {
     const output = await startTournament(id);
-    console.log(output);
+    if (!output.error) {
+      toast.success(output.message);
+      window.location.reload();
+    }
+  };
+
+  const handleGetMatches = async () => {
+    const output = await getMatches(id);
+    const { data } = output;
+    setMatches(data);
   };
 
   useEffect(() => {
     handleGetParticipants();
     handleShowTournament();
+    handleGetMatches();
   }, []);
 
   return (
@@ -173,6 +187,21 @@ const ViewTournament = () => {
               participants={participants}
             />
           )}
+        </div>
+        <div className="matches">
+          <div className="wrapper flex items-center my-5">
+            <h1 className="text-white text-3xl font-bold">
+              Tournament Matches
+            </h1>
+            <Badge className="ml-3">{matches.length}</Badge>
+          </div>
+          <div className="flex flex-wrap">
+            {matches.map((item) => {
+              const { match } = item;
+
+              return <MatchCard key={match.id} match={match} />;
+            })}
+          </div>
         </div>
       </div>
     </AdminLayout>

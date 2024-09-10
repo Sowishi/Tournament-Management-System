@@ -16,6 +16,7 @@ app.get("/", (req, res) => {
   res.send("Hello from Express!");
 });
 
+//Participants
 app.get("/get-participants", async (req, res) => {
   const id = req.query.id;
   try {
@@ -127,8 +128,8 @@ app.delete("/delete-participant", async (req, res) => {
     });
   }
 });
-//Tournament
 
+//Tournament
 app.get("/get-tournaments", async (req, res) => {
   try {
     const response = await fetch(
@@ -305,6 +306,39 @@ app.delete("/delete-tournament", async (req, res) => {
     // Send error response
     res.status(500).json({
       message: "Error deleting tournament",
+      error: error.message,
+    });
+  }
+});
+
+//Matches
+app.get("/get-matches", async (req, res) => {
+  const id = req.query.id;
+  try {
+    const response = await fetch(
+      `https://api.challonge.com/v1/tournaments/${id}/matches.json?api_key=RloHpyQkc1CVVlZvv48DtBqq16d8XTAYUhNVLau7`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const matches = await response.json();
+    // Send the fetched matches data to the client
+    res.json({
+      message: "matches fetched successfully",
+      data: matches,
+    });
+  } catch (error) {
+    // Handle any errors
+    console.error("Error fetching matches:", error);
+    // Send error response
+    res.status(500).json({
+      message: "Error fetching matches",
       error: error.message,
     });
   }
