@@ -4,8 +4,14 @@ import { Badge, Button, Card } from "flowbite-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import logo from "../assets/logo2.png";
+import useCrudParticipants from "../hooks/useCrudParticipants";
+import { useEffect, useState } from "react";
 
-export default function MatchCard({ match }) {
+export default function MatchCard({ match, id }) {
+  const { showParticipant } = useCrudParticipants();
+  const [player1, setPlayer1] = useState(null);
+  const [player2, setPlayer2] = useState(null);
+
   const getBadgeColor = (state) => {
     if (state == "pending") {
       return "warning";
@@ -14,6 +20,32 @@ export default function MatchCard({ match }) {
       return "success";
     }
   };
+
+  const handleGetPlayer1 = async () => {
+    const userID = match.player1_id;
+    if (userID) {
+      const output = await showParticipant(id, userID);
+      const { participant } = output.data;
+      setPlayer1(participant);
+    }
+    return null;
+  };
+
+  const handleGetPlayer2 = async () => {
+    const userID = match.player2_id;
+    if (userID) {
+      const output = await showParticipant(id, userID);
+      const { participant } = output.data;
+      setPlayer2(participant);
+    }
+    return null;
+  };
+
+  useEffect(() => {
+    handleGetPlayer1();
+    handleGetPlayer2();
+  }, []);
+
   return (
     <Card className="max-w-sm bg-slate-800 dark shadow-2xl basis-4/12">
       <div className="wrapper flex items-center justify-star">
@@ -26,15 +58,27 @@ export default function MatchCard({ match }) {
       </div>
 
       <div className="oponents">
-        <h5 className="text-lg font-bold tracking-tight text-gray-900 dark:text-white">
-          Bicol University
+        <h5 className="text-lg font-bold tracking-tight my-3 text-gray-900 dark:text-white">
+          {player1?.name ? (
+            player1?.name
+          ) : (
+            <Badge className="flex my-2" size={"lg"}>
+              Waiting for opponent
+            </Badge>
+          )}
         </h5>
-        <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+        <h5 className="text-2xl font-bold tracking-tight my-3 text-gray-900 dark:text-white">
           <span className="text-blue-500">V</span>
           <span className="text-red-500">S</span>
         </h5>
         <h5 className="text-lg font-bold tracking-tight text-gray-900 dark:text-white">
-          Camarines Norte State College
+          {player2?.name ? (
+            player2?.name
+          ) : (
+            <Badge className="flex my-2" size={"lg"}>
+              Waiting for opponent
+            </Badge>
+          )}
         </h5>
       </div>
 

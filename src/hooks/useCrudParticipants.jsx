@@ -37,6 +37,27 @@ const useCrudParticipants = () => {
     }
   };
 
+  const showParticipant = async (tourID, userID) => {
+    try {
+      const res = await fetch(
+        `http://localhost:5000/show-participant?tourID=${tourID}&userID=${userID}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json", // Set the Content-Type header
+          },
+        }
+      );
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      const output = await res.json();
+      return output;
+    } catch (error) {
+      toast.error(`Error showing participant`);
+    }
+  };
+
   const deleteParticipant = async (tourID, id) => {
     try {
       const res = await fetch("http://localhost:5000/delete-participant", {
@@ -56,7 +77,12 @@ const useCrudParticipants = () => {
     }
   };
 
-  return { getParticipants, addParticipant, deleteParticipant };
+  return {
+    getParticipants,
+    addParticipant,
+    deleteParticipant,
+    showParticipant,
+  };
 };
 
 export default useCrudParticipants;

@@ -199,7 +199,7 @@ const ViewTournament = () => {
             {matches.map((item) => {
               const { match } = item;
 
-              return <MatchCard key={match.id} match={match} />;
+              return <MatchCard id={id} key={match.id} match={match} />;
             })}
           </div>
         </div>

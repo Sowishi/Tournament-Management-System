@@ -46,6 +46,36 @@ app.get("/get-participants", async (req, res) => {
   }
 });
 
+app.get("/show-participant", async (req, res) => {
+  const { tourID, userID } = req.query;
+
+  try {
+    const response = await fetch(
+      `https://api.challonge.com/v1/tournaments/${tourID}/participants/${userID}.json?api_key=RloHpyQkc1CVVlZvv48DtBqq16d8XTAYUhNVLau7`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const tournaments = await response.json();
+    res.json({
+      message: "Participants fetched successfully",
+      data: tournaments,
+    });
+  } catch (error) {
+    console.error("Error fetching participants:", error);
+    res.status(500).json({
+      message: "Error fetching participants",
+      error: error.message,
+    });
+  }
+});
+
 app.post("/add-participant", async (req, res) => {
   const { users, id } = req.body;
   const names = users
