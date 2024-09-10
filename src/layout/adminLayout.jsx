@@ -161,7 +161,7 @@ export default function AdminLayout({ children }) {
           </Sidebar>
         </Drawer.Items>
       </Drawer>
-      <div className="w-full bg-slate-950 min-h-screen">
+      <div className="w-full bg-slate-950 min-h-screen pb-20">
         <div
           className={`header ${getHeaderBackground(
             currentAdmin?.role

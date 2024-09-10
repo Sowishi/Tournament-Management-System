@@ -1,6 +1,6 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import AdminLayout from "../layout/adminLayout";
-import { Badge, Button, Table } from "flowbite-react";
+import { Badge, Button, Table, Tooltip } from "flowbite-react";
 import useCrudParticipants from "../hooks/useCrudParticipants";
 import { useEffect, useState } from "react";
 import ParticipantsTables from "../components/participantsTable";
@@ -16,7 +16,7 @@ const ViewTournament = () => {
   const location = useLocation();
   const { getParticipants, addParticipant, deleteParticipant } =
     useCrudParticipants();
-  const { showTournament } = useCrudTournament();
+  const { showTournament, startTournament } = useCrudTournament();
 
   const { data: users } = useGetUsers();
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -50,6 +50,11 @@ const ViewTournament = () => {
     const output = await showTournament(id);
     const { tournament } = output.data;
     setTournament(tournament);
+  };
+
+  const handleStartTournament = async () => {
+    const output = await startTournament(id);
+    console.log(output);
   };
 
   useEffect(() => {
@@ -88,13 +93,26 @@ const ViewTournament = () => {
             </Badge>
           </div>
           <div className="wrapper flex items-center justify-center">
-            <Button
-              onClick={() => {
-                setAddModal(true);
-              }}
-            >
-              Add Participants
-            </Button>
+            <Tooltip content="Add Participants in the tournament">
+              <Button
+                onClick={() => {
+                  setAddModal(true);
+                }}
+              >
+                Add Participants
+              </Button>
+            </Tooltip>
+
+            <Tooltip content="Start the tournament">
+              <Button
+                disabled={tournament?.state !== "pending"}
+                color={"success"}
+                className="ml-5"
+                onClick={handleStartTournament}
+              >
+                Start Tournament
+              </Button>
+            </Tooltip>
           </div>
         </div>
         <div className="mb-5">
@@ -112,14 +130,15 @@ const ViewTournament = () => {
             </Table.Head>
             <Table.Body className="divide-y">
               <Table.Cell className="text-center flex items-center justify-center">
-                <Badge size={"lg"} className="px-10">
+                <Badge color={"warning"} size={"lg"} className="px-10">
                   <h1 className="text-lg"> {tournament?.state}</h1>
                 </Badge>
               </Table.Cell>
               <Table.Cell className="text-center">
                 <h1 className="text-lg text-white">
                   {" "}
-                  {tournament?.description}
+                  {/* {tournament?.description} */}
+                  Provinical Meet
                 </h1>
               </Table.Cell>
               <Table.Cell className="text-center">
