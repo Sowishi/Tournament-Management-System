@@ -183,7 +183,7 @@ app.post("/create-tournament", async (req, res) => {
             description: description,
             show_rounds: true,
             review_before_finalizing: false,
-            ranked_by: "match wins  ",
+            ranked_by: "match wins",
           },
         }),
       }
@@ -208,6 +208,37 @@ app.post("/create-tournament", async (req, res) => {
     // Send error response
     res.status(500).json({
       message: "Error creating tournament",
+      error: error.message,
+    });
+  }
+});
+
+app.get("/show-tournament", async (req, res) => {
+  const id = req.query.id;
+
+  try {
+    const response = await fetch(
+      `https://api.challonge.com/v1/tournaments/${id}.json?api_key=RloHpyQkc1CVVlZvv48DtBqq16d8XTAYUhNVLau7`
+    );
+
+    if (!response.ok) {
+      // If the response status is not OK, throw an error
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const output = await response.json();
+    // Send success response
+    res.json({
+      message: "Tournament fetch successfully",
+      data: output,
+    });
+  } catch (error) {
+    // Handle any errors
+    console.error("Error fetching tournament:", error);
+
+    // Send error response
+    res.status(500).json({
+      message: "Error fetching tournament",
       error: error.message,
     });
   }

@@ -1,8 +1,9 @@
 "use client";
 
-import { Button, Card } from "flowbite-react";
+import { Badge, Button, Card } from "flowbite-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import logo from "../assets/logo2.png";
 
 export default function TournamentCard({
   tournament,
@@ -13,7 +14,16 @@ export default function TournamentCard({
   const { tournament: data } = tournament;
   const navigation = useNavigate();
   return (
-    <Card className="max-w-sm">
+    <Card
+      renderImage={() => {
+        return (
+          <div className="flex justify-center items-center">
+            <img style={{ objectFit: "cover" }} src={logo} width={200} />
+          </div>
+        );
+      }}
+      className="max-w-sm bg-slate-800 dark shadow-2xl"
+    >
       <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
         {data.name}
       </h5>
@@ -21,16 +31,16 @@ export default function TournamentCard({
         {data.description}
       </p>
       <p className="font-normal text-gray-700 dark:text-gray-400">
-        {data.tournament_type}
+        Tournament Type: {data.tournament_type}
       </p>
+
+      <Badge size={"lg"}> {data.state}</Badge>
       <div className="flex">
         <Button
           onClick={() => {
-            const queryString = new URLSearchParams(data).toString();
-            console.log(data);
             setSelectedTournament(data);
             setShowModal(true);
-            navigation(`/admin/tournament/${data.url}?details=${queryString}`);
+            navigation(`/admin/tournament/${data.url}`);
           }}
         >
           View Tournament

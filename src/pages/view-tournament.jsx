@@ -8,6 +8,7 @@ import TmsModal from "../components/tmsModal";
 import useGetUsers from "../hooks/useGetUsers";
 import AddParticipantsTable from "../components/addParticipantsTable";
 import { toast } from "react-toastify";
+import useCrudTournament from "../hooks/useCrudTournament";
 
 const ViewTournament = () => {
   const { id } = useParams();
@@ -16,18 +17,13 @@ const ViewTournament = () => {
   const queryParams = new URLSearchParams(location.search);
   const { getParticipants, addParticipant, deleteParticipant } =
     useCrudParticipants();
-  const tournament = {
-    name: queryParams.get("name"),
-    date: queryParams.get("date"),
-    tournament_type: queryParams.get("tournament_type"),
-    description: queryParams.get("description"),
-    participants_count: queryParams.get("participants_count"),
-  };
+  const { showTournament } = useCrudTournament();
+
   const { data: users } = useGetUsers();
   const [selectedUsers, setSelectedUsers] = useState([]);
-
   const [participants, setParticipants] = useState([]);
   const [addModal, setAddModal] = useState(false);
+  const [tournament, setTournament] = useState();
 
   const handleGetParticipants = async () => {
     const output = await getParticipants(id);
@@ -51,8 +47,15 @@ const ViewTournament = () => {
     }
   };
 
+  const handleShowTournament = async () => {
+    const output = await showTournament(id);
+    const { tournament } = output.data;
+    setTournament(tournament);
+  };
+
   useEffect(() => {
     handleGetParticipants();
+    handleShowTournament();
   }, []);
 
   return (
@@ -79,19 +82,30 @@ const ViewTournament = () => {
               Back
             </Button>
             <h1 className="text-white text-3xl font-bold ">
-              {tournament.name}
+              {tournament?.name}
             </h1>
             <Badge size={"lg"} className="ml-5">
-              {tournament.tournament_type}
+              {tournament?.tournament_type}
             </Badge>
           </div>
-          <Button
-            onClick={() => {
-              setAddModal(true);
-            }}
-          >
-            Add Participants
-          </Button>
+          <div className="wrapper flex items-center justify-center">
+            <Button
+              className="mr-5"
+              color={"success"}
+              onClick={() => {
+                setAddModal(true);
+              }}
+            >
+              Start Tournament
+            </Button>
+            <Button
+              onClick={() => {
+                setAddModal(true);
+              }}
+            >
+              Add Participants
+            </Button>
+          </div>
         </div>
         <iframe
           src={`https://challonge.com/${id}/module`}
