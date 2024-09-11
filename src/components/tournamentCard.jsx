@@ -4,6 +4,8 @@ import { Badge, Button, Card } from "flowbite-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import logo from "../assets/logo2.png";
+import { HiOutlineUsers } from "react-icons/hi";
+import { HiOutlineSpeakerphone } from "react-icons/hi";
 
 export default function TournamentCard({
   tournament,
@@ -13,29 +15,72 @@ export default function TournamentCard({
 }) {
   const { tournament: data } = tournament;
   const navigation = useNavigate();
+
+  const getBadgeColor = (state) => {
+    console.log(state);
+    if (state == "pending") {
+      return "bg-blue-500";
+    } else if (state == "underway") {
+      return "bg-yellow-200";
+    } else if (state == "complete") {
+      return "bg-green-500";
+    } else if (state == "awaiting_review") {
+      return "bg-yellow-500";
+    }
+  };
   return (
     <Card
       renderImage={() => {
         return (
-          <div className="flex justify-center items-center">
-            <img style={{ objectFit: "cover" }} src={logo} width={200} />
+          <div className="flex justify-center items- opacity-20">
+            <img
+              style={{ objectFit: "cover", position: "absolute" }}
+              src={logo}
+              width={200}
+            />
           </div>
         );
       }}
-      className="max-w-sm bg-slate-800 dark shadow-2xl"
+      className="max-w-sm min-h-[29rem] border"
+      style={{
+        background: "rgb(2,6,23)",
+        background:
+          "linear-gradient(164deg, rgba(2,6,23,1) 59%, rgba(252,172,127,1) 91%)",
+      }}
     >
-      <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-        {data.name}
-      </h5>
-      <p className="font-normal text-gray-700 dark:text-gray-400">
-        {data.description}
-      </p>
-      <p className="font-normal text-gray-700 dark:text-gray-400">
-        Tournament Type: {data.tournament_type}
-      </p>
-
-      <Badge size={"lg"}> {data.state}</Badge>
-      <div className="flex">
+      <div className="container mx-auto">
+        <div className="header flex justify-between">
+          <div
+            className={`${getBadgeColor(data.state)}`}
+            style={{
+              width: 30,
+              height: 30,
+              borderRadius: "100%",
+            }}
+          ></div>
+          <p className="text-white text-sm">Aug 20, 2024 </p>
+        </div>
+        <div className="content">
+          <h1 className="text-white font-bold text-3xl my-5">{data.name}</h1>
+          <div className="badge flex flex-col items-start">
+            <Badge size={"md"} className="mt-3">
+              {data.tournament_type}
+            </Badge>
+            <Badge color={"pink"} size={"md"} className="mt-3">
+              {data.description}
+            </Badge>
+          </div>
+          <h1 className="text-white font-bold text-md mt-5 flex items-center ">
+            <HiOutlineUsers className="mr-1" />
+            Participants: {data.participants_count}
+          </h1>
+          <h1 className="text-white font-bold text-md  flex items-center ">
+            <HiOutlineSpeakerphone className="mr-1" />
+            Event: Bicol Meet
+          </h1>
+        </div>
+      </div>
+      <div className="flex flex-col">
         <Button
           onClick={() => {
             setSelectedTournament(data);
@@ -58,8 +103,8 @@ export default function TournamentCard({
           </svg>
         </Button>
         <Button
+          className="mt-3"
           color={"failure"}
-          className="mx-3"
           onClick={async () => {
             const res = await deleteTournament(tournament);
             if (res.error) {
