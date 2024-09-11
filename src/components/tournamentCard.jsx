@@ -50,14 +50,19 @@ export default function TournamentCard({
     >
       <div className="container mx-auto">
         <div className="header flex justify-between">
-          <div
-            className={`${getBadgeColor(data.state)}`}
-            style={{
-              width: 30,
-              height: 30,
-              borderRadius: "100%",
-            }}
-          ></div>
+          <div className="flex items-center justify-start">
+            <div
+              className={`${getBadgeColor(data.state)}`}
+              style={{
+                width: 30,
+                height: 30,
+                borderRadius: "100%",
+              }}
+            ></div>
+            <Badge color={"warning"} className="ml-2">
+              {data.state}
+            </Badge>
+          </div>
           <p className="text-white text-sm">Aug 20, 2024 </p>
         </div>
         <div className="content">

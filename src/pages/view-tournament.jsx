@@ -201,7 +201,7 @@ const ViewTournament = () => {
               </h1>
               <Badge className="ml-3">{matches.length}</Badge>
             </div>
-            <div className="flex flex-wrap">
+            <div className="flex justify-start items-start flex-wrap">
               {matches.map((item) => {
                 const { match } = item;
 

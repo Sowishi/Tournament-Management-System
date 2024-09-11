@@ -15,14 +15,13 @@ export default function MatchCard({ match, id }) {
   const [player2, setPlayer2] = useState(null);
 
   const getBadgeColor = (state) => {
+    console.log(state);
     if (state == "pending") {
-      return "info";
-    }
-    if (state == "open") {
-      return "warning";
-    }
-    if (state == "complete") {
-      return "success";
+      return "bg-red-500";
+    } else if (state == "open") {
+      return "bg-blue-500";
+    } else if (state == "complete") {
+      return "bg-green-500";
     }
   };
 
@@ -52,16 +51,31 @@ export default function MatchCard({ match, id }) {
   }, []);
 
   return (
-    <Card className="max-w-sm bg-slate-800 dark shadow-2xl basis-4/12">
-      <div className="wrapper flex items-center justify-star">
-        <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-          Round {match?.round}
-        </h5>
-        <Badge color={getBadgeColor(match?.state)} size={"lg"} className="ml-3">
-          {match?.state}
-        </Badge>
+    <Card
+      className="max-w-sm min-h-[29rem] border basis-4/12 my-5 dark"
+      style={{
+        background: "rgb(2,6,23)",
+        background:
+          "linear-gradient(164deg, rgba(2,6,23,1) 59%, rgba(252,172,127,1) 91%)",
+      }}
+    >
+      <div className="container mx-auto  h-100">
+        <div className="header flex justify-between items-center">
+          <div className="flex items-center justify-start">
+            <div
+              className={`${getBadgeColor(match.state)}`}
+              style={{
+                width: 30,
+                height: 30,
+                borderRadius: "100%",
+              }}
+            ></div>
+          </div>
+          <Badge size={"lg"} color={"info"} className="ml-2">
+            Round {match.round}
+          </Badge>
+        </div>
       </div>
-
       {match?.state !== "complete" && (
         <>
           <div className="oponents">
@@ -88,9 +102,7 @@ export default function MatchCard({ match, id }) {
               )}
             </h5>
           </div>
-          <h5 className="text-lg text-white border-b-2 border-t-2 mb-2 pb-2">
-            Who is the winner?
-          </h5>
+          <h5 className="text-lg text-white mt-5">Who is the winner?</h5>
           <div className="flex justify-around items-center">
             <Tooltip content={`${player1?.name}`}>
               <Button
@@ -128,7 +140,7 @@ export default function MatchCard({ match, id }) {
         <>
           {match.winner_id == player1?.id && (
             <>
-              <h5 className="text-2xl border-b-4 pb-5 font-bold tracking-tight text-gray-900 dark:text-white">
+              <h5 className="text-2xl mt-20 border-b-4 pb-5 font-bold tracking-tight text-gray-900 dark:text-white">
                 Winner 🎉🎉🎉
               </h5>
               <h5 className="text-3xl text-center font-bold tracking-tight text-gray-900 dark:text-white">
@@ -138,7 +150,7 @@ export default function MatchCard({ match, id }) {
           )}
           {match.winner_id == player2?.id && (
             <>
-              <h5 className="text-2xl border-b-4 pb-5 font-bold tracking-tight text-gray-900 dark:text-white">
+              <h5 className="text-2xl mt-20 border-b-4 pb-5 font-bold tracking-tight text-gray-900 dark:text-white">
                 Winner 🎉🎉🎉
               </h5>
               <h5 className="text-3xl text-center font-bold tracking-tight text-gray-900 dark:text-white">
