@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 
 const useCrudTournament = () => {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getTournament();
@@ -11,11 +12,13 @@ const useCrudTournament = () => {
 
   const getTournament = async () => {
     try {
+      setLoading(true);
       const res = await fetch("http://localhost:5000/get-tournaments");
       if (!res.ok) {
         throw new Error(`HTTP error! Status: ${res.status}`);
       }
       const output = await res.json();
+      setLoading(false);
       setData(output.data);
     } catch (error) {
       toast.error(`Error fetching data: ${error.message}`);
@@ -101,6 +104,7 @@ const useCrudTournament = () => {
   return {
     addTournament,
     data,
+    loading,
     deleteTournament,
     showTournament,
     startTournament,
