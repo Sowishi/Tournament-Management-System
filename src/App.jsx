@@ -86,7 +86,7 @@ const App = () => {
           element={currentAdmin ? <AdminTournament /> : <AdminLogin />}
         />
         <Route
-          path="/admin/tournament/:id"
+          path="/tournament/:id"
           element={currentAdmin ? <ViewTournament /> : <AdminLogin />}
         />
       </Routes>

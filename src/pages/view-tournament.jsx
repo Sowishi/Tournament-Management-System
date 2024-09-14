@@ -12,11 +12,15 @@ import useCrudTournament from "../hooks/useCrudTournament";
 import useCrudMatches from "../hooks/useCrudMatches";
 import MatchCard from "../components/matchCard";
 import moment from "moment";
+import DefaultLayout from "../layout/defaultLayout";
 
 const ViewTournament = () => {
   const { id } = useParams();
   const navigation = useNavigate();
   const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const client = queryParams.get("client");
+
   const { getParticipants, addParticipant, deleteParticipant } =
     useCrudParticipants();
   const { showTournament, startTournament, finalizeTournament } =
@@ -29,8 +33,6 @@ const ViewTournament = () => {
   const [matches, setMatches] = useState([]);
   const [addModal, setAddModal] = useState(false);
   const [tournament, setTournament] = useState();
-
-  console.log(tournament);
 
   const handleGetParticipants = async () => {
     const output = await getParticipants(id);
@@ -87,6 +89,82 @@ const ViewTournament = () => {
     handleShowTournament();
     handleGetMatches();
   }, []);
+
+  if (client) {
+    return (
+      <DefaultLayout>
+        <TmsModal
+          onSubmit={handleAddParticpant}
+          title={"Add Participant"}
+          size={"5xl"}
+          openModal={addModal}
+          handleClose={() => setAddModal(false)}
+        >
+          <AddParticipantsTable
+            setSelectedUsers={setSelectedUsers}
+            users={users}
+          />
+        </TmsModal>
+        <div className="container mx-auto mt-10 pb-20">
+          <div className="wrapper flex items-center justify-between mb-5">
+            <div className="wrapper flex items-center">
+              <Button onClick={() => navigation("/events")} className="mr-5">
+                Back
+              </Button>
+              <h1 className="text-white text-3xl font-bold ">
+                {tournament?.name}
+              </h1>
+              <Badge size={"lg"} className="ml-5">
+                {tournament?.tournament_type}
+              </Badge>
+            </div>
+          </div>
+          <div className="mb-5">
+            <Table hoverable>
+              <Table.Head>
+                <Table.HeadCell className="text-center bg-slate-900 text-white font-bold border">
+                  Tournament State
+                </Table.HeadCell>
+                <Table.HeadCell className="text-center bg-slate-900 text-white font-bold border">
+                  Registered Event
+                </Table.HeadCell>
+                <Table.HeadCell className="text-center bg-slate-900 text-white font-bold border">
+                  Tournament Start Date
+                </Table.HeadCell>
+              </Table.Head>
+              <Table.Body className="divide-y">
+                <Table.Cell className="text-center flex items-center justify-center">
+                  <Badge color={"warning"} size={"lg"} className="px-10">
+                    <h1 className="text-lg"> {tournament?.state}</h1>
+                  </Badge>
+                </Table.Cell>
+                <Table.Cell className="text-center">
+                  <h1 className="text-lg text-white">
+                    {" "}
+                    {/* {tournament?.description} */}
+                    Provinical Meet
+                  </h1>
+                </Table.Cell>
+                <Table.Cell className="text-center">
+                  <h1 className="text-lg text-white">
+                    {moment(tournament?.start_at).format("LL")}
+                  </h1>
+                </Table.Cell>
+              </Table.Body>
+            </Table>
+          </div>
+          <iframe
+            src={`https://challonge.com/${id}/module`}
+            width="100%"
+            height="500"
+            frameborder="0"
+            scrolling="auto"
+            allowtransparency="true"
+          ></iframe>
+        </div>
+      </DefaultLayout>
+    );
+  }
 
   return (
     <AdminLayout>

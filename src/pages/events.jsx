@@ -2,6 +2,7 @@ import SingleElimination from "../components/singleElimination";
 import Title from "../components/title";
 import TmsSelect from "../components/tmsSelect";
 import DefaultLayout from "../layout/defaultLayout";
+import AdminTournament from "../pages/admin-tournaments";
 
 const Events = () => {
   const teams = ["team1", "team2", "team3", "team4"];
@@ -9,6 +10,7 @@ const Events = () => {
   return (
     <DefaultLayout>
       <Title title={"Events Display"} />
+      <AdminTournament client={true} />
     </DefaultLayout>
   );
 };

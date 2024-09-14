@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import TournamentCard from "../components/tournamentCard";
 import useGetEventName from "../hooks/useGetEventName";
 
-const AdminTournament = () => {
+const AdminTournament = ({ client }) => {
   const [createModal, setCreateModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selectedTournament, setSelectedTournament] = useState();
@@ -46,7 +46,7 @@ const AdminTournament = () => {
   });
 
   return (
-    <AdminLayout>
+    <AdminLayout client={client}>
       <TmsModal
         onSubmit={handleAddTournament}
         title={"Create Tournament"}
@@ -87,12 +87,15 @@ const AdminTournament = () => {
       </TmsModal>
 
       <div className="container  mx-auto my-10">
-        <div className="wrapper flex justify-between items-center">
-          <h1 className="text-white text-4xl font-bold mb-5">Tournament</h1>
-          <Button onClick={() => setCreateModal(true)}>
-            Create Tournament
-          </Button>
-        </div>
+        {!client && (
+          <div className="wrapper flex justify-between items-center">
+            <h1 className="text-white text-4xl font-bold mb-5">Tournament</h1>
+            <Button onClick={() => setCreateModal(true)}>
+              Create Tournament
+            </Button>
+          </div>
+        )}
+
         <div className="flex flex-wrap">
           {loading && (
             <>
@@ -106,6 +109,7 @@ const AdminTournament = () => {
               return (
                 <div key={item} className="basis-3/12 my-5 p-5">
                   <TournamentCard
+                    client={client}
                     deleteTournament={deleteTournament}
                     setShowModal={setShowModal}
                     setSelectedTournament={setSelectedTournament}

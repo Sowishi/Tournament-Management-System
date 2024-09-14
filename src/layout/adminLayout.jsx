@@ -15,7 +15,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { useStore } from "../zustand/store";
 
-export default function AdminLayout({ children }) {
+export default function AdminLayout({ children, client }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleClose = () => setIsOpen(false);
@@ -161,25 +161,32 @@ export default function AdminLayout({ children }) {
           </Sidebar>
         </Drawer.Items>
       </Drawer>
-      <div className="w-full bg-slate-950 min-h-screen pb-20">
-        <div
-          className={`header ${getHeaderBackground(
-            currentAdmin?.role
-          )} py-3 flex justify-between items-center px-10`}
-        >
-          <HiMenu
-            className="cursor-pointer"
-            onClick={() => setIsOpen(true)}
-            color="white"
-            size={25}
-          />
-          <div className="wrapper mx-10">
-            <h1 className="text-white text-2xl">Admin Dashboard</h1>
-            <p className="text-blue-500">
-              Logged in as: {getAdminRole(currentAdmin?.role)}
-            </p>
+      <div
+        className={`w-full ${
+          client ? "background-[#FC7F72]" : "bg-slate-950"
+        } min-h-screen pb-20`}
+      >
+        {!client && (
+          <div
+            className={`header ${getHeaderBackground(
+              currentAdmin?.role
+            )} py-3 flex justify-between items-center px-10`}
+          >
+            <HiMenu
+              className="cursor-pointer"
+              onClick={() => setIsOpen(true)}
+              color="white"
+              size={25}
+            />
+            <div className="wrapper mx-10">
+              <h1 className="text-white text-2xl">Admin Dashboard</h1>
+              <p className="text-blue-500">
+                Logged in as: {getAdminRole(currentAdmin?.role)}
+              </p>
+            </div>
           </div>
-        </div>
+        )}
+
         {children}
       </div>
     </>

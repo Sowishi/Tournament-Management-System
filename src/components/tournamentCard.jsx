@@ -13,6 +13,7 @@ export default function TournamentCard({
   setSelectedTournament,
   setShowModal,
   deleteTournament,
+  client,
 }) {
   const { tournament: data } = tournament;
   const navigation = useNavigate();
@@ -93,7 +94,11 @@ export default function TournamentCard({
           onClick={() => {
             setSelectedTournament(data);
             setShowModal(true);
-            navigation(`/admin/tournament/${data.url}`);
+            if (client) {
+              navigation(`/tournament/${data.url}?client=true`);
+            } else {
+              navigation(`/tournament/${data.url}`);
+            }
           }}
         >
           View Tournament
@@ -110,21 +115,23 @@ export default function TournamentCard({
             />
           </svg>
         </Button>
-        <Button
-          className="mt-3"
-          color={"failure"}
-          onClick={async () => {
-            const res = await deleteTournament(tournament);
-            if (res.error) {
-              toast.error(res.message);
-              return;
-            }
-            toast.success(res.message);
-            window.location.reload();
-          }}
-        >
-          Delete
-        </Button>
+        {!client && (
+          <Button
+            className="mt-3"
+            color={"failure"}
+            onClick={async () => {
+              const res = await deleteTournament(tournament);
+              if (res.error) {
+                toast.error(res.message);
+                return;
+              }
+              toast.success(res.message);
+              window.location.reload();
+            }}
+          >
+            Delete
+          </Button>
+        )}
       </div>
     </Card>
   );
