@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import useCrudTournament from "../hooks/useCrudTournament";
 import useCrudMatches from "../hooks/useCrudMatches";
 import MatchCard from "../components/matchCard";
+import moment from "moment";
 
 const ViewTournament = () => {
   const { id } = useParams();
@@ -28,6 +29,8 @@ const ViewTournament = () => {
   const [matches, setMatches] = useState([]);
   const [addModal, setAddModal] = useState(false);
   const [tournament, setTournament] = useState();
+
+  console.log(tournament);
 
   const handleGetParticipants = async () => {
     const output = await getParticipants(id);
@@ -180,7 +183,9 @@ const ViewTournament = () => {
                 </h1>
               </Table.Cell>
               <Table.Cell className="text-center">
-                <h1 className="text-lg text-white">Aug 28, 2024</h1>
+                <h1 className="text-lg text-white">
+                  {moment(tournament?.start_at).format("LL")}
+                </h1>
               </Table.Cell>
             </Table.Body>
           </Table>

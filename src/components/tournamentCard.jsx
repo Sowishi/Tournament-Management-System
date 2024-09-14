@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import logo from "../assets/logo2.png";
 import { HiOutlineUsers } from "react-icons/hi";
 import { HiOutlineSpeakerphone } from "react-icons/hi";
+import moment from "moment";
 
 export default function TournamentCard({
   tournament,
@@ -63,7 +64,9 @@ export default function TournamentCard({
               {data.state}
             </Badge>
           </div>
-          <p className="text-white text-sm">Aug 20, 2024 </p>
+          <p className="text-white text-xs">
+            {moment(data.start_at).format("LL")}{" "}
+          </p>
         </div>
         <div className="content">
           <h1 className="text-white font-bold text-3xl my-5">{data.name}</h1>

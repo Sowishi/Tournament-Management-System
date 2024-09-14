@@ -7,6 +7,7 @@ import TmsSelect from "../components/tmsSelect";
 import useCrudTournament from "../hooks/useCrudTournament";
 import { toast } from "react-toastify";
 import TournamentCard from "../components/tournamentCard";
+import useGetEventName from "../hooks/useGetEventName";
 
 const AdminTournament = () => {
   const [createModal, setCreateModal] = useState(false);
@@ -14,11 +15,13 @@ const AdminTournament = () => {
   const [selectedTournament, setSelectedTournament] = useState();
   const { addTournament, data, deleteTournament, loading } =
     useCrudTournament();
+  const { data: eventNames } = useGetEventName();
 
   const [forms, setForms] = useState({
     tournamentName: "",
-    description: "",
+    tournamentEvent: "RSCUAA",
     tournamentType: "single elimination",
+    startAt: "",
   });
 
   const handleChange = (event) => {
@@ -38,6 +41,10 @@ const AdminTournament = () => {
     window.location.reload();
   };
 
+  const filterEvent = eventNames.map((item) => {
+    return item.eventName;
+  });
+
   return (
     <AdminLayout>
       <TmsModal
@@ -55,6 +62,13 @@ const AdminTournament = () => {
             label={"Tournament Name"}
             dark={true}
           />
+          <TmsInput
+            name={"startAt"}
+            type={"datetime-local"}
+            onChange={handleChange}
+            label={"Tournament Start"}
+            dark={true}
+          />
           <TmsSelect
             name={"tournamentType"}
             onChange={handleChange}
@@ -62,11 +76,12 @@ const AdminTournament = () => {
             label={"Tournament Type"}
             dark={true}
           />
-          <TmsInput
-            name={"description"}
+          <TmsSelect
+            dark
+            label={"Tournament Event"}
+            name={"tournamentEvent"}
+            data={filterEvent}
             onChange={handleChange}
-            label={"Tournament Description"}
-            dark={true}
           />
         </form>
       </TmsModal>

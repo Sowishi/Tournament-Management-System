@@ -196,7 +196,7 @@ app.get("/get-tournaments", async (req, res) => {
 });
 
 app.post("/create-tournament", async (req, res) => {
-  const { tournamentName, tournamentType, description } = req.body;
+  const { tournamentName, tournamentType, tournamentEvent, startAt } = req.body;
 
   try {
     const response = await fetch(
@@ -211,10 +211,11 @@ app.post("/create-tournament", async (req, res) => {
           tournament: {
             name: tournamentName,
             tournament_type: tournamentType,
-            description: description,
+            description: tournamentEvent,
             show_rounds: true,
             review_before_finalizing: false,
             ranked_by: "match wins",
+            start_at: startAt,
           },
         }),
       }
