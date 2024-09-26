@@ -93,14 +93,6 @@ export default function AdminLayout({ children, client }) {
                       <Link to="/admin/tournament">
                         <Sidebar.Item>Tournament</Sidebar.Item>
                       </Link>
-                      <Link
-                        onClick={() => {
-                          setCurrentAdmin(null);
-                          localStorage.removeItem("admin");
-                        }}
-                      >
-                        <Sidebar.Item>Logout</Sidebar.Item>
-                      </Link>
                     </Sidebar.ItemGroup>
                   )}
                   {isEventAdmin && (
@@ -121,14 +113,6 @@ export default function AdminLayout({ children, client }) {
                       <Link to="/admin/admins">
                         <Sidebar.Item>Tournament</Sidebar.Item>
                       </Link>
-                      <Link
-                        onClick={() => {
-                          setCurrentAdmin(null);
-                          localStorage.removeItem("admin");
-                        }}
-                      >
-                        <Sidebar.Item>Logout</Sidebar.Item>
-                      </Link>
                     </Sidebar.ItemGroup>
                   )}
                   {isDocumentAdmin && (
@@ -144,14 +128,6 @@ export default function AdminLayout({ children, client }) {
                       </Link>
                       <Link to="/admin/admins">
                         <Sidebar.Item>Documents</Sidebar.Item>
-                      </Link>
-                      <Link
-                        onClick={() => {
-                          setCurrentAdmin(null);
-                          localStorage.removeItem("admin");
-                        }}
-                      >
-                        <Sidebar.Item>Logout</Sidebar.Item>
                       </Link>
                     </Sidebar.ItemGroup>
                   )}
@@ -178,11 +154,24 @@ export default function AdminLayout({ children, client }) {
               color="white"
               size={25}
             />
-            <div className="wrapper mx-10">
-              <h1 className="text-white text-2xl">Admin Dashboard</h1>
-              <p className="text-blue-500">
-                Logged in as: {getAdminRole(currentAdmin?.role)}
-              </p>
+            <div className="wrapper mx-10 flex items-center justify-start">
+              <div className="flex flex-col">
+                <h1 className="text-white text-2xl">Admin Dashboard</h1>
+                <p className="text-blue-500">
+                  Logged in as: {getAdminRole(currentAdmin?.role)}
+                </p>
+              </div>
+
+              <Button
+                onClick={() => {
+                  setCurrentAdmin(null);
+                  localStorage.removeItem("admin");
+                }}
+                color={"failure"}
+                className="ml-5"
+              >
+                Logout
+              </Button>
             </div>
           </div>
         )}
