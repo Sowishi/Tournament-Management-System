@@ -130,12 +130,32 @@ const AdminCalendar = () => {
           />
         </div>
       </TmsModal>
-      <div className="wrapper flex justify-between   items-center mx-12 my-5">
-        <TmsSelect
-          data={filterEvent}
-          onChange={(e) => setSelectedEvent(e.target.value)}
-        />
-        <div className="wrapper flex items-center justify-start">
+
+      <div className="container mx-auto mt-16 flex justify-between items-center">
+        <h1 className="text-white text-4xl font-bold mb-5">Calendar</h1>
+
+        <div className="wrapper flex mb-3 py-3">
+          <Button
+            color={selectedEvent == "all" ? "info" : "gray"}
+            onClick={() => setSelectedEvent("all")}
+            className="mx-3"
+          >
+            All
+          </Button>
+          {eventNames.map((event) => {
+            return (
+              <Button
+                key={event.id}
+                color={selectedEvent == event.eventName ? "info" : "gray"}
+                className="mx-3"
+                onClick={() => setSelectedEvent(event.eventName)}
+              >
+                {event.eventName}
+              </Button>
+            );
+          })}
+        </div>
+        <div className="wrapper flex">
           <Button onClick={() => setAddModal(true)}>Add Calendar</Button>
           <Button
             className="mx-3"
@@ -159,7 +179,6 @@ const AdminCalendar = () => {
       />
 
       <div className="container mx-auto py-5 ">
-        <h1 className="text-white text-3xl mx-5">Calendar: {selectedEvent}</h1>
         <Calendar
           views={["month", "agenda"]}
           className="mx-5 bg-white rounded p-6"
