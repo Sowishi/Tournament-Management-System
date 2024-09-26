@@ -142,7 +142,7 @@ const ViewTournament = () => {
                   <h1 className="text-lg text-white">
                     {" "}
                     {/* {tournament?.description} */}
-                    Provinical Meet
+                    Provinical Meetds
                   </h1>
                 </Table.Cell>
                 <Table.Cell className="text-center">
@@ -176,6 +176,7 @@ const ViewTournament = () => {
         handleClose={() => setAddModal(false)}
       >
         <AddParticipantsTable
+          event={tournament?.description}
           setSelectedUsers={setSelectedUsers}
           users={users}
         />
@@ -255,9 +256,7 @@ const ViewTournament = () => {
               </Table.Cell>
               <Table.Cell className="text-center">
                 <h1 className="text-lg text-white">
-                  {" "}
-                  {/* {tournament?.description} */}
-                  Provinical Meet
+                  {tournament?.description}
                 </h1>
               </Table.Cell>
               <Table.Cell className="text-center">
