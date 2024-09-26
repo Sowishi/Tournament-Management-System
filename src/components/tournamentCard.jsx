@@ -19,7 +19,6 @@ export default function TournamentCard({
   const navigation = useNavigate();
 
   const getBadgeColor = (state) => {
-    console.log(state);
     if (state == "pending") {
       return "bg-blue-500";
     } else if (state == "underway") {
@@ -75,9 +74,6 @@ export default function TournamentCard({
             <Badge size={"md"} className="mt-3">
               {data.tournament_type}
             </Badge>
-            <Badge color={"pink"} size={"md"} className="mt-3">
-              {data.description}
-            </Badge>
           </div>
           <h1 className="text-white font-bold text-md mt-5 flex items-center ">
             <HiOutlineUsers className="mr-1" />
@@ -85,7 +81,7 @@ export default function TournamentCard({
           </h1>
           <h1 className="text-white font-bold text-md  flex items-center ">
             <HiOutlineSpeakerphone className="mr-1" />
-            Event: Bicol Meet
+            Event: {data.description}
           </h1>
         </div>
       </div>

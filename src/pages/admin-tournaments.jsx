@@ -16,6 +16,7 @@ const AdminTournament = ({ client }) => {
   const { addTournament, data, deleteTournament, loading } =
     useCrudTournament();
   const { data: eventNames } = useGetEventName();
+  const [selectedEvent, setSelectedEvent] = useState("all");
 
   const [forms, setForms] = useState({
     tournamentName: "",
@@ -45,6 +46,16 @@ const AdminTournament = ({ client }) => {
     return item.eventName;
   });
 
+  const filterTournament = data.filter((item) => {
+    if (selectedEvent == "all") {
+      return item;
+    }
+
+    if (item.tournament.description == selectedEvent) {
+      return item;
+    }
+  });
+
   return (
     <AdminLayout client={client}>
       <TmsModal
@@ -57,6 +68,7 @@ const AdminTournament = ({ client }) => {
       >
         <form>
           <TmsInput
+            placeHolder={"Enter Tournament Name"}
             name={"tournamentName"}
             onChange={handleChange}
             label={"Tournament Name"}
@@ -96,6 +108,30 @@ const AdminTournament = ({ client }) => {
           </div>
         )}
 
+        <div className="container mx-auto mt-5">
+          <div className="wrapper flex mb-3 py-3">
+            <Button
+              color={selectedEvent == "all" ? "info" : "gray"}
+              onClick={() => setSelectedEvent("all")}
+              className="mx-3"
+            >
+              All
+            </Button>
+            {eventNames.map((event) => {
+              return (
+                <Button
+                  key={event.id}
+                  color={selectedEvent == event.eventName ? "info" : "gray"}
+                  className="mx-3"
+                  onClick={() => setSelectedEvent(event.eventName)}
+                >
+                  {event.eventName}
+                </Button>
+              );
+            })}
+          </div>
+        </div>
+
         <div className="flex flex-wrap">
           {loading && (
             <>
@@ -105,7 +141,7 @@ const AdminTournament = ({ client }) => {
             </>
           )}
           {!loading &&
-            data.map((item) => {
+            filterTournament.map((item) => {
               return (
                 <div key={item} className="basis-3/12 my-5 p-5">
                   <TournamentCard
