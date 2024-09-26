@@ -1,19 +1,17 @@
 import { Button, Drawer, Sidebar, TextInput } from "flowbite-react";
 import { useState } from "react";
 import {
-  HiChartPie,
-  HiClipboard,
-  HiCollection,
-  HiInformationCircle,
-  HiLogin,
-  HiPencil,
   HiSearch,
-  HiShoppingBag,
-  HiUsers,
+  HiOutlineChartSquareBar,
   HiMenu,
+  HiOutlineUserCircle,
+  HiOutlineCalendar,
 } from "react-icons/hi";
 import { Link, useNavigate } from "react-router-dom";
 import { useStore } from "../zustand/store";
+import { HiOutlineReply, HiOutlineUser } from "react-icons/hi";
+import { TbTournament } from "react-icons/tb";
+import logo from "../assets/logo2.png";
 
 export default function AdminLayout({ children, client }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -76,23 +74,74 @@ export default function AdminLayout({ children, client }) {
                   {isMasterAdmin && (
                     <Sidebar.ItemGroup>
                       <a href="/home" target="_blank">
-                        <Sidebar.Item>View Site</Sidebar.Item>
+                        <Sidebar.Item
+                          onClick={() => setIsOpen(false)}
+                          className="bg-blue-950 text-white hover:text-white hover:bg-red-500 my-3"
+                        >
+                          <div className="flex items-center">
+                            View Site <HiOutlineReply className="ml-2" />
+                          </div>
+                        </Sidebar.Item>
                       </a>
                       <Link to="/admin/home">
-                        <Sidebar.Item>Admin Home Page</Sidebar.Item>
+                        <Sidebar.Item
+                          onClick={() => setIsOpen(false)}
+                          className="bg-blue-950 text-white hover:text-white hover:bg-red-500 my-3"
+                        >
+                          <div className="flex items-center">
+                            Admin Dashboard
+                            <HiOutlineChartSquareBar className="ml-3" />
+                          </div>
+                        </Sidebar.Item>
                       </Link>
                       <Link to="/admin/users">
-                        <Sidebar.Item>Users Management</Sidebar.Item>
+                        <Sidebar.Item
+                          onClick={() => setIsOpen(false)}
+                          className="bg-blue-950 text-white hover:text-white hover:bg-red-500 my-3"
+                        >
+                          <div className="flex items-center">
+                            Users Management <HiOutlineUser className="ml-3" />
+                          </div>
+                        </Sidebar.Item>
                       </Link>
                       <Link to="/admin/admins">
-                        <Sidebar.Item>Admins Management</Sidebar.Item>
+                        <Sidebar.Item
+                          onClick={() => setIsOpen(false)}
+                          className="bg-blue-950 text-white hover:text-white hover:bg-red-500 my-3"
+                        >
+                          <div className="flex items-center">
+                            Admins Management{" "}
+                            <HiOutlineUserCircle className="ml-3" />
+                          </div>{" "}
+                        </Sidebar.Item>
                       </Link>{" "}
                       <Link to="/admin/calendar">
-                        <Sidebar.Item>Calendar</Sidebar.Item>
+                        <Sidebar.Item
+                          onClick={() => setIsOpen(false)}
+                          className="bg-blue-950 text-white hover:text-white hover:bg-red-500 my-3"
+                        >
+                          <div className="flex items-center">
+                            Calendar <HiOutlineCalendar className="ml-3" />
+                          </div>
+                        </Sidebar.Item>
                       </Link>
                       <Link to="/admin/tournament">
-                        <Sidebar.Item>Tournament</Sidebar.Item>
+                        <Sidebar.Item
+                          onClick={() => setIsOpen(false)}
+                          className="bg-blue-950 text-white hover:text-white hover:bg-red-500 my-3"
+                        >
+                          <div className="flex items-center">
+                            Tournament
+                            <TbTournament className="ml-3" />
+                          </div>
+                        </Sidebar.Item>
                       </Link>
+                      <Sidebar.Item
+                        onClick={() => setIsOpen(false)}
+                        className="mt-20"
+                      >
+                        <img src={logo} />
+                      </Sidebar.Item>
                     </Sidebar.ItemGroup>
                   )}
                   {isEventAdmin && (
