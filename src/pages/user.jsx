@@ -246,6 +246,27 @@ const User = () => {
             </Button>
           </div>
         </div>
+        <div className="wrapper my-10">
+          <div className="wrapper flex flex-col items-start justify-start">
+            <div className="flex flex-col">
+              <h1 className="text-white font-bold text-3xl">
+                Register to Challonge
+              </h1>
+              <p className="text-white mt-2">
+                Register to Challonge to add your own custom logo use your
+                registered email as your challonge account
+              </p>
+            </div>
+
+            <a
+              className="mt-5"
+              target="_blank"
+              href="https://challonge.com/users/new?continue=/dashboard"
+            >
+              <Button>Register to Challonge</Button>
+            </a>
+          </div>
+        </div>
         <div className="wrapper pb-20">
           <h1 className="text-white font-bold text-3xl mt-10">
             Attached Documents
