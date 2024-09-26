@@ -6,6 +6,7 @@ import {
   HiMenu,
   HiOutlineUserCircle,
   HiOutlineCalendar,
+  HiDesktopComputer,
 } from "react-icons/hi";
 import { Link, useNavigate } from "react-router-dom";
 import { useStore } from "../zustand/store";
@@ -125,6 +126,48 @@ export default function AdminLayout({ children, client }) {
                           </div>
                         </Sidebar.Item>
                       </Link>
+                      <Link>
+                        <Sidebar.Item
+                          onClick={() => setIsOpen(false)}
+                          className="bg-blue-950 text-white hover:text-white hover:bg-red-500 my-3"
+                        >
+                          <div className="flex items-center">
+                            System Logs
+                            <HiDesktopComputer className="ml-3" />
+                          </div>
+                        </Sidebar.Item>
+                      </Link>
+                      <Sidebar.Item
+                        onClick={() => setIsOpen(false)}
+                        className="mt-20"
+                      >
+                        <img src={logo} />
+                      </Sidebar.Item>
+                    </Sidebar.ItemGroup>
+                  )}
+                  {isEventAdmin && (
+                    <Sidebar.ItemGroup>
+                      <a href="/home" target="_blank">
+                        <Sidebar.Item
+                          onClick={() => setIsOpen(false)}
+                          className="bg-blue-950 text-white hover:text-white hover:bg-red-500 my-3"
+                        >
+                          <div className="flex items-center">
+                            View Site <HiOutlineReply className="ml-2" />
+                          </div>
+                        </Sidebar.Item>
+                      </a>
+
+                      <Link to="/admin/calendar">
+                        <Sidebar.Item
+                          onClick={() => setIsOpen(false)}
+                          className="bg-blue-950 text-white hover:text-white hover:bg-red-500 my-3"
+                        >
+                          <div className="flex items-center">
+                            Calendar <HiOutlineCalendar className="ml-3" />
+                          </div>
+                        </Sidebar.Item>
+                      </Link>
                       <Link to="/admin/tournament">
                         <Sidebar.Item
                           onClick={() => setIsOpen(false)}
@@ -142,26 +185,6 @@ export default function AdminLayout({ children, client }) {
                       >
                         <img src={logo} />
                       </Sidebar.Item>
-                    </Sidebar.ItemGroup>
-                  )}
-                  {isEventAdmin && (
-                    <Sidebar.ItemGroup>
-                      {" "}
-                      <a href="/home" target="_blank">
-                        <Sidebar.Item>View Site</Sidebar.Item>
-                      </a>
-                      <Link to="/admin/home">
-                        <Sidebar.Item>Admin Home Page</Sidebar.Item>
-                      </Link>
-                      <Link to="/admin/users">
-                        <Sidebar.Item>Users Management</Sidebar.Item>
-                      </Link>
-                      <Link to="/admin/admins">
-                        <Sidebar.Item>Calendar</Sidebar.Item>
-                      </Link>
-                      <Link to="/admin/admins">
-                        <Sidebar.Item>Tournament</Sidebar.Item>
-                      </Link>
                     </Sidebar.ItemGroup>
                   )}
                   {isDocumentAdmin && (
