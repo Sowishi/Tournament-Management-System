@@ -135,13 +135,6 @@ const AdminCalendar = () => {
         <h1 className="text-white text-4xl font-bold mb-5">Calendar</h1>
 
         <div className="wrapper flex mb-3 py-3">
-          <Button
-            color={selectedEvent == "all" ? "info" : "gray"}
-            onClick={() => setSelectedEvent("all")}
-            className="mx-3"
-          >
-            All
-          </Button>
           {eventNames.map((event) => {
             return (
               <Button

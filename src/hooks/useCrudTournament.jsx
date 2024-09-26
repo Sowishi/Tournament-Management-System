@@ -1,3 +1,4 @@
+import moment from "moment";
 import { useEffect, useState } from "react";
 import { json } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -10,6 +11,17 @@ const useCrudTournament = () => {
     getTournament();
   }, []);
 
+  const filterByLatestDate = async (data) => {
+    return new Promise((resolve) => {
+      const sortedData = data.sort((a, b) => {
+        const dateA = moment(a.tournament.start_at);
+        const dateB = moment(b.tournament.start_at);
+        return dateB.diff(dateA); // Sort by difference, descending order (latest first)
+      });
+      resolve(sortedData);
+    });
+  };
+
   const getTournament = async () => {
     try {
       setLoading(true);
@@ -19,7 +31,8 @@ const useCrudTournament = () => {
       }
       const output = await res.json();
       setLoading(false);
-      setData(output.data);
+      const filterByRecent = await filterByLatestDate(output.data);
+      setData(filterByRecent);
     } catch (error) {
       toast.error(`Error fetching data: ${error.message}`);
       console.error("Error fetching data:", error);

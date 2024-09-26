@@ -8,6 +8,8 @@ import useCrudTournament from "../hooks/useCrudTournament";
 import { toast } from "react-toastify";
 import TournamentCard from "../components/tournamentCard";
 import useGetEventName from "../hooks/useGetEventName";
+import useCrudCalendar from "../hooks/useCrudCalendar";
+import moment from "moment";
 
 const AdminTournament = ({ client }) => {
   const [createModal, setCreateModal] = useState(false);
@@ -17,6 +19,7 @@ const AdminTournament = ({ client }) => {
     useCrudTournament();
   const { data: eventNames } = useGetEventName();
   const [selectedEvent, setSelectedEvent] = useState("all");
+  const { addCalendar } = useCrudCalendar();
 
   const [forms, setForms] = useState({
     tournamentName: "",
@@ -37,9 +40,21 @@ const AdminTournament = ({ client }) => {
       toast.error(res.message);
       return;
     }
-    toast.success(res.message);
-    setCreateModal(false);
-    window.location.reload();
+    const startDateMoment = moment().format("LLL"); // Today's date
+    const endDateMoment = moment().add(7, "days").format("LLL"); // 7 days after today
+    const output = {
+      title: forms.tournamentName,
+      eventName: forms.tournamentEvent,
+      ["start"]: startDateMoment,
+      ["end"]: endDateMoment,
+    };
+    addCalendar(output);
+
+    setTimeout(() => {
+      toast.success(res.message);
+      setCreateModal(false);
+      window.location.reload();
+    }, 2000);
   };
 
   const filterEvent = eventNames.map((item) => {
@@ -143,7 +158,7 @@ const AdminTournament = ({ client }) => {
           {!loading &&
             filterTournament.map((item) => {
               return (
-                <div key={item} className="basis-3/12 my-5 p-5">
+                <div key={item.id} className="basis-3/12 my-5 p-5">
                   <TournamentCard
                     client={client}
                     deleteTournament={deleteTournament}
