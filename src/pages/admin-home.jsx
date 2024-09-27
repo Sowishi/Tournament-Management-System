@@ -14,6 +14,7 @@ import useDeleteEventName from "../hooks/useDeleteEventName";
 import TmsModal from "../components/tmsModal";
 import ConfirmationModals from "../components/confirmationModal";
 import { HiOutlineTrash } from "react-icons/hi";
+import useCrudCollegeName from "../hooks/useCrudCollegeName";
 
 const AdminHome = () => {
   const [addPicModal, setAddPicModal] = useState(false);
@@ -22,19 +23,27 @@ const AdminHome = () => {
   const [deleteCarouselModal, setDeleteCarouselModal] = useState(false);
   const [selectedCarousel, setSelectedCarousel] = useState();
   const [selectedEvent, setSelectedEvent] = useState();
-
+  const [addCollegeModal, setAddCollegeModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(null);
   const [eventName, setEventName] = useState("");
+  const [collegeName, setCollegeName] = useState("");
+  const [selectedCollegeName, setSelectedCollegeName] = useState();
+  const [collegeDeleteModal, setCollegeDeleteModal] = useState(false);
+
+  // Hooks
 
   const { addCarouselPic } = useAddCarouselPic();
   const { addEventName } = useAddEventName();
-
   const { data } = useGetCarouselPic();
   const { data: eventNameData } = useGetEventName();
-
   const { deleteCarouselPic } = useDeleteCarouselPic();
   const { deleteEventName } = useDeleteEventName();
+  const {
+    addCollegeName,
+    data: collegeNameData,
+    deleteCollegeName,
+  } = useCrudCollegeName();
 
   const uploadImage = async (file) => {
     setLoading(true);
@@ -92,6 +101,12 @@ const AdminHome = () => {
     toast.success("Successfully Added Event Name");
   };
 
+  const handleUploadCollege = () => {
+    addCollegeName(collegeName);
+    setAddCollegeModal(false);
+    toast.success("Successfully Added College Name");
+  };
+
   return (
     <AdminLayout>
       <TmsModal
@@ -122,6 +137,7 @@ const AdminHome = () => {
         openModal={deleteModal}
         handleClose={() => setDeleteModal(false)}
       />
+
       <ConfirmationModals
         title={"Are you sure to delete this carousel picture?"}
         handleSubmit={() => {
@@ -131,6 +147,18 @@ const AdminHome = () => {
         openModal={deleteCarouselModal}
         handleClose={() => setDeleteCarouselModal(false)}
       />
+
+      <ConfirmationModals
+        title={"Are you sure to delete this college name?"}
+        handleSubmit={() => {
+          deleteCollegeName(selectedCollegeName);
+          setCollegeDeleteModal(false);
+        }}
+        openModal={collegeDeleteModal}
+        handleClose={() => setCollegeDeleteModal(false)}
+      />
+
+      {/* Event Name Modal */}
       <TmsModal
         onSubmit={handlUploadEvent}
         title="Add Event Modal"
@@ -141,6 +169,22 @@ const AdminHome = () => {
           <h1 className="font-bold">Enter your event name</h1>
           <TmsInput
             onChange={(event) => setEventName(event.target.value)}
+            type={"text"}
+          />
+        </div>
+      </TmsModal>
+
+      {/* College Name Modal */}
+      <TmsModal
+        onSubmit={handleUploadCollege}
+        title="Add College Name Modal"
+        openModal={addCollegeModal}
+        handleClose={() => setAddCollegeModal(false)}
+      >
+        <div className="p-10">
+          <h1 className="font-bold">Enter your college name</h1>
+          <TmsInput
+            onChange={(event) => setCollegeName(event.target.value)}
             type={"text"}
           />
         </div>
@@ -203,6 +247,34 @@ const AdminHome = () => {
                 </Button>
                 <div className="ml-10">
                   <h1>{event.eventName} </h1>
+                </div>
+              </ListGroup.Item>
+            );
+          })}
+        </ListGroup>
+      </div>
+      <div className="wrapper mx-10 mt-10 pb-20">
+        <div className="header w-full flex justify-between items-center">
+          <h1 className="text-white text-4xl font-bold">College Names</h1>
+          <Button onClick={() => setAddCollegeModal(true)}>Add College</Button>
+        </div>{" "}
+        <ListGroup className="w-full mt-10">
+          {collegeNameData?.map((event) => {
+            return (
+              <ListGroup.Item key={event.id}>
+                <Button
+                  onClick={() => {
+                    setSelectedCollegeName(event.id);
+                    setCollegeDeleteModal(true);
+                  }}
+                  className="ml-10"
+                  color={"failure"}
+                >
+                  <HiOutlineTrash className="mr-2 h-5 w-5" />
+                  Delete
+                </Button>
+                <div className="ml-10">
+                  <h1>{event.collegeName} </h1>
                 </div>
               </ListGroup.Item>
             );
