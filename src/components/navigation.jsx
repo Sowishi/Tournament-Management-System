@@ -14,7 +14,8 @@ import {
 import useGetEventName from "../hooks/useGetEventName";
 import { useEffect } from "react";
 const Navigation = () => {
-  const { setCurrentEvent, currentEvent, currentUser } = useStore();
+  const { setCurrentEvent, currentEvent, currentUser, setCurrentUser } =
+    useStore();
   const { data: eventNameData } = useGetEventName();
 
   useEffect(() => {
@@ -79,13 +80,25 @@ const Navigation = () => {
           </>
         )}
         {currentUser && (
-          <Link to={"/user"}>
-            {" "}
-            <Button gradientMonochrome="info" className="mx-3">
-              <HiOutlineUser className="mr-2 h-5 w-5" />
-              User Account
+          <>
+            <Link to={"/user"}>
+              {" "}
+              <Button gradientMonochrome="info" className="mx-3">
+                <HiOutlineUser className="mr-2 h-5 w-5" />
+                User Account
+              </Button>
+            </Link>
+            <Button
+              onClick={() => {
+                setCurrentUser(null);
+                localStorage.removeItem("user");
+              }}
+              gradientMonochrome="failure"
+              type="submit"
+            >
+              Logout
             </Button>
-          </Link>
+          </>
         )}
       </Button.Group>
     </div>

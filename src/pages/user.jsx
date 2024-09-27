@@ -391,17 +391,6 @@ const User = () => {
           </div>
           <div className="flex justify-center items-center mt-10">
             <Button
-              onClick={() => {
-                setCurrentUser(null);
-                localStorage.removeItem("user");
-              }}
-              className="w-full mx-3 py-4"
-              gradientMonochrome="failure"
-              type="submit"
-            >
-              Logout
-            </Button>
-            <Button
               className="w-full mx-3 py-4"
               gradientMonochrome="info"
               type="submit"
