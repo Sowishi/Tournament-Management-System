@@ -8,6 +8,8 @@ import useAddUser from "../hooks/useAddUser";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo2.png";
 import { toast } from "react-toastify";
+import useGetEventName from "../hooks/useGetEventName";
+import useCrudCollegeName from "../hooks/useCrudCollegeName";
 
 const Registration = () => {
   const [forms, setForms] = useState({
@@ -17,7 +19,7 @@ const Registration = () => {
     email: "",
     contactNumber: "",
     address: "",
-    sportsInfo: "Provincial Meet",
+    sportsInfo: "",
     collegeName: "",
     position: "Student",
     password: "",
@@ -25,6 +27,8 @@ const Registration = () => {
   });
 
   const { addUser } = useAddUser();
+  const { data: eventNames } = useGetEventName();
+  const { data: collegeNames } = useCrudCollegeName();
 
   const navigate = useNavigate();
 
@@ -66,6 +70,14 @@ const Registration = () => {
     }
     return true;
   }
+
+  const formatEventNames = eventNames.map((item) => {
+    return item.eventName;
+  });
+
+  const formatCollegeNames = collegeNames.map((item) => {
+    return item.collegeName;
+  });
 
   return (
     <AuthLayout hideHeader={true}>
@@ -138,13 +150,13 @@ const Registration = () => {
               name="sportsInfo"
               onChange={handleChange}
               label={"Sports Information"}
-              data={["Provincial Meet", "RSCUAA", "Bicol Meet"]}
+              data={["Please select event name", ...formatEventNames]}
             />
-            <TmsInput
+            <TmsSelect
               name="collegeName"
               onChange={handleChange}
-              placeHolder={"Name of school/Institution"}
               label={"College Name"}
+              data={["Please select college name", ...formatCollegeNames]}
             />
           </div>
 
