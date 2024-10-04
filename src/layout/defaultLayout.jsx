@@ -1,5 +1,4 @@
 import Header from "../components/header";
-import logo from "../assets/logo2.png";
 import { TmsFooter } from "../components/footer";
 
 const DefaultLayout = ({ children, hideHeader }) => {
@@ -13,7 +12,8 @@ const DefaultLayout = ({ children, hideHeader }) => {
             "linear-gradient(189deg, rgba(252,110,108,1) 0%, rgba(252,172,127,1) 100%)",
         }}
       >
-        {hideHeader && (
+        <Header hideHeader={hideHeader} />
+        {/* {hideHeader && (
           <div
             style={{
               background:
@@ -27,7 +27,7 @@ const DefaultLayout = ({ children, hideHeader }) => {
             </h1>
           </div>
         )}
-        <Header hideHeader={hideHeader} />
+       */}
 
         {children}
       </div>

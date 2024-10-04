@@ -4,13 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 
 const LoadingScreen = () => {
   return (
-    <div
-      style={{
-        background:
-          "linear-gradient(87deg, rgba(255,51,50,1) 0%, rgba(255,131,76,1) 100%)",
-      }}
-      className=" mx-auto w-full h-screen flex justify-center items-center"
-    >
+    <div className=" mx-auto w-full h-screen flex justify-center items-center bg-white">
       <div className="wrapper flex justify-end items-center flex-col">
         <motion.img
           initial={{ y: -500, scale: 1 }}
@@ -20,7 +14,7 @@ const LoadingScreen = () => {
         />
 
         <div className="wrapper flex">
-          <h1 className="text-white font-bold text-2xl mr-3">Loading</h1>
+          <h1 className="text-dark font-bold text-3xl mr-3">Loading</h1>
           <Spinner />
         </div>
       </div>

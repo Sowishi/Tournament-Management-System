@@ -1,89 +1,128 @@
-import { Button, Dropdown } from "flowbite-react";
+"use client";
+
+import { Avatar, Button, Dropdown, Navbar } from "flowbite-react";
 import logo from "../assets/logo2.png";
-import Navigation from "./navigation";
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import useGetEventName from "../hooks/useGetEventName";
 import { useStore } from "../zustand/store";
-import { eventsName } from "../constant";
-import { HiLogin, HiUser } from "react-icons/hi";
-import { HiOutlineUserAdd } from "react-icons/hi";
-import { motion } from "framer-motion";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  HiOutlineCalendar,
+  HiOutlineHome,
+  HiOutlineMap,
+  HiOutlineRss,
+  HiOutlineUser,
+  HiOutlineUserCircle,
+  HiOutlineUserGroup,
+  HiViewBoards,
+} from "react-icons/hi";
 
-const Header = () => {
-  const { currentEvent, currentUser } = useStore();
+export default function Header() {
+  const { setCurrentEvent, currentEvent, currentUser, setCurrentUser } =
+    useStore();
+  const { data: eventNameData } = useGetEventName();
 
+  useEffect(() => {
+    setCurrentEvent(currentUser?.sportsInfo);
+  }, []);
+
+  const navigation = useNavigate();
   return (
-    <>
-      <div
-        className="header w-100"
-        style={{
-          background:
-            "linear-gradient(87deg, rgba(255,51,50,1) 0%, rgba(255,131,76,1) 100%)",
-        }}
-      >
-        <div className="brand flex items-center justify-between p-3 mx-2">
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            className="wrapper flex items-center justify-start"
+    <Navbar fluid rounded className="py-2">
+      <Navbar.Brand href="https://flowbite-react.com" className="ml-5">
+        <img src={logo} className="mr-3 h-6 sm:h-9" alt="Flowbite React Logo" />
+        <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
+          TMS
+        </span>
+      </Navbar.Brand>
+      <div className="flex md:order-2 mr-5">
+        {currentUser && (
+          <Dropdown
+            arrowIcon={false}
+            inline
+            label={<HiOutlineUserCircle size={30} />}
           >
-            <img src={logo} alt="" style={{ width: "5rem", height: "5rem" }} />
-            <div className="title ml-3">
-              <h1
-                className="text-xl text-white font-bold "
-                style={{ letterSpacing: "3px" }}
-              >
-                {currentEvent
-                  ? eventsName[currentEvent]
-                  : " WEB-BASED: TOURNAMENT MANAGEMENT SYSTEM"}
-              </h1>
-              {!currentEvent && (
-                <>
-                  <div
-                    className="line my-2 mx-2"
-                    style={{ width: 500, height: 2, background: "#FFBD59" }}
-                  ></div>
-                  <p className="text-white text-sm mx-1">
-                    You have to have a real love of your sport to carry you
-                    through all the bad times
-                  </p>
-                </>
-              )}
-            </div>
-          </motion.div>
-
-          {!currentUser && (
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              className="auth-links w-100 flex justify-end items-center mx-5"
+            <Dropdown.Header>
+              <span className="block text-sm">{currentUser.email}</span>
+            </Dropdown.Header>
+            <Dropdown.Item
+              onClick={() => {
+                navigation("/user");
+              }}
             >
-              <div className="flex mb-3">
-                <motion.div whileHover={{ scale: 1.1 }} onTap={{ scale: 1 }}>
-                  <a href={"/login"}>
-                    <Button gradientMonochrome="info" className="mx-3">
-                      <HiLogin className="mr-2 h-5 w-5" />
-                      Login
-                    </Button>
-                  </a>
-                </motion.div>
-
-                <motion.div whileHover={{ scale: 1.1 }} onTap={{ scale: 1 }}>
-                  <a href={"/registration"}>
-                    <Button gradientMonochrome="teal" className="mx-3">
-                      <HiOutlineUserAdd className="mr-2 h-5 w-5" />
-                      Register
-                    </Button>
-                  </a>
-                </motion.div>
-              </div>
-            </motion.div>
-          )}
-        </div>
+              Dashboard
+            </Dropdown.Item>
+            <Dropdown.Divider />
+            <Dropdown.Item
+              onClick={() => {
+                setCurrentUser(null);
+                localStorage.removeItem("user");
+              }}
+            >
+              Sign out
+            </Dropdown.Item>
+          </Dropdown>
+        )}
+        <Navbar.Toggle />
       </div>
+      <Navbar.Collapse>
+        <Button.Group>
+          <Link to="/">
+            <Button color="grLinky">Main Menu</Button>
+          </Link>
+          <Link to="/home">
+            <Button color="grLinky">
+              {" "}
+              <HiOutlineHome className="mr-2 h-5 w-5" />
+              Home
+            </Button>
+          </Link>
 
-      <Navigation />
-    </>
+          {!currentEvent && (
+            <>
+              <Link to={"/about"}>
+                <Button color="gray">
+                  {" "}
+                  <HiOutlineMap className="mr-2 h-5 w-5" />
+                  About Us
+                </Button>
+              </Link>
+            </>
+          )}
+          {currentEvent && (
+            <>
+              <Link to={"/calendar"}>
+                <Button color="gray">
+                  {" "}
+                  <HiOutlineCalendar className="mr-2 h-5 w-5" />
+                  Calendar
+                </Button>
+              </Link>
+              <Link to={"/events"}>
+                <Button color="gray">
+                  {" "}
+                  <HiOutlineRss className="mr-2 h-5 w-5" />
+                  Events
+                </Button>
+              </Link>
+              <Link to={"/participants"}>
+                <Button color="gray">
+                  {" "}
+                  <HiOutlineUserGroup className="mr-2 h-5 w-5" />
+                  Participants
+                </Button>
+              </Link>
+              <Link to={"/tally"}>
+                <Button color="gray">
+                  {" "}
+                  <HiViewBoards className="mr-2 h-5 w-5" />
+                  Tally
+                </Button>
+              </Link>
+            </>
+          )}
+        </Button.Group>
+      </Navbar.Collapse>
+    </Navbar>
   );
-};
-
-export default Header;
+}

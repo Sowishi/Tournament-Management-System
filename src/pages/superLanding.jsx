@@ -6,9 +6,9 @@ const SuperLanding = () => {
   const navigate = useNavigate();
   const { setGuest } = useStore();
   return (
-    <div className="flex-1 h-screen bg-red-500 relative">
+    <div className="flex-1 h-screen bg-white relative">
       <div className="absolute top-10">
-        <h1 className="uppercase font-bold text-9xl text-white z-0 text-center opacity-50">
+        <h1 className="uppercase font-bold text-9xl text-dark z-0 text-center opacity-50">
           Web-based tournament management system
         </h1>
       </div>
