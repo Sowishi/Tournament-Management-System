@@ -7,7 +7,7 @@ const Title = ({ title }) => {
       animate={{ y: 0 }}
       className="wrapper flex jsutify-center items-center  flex-col mb-5"
     >
-      <h1 className="font-bold uppercase text-slate-950 text-5xl m-5 text-center">
+      <h1 className="font-bold uppercase text-slate-950 text-4xl m-5 text-center">
         {title}
       </h1>
       <div

@@ -6,7 +6,7 @@ const Tally = () => {
   return (
     <DefaultLayout>
       <Title title={"Tally of Medals"} />
-      <div className="container mx-auto mt-10">
+      <div className="container mx-auto mt-10 p-5">
         <TallyTable />
       </div>
     </DefaultLayout>

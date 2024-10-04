@@ -10,7 +10,9 @@ const Events = () => {
   return (
     <DefaultLayout>
       <Title title={"Events Display"} />
-      <AdminTournament client={true} />
+      <div className="container mx-auto p-5">
+        <AdminTournament client={true} />
+      </div>
     </DefaultLayout>
   );
 };

@@ -204,11 +204,11 @@ const User = () => {
           />
         </div>
       </TmsModal>
-      <div className="container mx-auto">
+      <div className="container mx-auto p-10">
         <div className="wrapper flex w-full justify-between items-center px-10 my-10">
           <div className="wrapper">
             <div className="flex items-center justify-start">
-              <h1 className="text-white text-3xl">Account Status: </h1>
+              <h1 className=" text-3xl">Account Status: </h1>
               <Badge
                 color={getStatusColor(
                   currentUser.status ? currentUser.status : "Pending"
@@ -220,7 +220,7 @@ const User = () => {
             </div>
 
             <div className="wrapper flex items-center justify-start">
-              <h1 className="text-white text-3xl">
+              <h1 className=" text-3xl">
                 College Name:{" "}
                 <span className="font-bold">{currentUser.collegeName}</span>
               </h1>
@@ -249,10 +249,8 @@ const User = () => {
         <div className="wrapper my-10">
           <div className="wrapper flex flex-col items-start justify-start">
             <div className="flex flex-col">
-              <h1 className="text-white font-bold text-3xl">
-                Register to Challonge
-              </h1>
-              <p className="text-white mt-2">
+              <h1 className=" font-bold text-3xl">Register to Challonge</h1>
+              <p className=" mt-2">
                 Register to Challonge to add your own custom logo use your
                 registered email as your challonge account
               </p>
@@ -268,9 +266,7 @@ const User = () => {
           </div>
         </div>
         <div className="wrapper pb-20">
-          <h1 className="text-white font-bold text-3xl mt-10">
-            Attached Documents
-          </h1>
+          <h1 className=" font-bold text-3xl mt-10">Attached Documents</h1>
           <div className="flex py-5 flex-wrap">
             {documentsFilter?.map((item) => {
               return (
@@ -282,9 +278,7 @@ const User = () => {
                   <iframe src={item.file} />
 
                   <div className="wrapper flex items-center justify-center">
-                    <h1 className="text-white font-bold my-5">
-                      {item.fileLabel}
-                    </h1>
+                    <h1 className=" font-bold my-5">{item.fileLabel}</h1>
                     <Button
                       onClick={() => deleteDocument(item.id)}
                       className="ml-3"
@@ -299,7 +293,7 @@ const User = () => {
             {documentsFilter.length <= 0 && (
               <>
                 <div className="flex justify-center items-center w-full">
-                  <h1 className="text-white text-center font-bold my-5">
+                  <h1 className=" text-center font-bold my-5">
                     No Documents Provided
                   </h1>
                 </div>
@@ -308,9 +302,7 @@ const User = () => {
           </div>
         </div>
         <form onSubmit={handleSubmit}>
-          <h1 className="text-white font-bold text-3xl mt-5">
-            Personal Details
-          </h1>
+          <h1 className=" font-bold text-3xl mt-5">Personal Details</h1>
           <div className="flex">
             <div className="basis-6/12 mx-3">
               <TmsInput
@@ -368,9 +360,7 @@ const User = () => {
               />{" "}
             </div>
           </div>
-          <h1 className="text-white font-bold text-3xl mt-10">
-            Sports Information
-          </h1>
+          <h1 className=" font-bold text-3xl mt-10">Sports Information</h1>
           <div className="flex mx-3 flex-col">
             <TmsSelect
               required={true}
