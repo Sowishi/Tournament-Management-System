@@ -5,7 +5,9 @@ import LoadingScreen from "../components/loadingScreen";
 import DefaultLayout from "../layout/defaultLayout";
 import { motion } from "framer-motion";
 import Title from "../components/title";
-import { Button } from "flowbite-react";
+import { Badge, Button } from "flowbite-react";
+import { useStore } from "../zustand/store";
+import { useNavigate } from "react-router-dom";
 
 //  <div className="header flex m-5">
 //       <div className="wrapper ml-10 flex">
@@ -20,12 +22,15 @@ import { Button } from "flowbite-react";
 
 const Landing = () => {
   const [loading, setLoading] = useState(true);
-
+  const { setCurrentEvent, currentEvent, currentUser, setCurrentUser } =
+    useStore();
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
     }, 1000);
   }, []);
+
+  const navigation = useNavigate();
 
   return (
     <>
@@ -33,18 +38,38 @@ const Landing = () => {
         <LoadingScreen />
       ) : (
         <DefaultLayout>
-          <div className="flex  mx-10">
-            <div className="basis-5/12 flex justify-center items-center">
-              <div className="wrapper flex flex-col justify-center items-center">
-                <h1 className="uppercase text-white text-4xl text-center font-bold">
-                  Web-based tournament management system
-                </h1>
-                <Button className="mt-5">Learn more about us</Button>
+          <div className="container mx-auto mt-10">
+            <h1 className="text-center text-3xl font-bold flex justify-center items-center">
+              Tournament Event:{" "}
+              <Badge size={"xl"} className="ml-3 px-10">
+                {currentEvent}
+              </Badge>
+            </h1>
+            <div className="flex">
+              <div className="basis-7/12 p-10">
+                <div className="container mx-auto h-[30rem] flex justify-center items-center flex-col">
+                  <TMSCarousel />
+                </div>
               </div>
-            </div>
-            <div className="basis-7/12">
-              <div className="container mx-auto h-[30rem] flex justify-center items-center">
-                <TMSCarousel />
+              <div className="basis-5/12 flex justify-center items-center">
+                <div className="shadow-xl p-10 mx-5">
+                  <h1 className="font-bold text-3xl">
+                    Tournament Management System
+                  </h1>
+                  <p className="text-gray-400 my-3">
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                    Voluptatibus asperiores, ducimus porro hic dolore quas vel
+                    vitae incidunt aspernatur natus laudantium accusamus
+                    necessitatibus dicta. Incidunt at nihil vel aspernatur quia!
+                  </p>
+                  <Button
+                    onClick={() => navigation("/events")}
+                    className="mt-5 w-full py-3"
+                    gradientDuoTone="cyanToBlue"
+                  >
+                    View Tournaments
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
