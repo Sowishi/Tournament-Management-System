@@ -10,7 +10,17 @@ import logo from "../assets/logo2.png";
 import { toast } from "react-toastify";
 import useGetEventName from "../hooks/useGetEventName";
 import useCrudCollegeName from "../hooks/useCrudCollegeName";
-
+import {
+  HiOutlineHome,
+  HiOutlineQuestionMarkCircle,
+  HiOutlineMap,
+  HiOutlineCalendar,
+  HiOutlineRss,
+  HiOutlineUserGroup,
+  HiViewBoards,
+  HiOutlineUser,
+  HiMail,
+} from "react-icons/hi";
 const Registration = () => {
   const [forms, setForms] = useState({
     schoolRepresentative: "",
@@ -27,33 +37,53 @@ const Registration = () => {
   const { data: eventNames } = useGetEventName();
   const { data: collegeNames } = useCrudCollegeName();
 
+  const [passwordValidation, setPasswordValidation] = useState("");
+  const [phoneValidation, setPhoneValidation] = useState("");
+
   const navigate = useNavigate();
 
   const handleChange = (event) => {
     const { value, name } = event.target;
+
+    if (name == "contact") {
+      if (value.length !== 10 || value[0] !== "9") {
+        setPhoneValidation(
+          "Phone number must be 10 digits long and start with '9'"
+        );
+      }
+      if (value.length == 10 || value[0] == "9") {
+        setPhoneValidation(undefined);
+      }
+    }
+
+    if (name == "password") {
+      if (value.length < 8) {
+        setPasswordValidation("Password must be at least 8 characters long");
+      } else {
+        setPasswordValidation(undefined);
+      }
+    }
+
+    if (name == "confirmPassword") {
+      if (value !== forms.password) {
+        setPasswordValidation("Password does not match");
+      }
+
+      if (value == forms.password) {
+        setPasswordValidation(undefined);
+      }
+    }
+
     const output = { ...forms, [name]: value };
     setForms(output);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (forms.password.length < 8) {
-      toast.error("Password must be at least 8 characters long");
-      return;
-    }
 
-    if (forms.contactNumber.length !== 10 || forms.contactNumber[0] !== "9") {
-      toast.error("Phone number must be 10 digits long and start with '9'");
-      return;
-    }
-    if (forms.password !== forms.confirmPassword) {
-      toast.error("Password does not match");
-      return;
-    } else {
-      addUser(forms);
-      toast.success("Successfully Registered");
-      navigate("/login");
-    }
+    addUser(forms);
+    toast.success("Successfully Registered");
+    navigate("/login");
   };
 
   function areAllFieldsFilled() {
@@ -81,8 +111,12 @@ const Registration = () => {
       <div
         className="wrapper p-14 m-20 w-full rounded-lg"
         style={{
-          background:
-            "linear-gradient(87deg, rgba(255,51,50,1) 0%, rgba(255,131,76,1) 100%)",
+          margin: "0 auto",
+          background: "rgba(16, 18, 27, 0.4)",
+          border: "1px solid rgba(255, 255, 255, 0.18)",
+          borderRadius: "10px",
+          backdropFilter: "blur(2px)",
+          margin: 100,
         }}
       >
         <div className="text-center flex justify-center items-center">
@@ -111,11 +145,13 @@ const Registration = () => {
                 label={"SUCs Email"}
               />
               <TmsInput
+                addOn={"+63"}
                 onChange={handleChange}
                 value={forms.contact}
                 name={"contact"}
                 placeHolder={"SUCs Contact"}
                 label={"SUCs Contact"}
+                error={phoneValidation}
               />
             </div>
           </div>
@@ -158,6 +194,7 @@ const Registration = () => {
                 onChange={handleChange}
                 placeHolder={"Password"}
                 label={"Password"}
+                error={passwordValidation}
               />
             </div>
             <div className="basis-6/12">
@@ -167,17 +204,27 @@ const Registration = () => {
                 onChange={handleChange}
                 placeHolder={"Confirm Password"}
                 label={"Confirm Password"}
+                error={passwordValidation}
               />
             </div>
           </div>
 
           <div className="flex justify-center items-center mt-10">
+            <Link to={"/login"} className="w-full mx-3 py-4">
+              <Button
+                className="w-full py-4"
+                gradientMonochrome="success"
+                type="submit"
+              >
+                Back to Login
+              </Button>
+            </Link>
             <Button
               className="w-full mx-3 py-4"
               gradientMonochrome="info"
               type="submit"
             >
-              SUBMIT
+              Register
             </Button>
           </div>
         </form>

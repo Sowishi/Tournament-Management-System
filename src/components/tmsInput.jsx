@@ -11,6 +11,8 @@ const TmsInput = ({
   addOn,
   dark,
   required,
+  error,
+  rightIcon,
 }) => {
   return (
     <div>
@@ -31,6 +33,11 @@ const TmsInput = ({
         type={type}
         placeholder={placeHolder}
         required={required}
+        color={error ? "failure" : ""}
+        helperText={
+          <>{error && <span className="font-medium">{error}</span>}</>
+        }
+        rightIcon={rightIcon}
       />
     </div>
   );
