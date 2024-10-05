@@ -10,17 +10,7 @@ import logo from "../assets/logo2.png";
 import { toast } from "react-toastify";
 import useGetEventName from "../hooks/useGetEventName";
 import useCrudCollegeName from "../hooks/useCrudCollegeName";
-import {
-  HiOutlineHome,
-  HiOutlineQuestionMarkCircle,
-  HiOutlineMap,
-  HiOutlineCalendar,
-  HiOutlineRss,
-  HiOutlineUserGroup,
-  HiViewBoards,
-  HiOutlineUser,
-  HiMail,
-} from "react-icons/hi";
+
 const Registration = () => {
   const [forms, setForms] = useState({
     schoolRepresentative: "",

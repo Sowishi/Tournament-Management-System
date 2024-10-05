@@ -1,6 +1,6 @@
 import { Button, Label, TextInput } from "flowbite-react";
 import logo from "../assets/logo2.png";
-import tmsBG from "../assets/tms-bg.jpg";
+import tmsBG from "../assets/460541106_1061387815010501_3074254458016743449_n.jpg";
 import TmsInput from "../components/tmsInput";
 
 const AuthLayout = ({ children, hideHeader }) => {
