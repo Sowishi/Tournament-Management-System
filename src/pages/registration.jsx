@@ -13,15 +13,12 @@ import useCrudCollegeName from "../hooks/useCrudCollegeName";
 
 const Registration = () => {
   const [forms, setForms] = useState({
-    fullName: "",
-    birthDate: "",
-    gender: "Male",
+    schoolRepresentative: "",
     email: "",
-    contactNumber: "",
-    address: "",
-    sportsInfo: "",
+    contact: "",
+    sportsEvent: "",
     collegeName: "",
-    position: "Student",
+    username: "",
     password: "",
     confirmPassword: "",
   });
@@ -95,51 +92,31 @@ const Registration = () => {
           <img src={logo} width={100} alt="" />
         </div>
         <form onSubmit={handleSubmit}>
-          <h1 className="text-white font-bold text-3xl">Personal Details</h1>
+          <h1 className="text-white font-bold text-3xl">SUCS details</h1>
           <div className="flex">
-            <div className="basis-6/12 mx-3">
+            <div className="basis-full mx-3">
               <TmsInput
-                name="fullName"
+                name="schoolRepresentative"
                 onChange={handleChange}
-                value={forms.fullName}
-                placeHolder={"Full Name"}
-                label={"Full Name"}
+                value={forms.schoolRepresentative}
+                placeHolder={"SUCs Representative"}
+                label={"SUCs Representative"}
               />
               <TmsInput
                 onChange={handleChange}
-                name={"birthDate"}
-                type={"date"}
-                placeHolder={"Birthdate"}
-                label={"Birth Date"}
-              />
-              <TmsSelect
-                name="gender"
-                onChange={handleChange}
-                label={"Gender"}
-                data={["Male", "Female"]}
-              />
-            </div>
-            <div className="basis-6/12 mx-3">
-              <TmsInput
-                type={"email"}
+                value={forms.email}
                 name={"email"}
-                onChange={handleChange}
+                type={"email"}
                 placeHolder={"Email"}
-                label={"Email"}
+                label={"SUCs Email"}
               />
               <TmsInput
-                addOn="+63"
                 onChange={handleChange}
-                name={"contactNumber"}
-                placeHolder={"Contact Number"}
-                label={"Contact Number"}
-              />{" "}
-              <TmsInput
-                name={"address"}
-                onChange={handleChange}
-                placeHolder={"Address"}
-                label={"Address"}
-              />{" "}
+                value={forms.contact}
+                name={"contact"}
+                placeHolder={"SUCs Contact"}
+                label={"SUCs Contact"}
+              />
             </div>
           </div>
           <h1 className="text-white font-bold text-3xl mt-10">
@@ -147,7 +124,7 @@ const Registration = () => {
           </h1>
           <div className="flex mx-3 flex-col">
             <TmsSelect
-              name="sportsInfo"
+              name="sportsEvent"
               onChange={handleChange}
               label={"Sports Information"}
               data={["Please select event name", ...formatEventNames]}
@@ -160,8 +137,21 @@ const Registration = () => {
             />
           </div>
 
-          <div className="flex">
-            <div className="basis-6/12 mx-3">
+          <h1 className="text-white font-bold text-3xl mt-10">
+            Account Information
+          </h1>
+
+          <div className="flex flex-wrap mx-3">
+            <div className="basis-full">
+              <TmsInput
+                onChange={handleChange}
+                value={forms.username}
+                name={"username"}
+                placeHolder={"Username"}
+                label={"Username"}
+              />
+            </div>
+            <div className="basis-6/12 pr-5">
               <TmsInput
                 type={"password"}
                 name={"password"}
@@ -170,7 +160,7 @@ const Registration = () => {
                 label={"Password"}
               />
             </div>
-            <div className="basis-6/12 mx-3">
+            <div className="basis-6/12">
               <TmsInput
                 type={"password"}
                 name={"confirmPassword"}
@@ -184,7 +174,6 @@ const Registration = () => {
           <div className="flex justify-center items-center mt-10">
             <Button
               className="w-full mx-3 py-4"
-              disabled={!areAllFieldsFilled()}
               gradientMonochrome="info"
               type="submit"
             >

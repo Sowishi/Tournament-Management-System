@@ -56,7 +56,9 @@ export default function Header() {
             <Dropdown.Item
               onClick={() => {
                 setCurrentUser(null);
+                navigation("/");
                 localStorage.removeItem("user");
+                window.location.reload();
               }}
             >
               Sign out
@@ -67,9 +69,6 @@ export default function Header() {
       </div>
       <Navbar.Collapse>
         <Button.Group>
-          <Link to="/">
-            <Button color="grLinky">Main Menu</Button>
-          </Link>
           <Link to="/home">
             <Button color="grLinky">
               {" "}

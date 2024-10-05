@@ -15,24 +15,8 @@ const SuperLanding = () => {
 
       <div className="flex z-10 absolute w-full">
         <div
-          onClick={() => {
-            navigate("/home");
-            setGuest(true);
-          }}
-          className="tms-card basis-4/12 h-screen flex justify-center items-center "
-        >
-          <div className="w-10/12 h-[20rem] bg-[#7695FF] shadow-lg rounded-lg flex justify-center items-center">
-            <div className="flex flex-col items-center justify-center">
-              <h1 className="text-white font-bold text-3xl mb-5">
-                View Tournament
-              </h1>
-              <img src={logo} width={150} />
-            </div>
-          </div>
-        </div>
-        <div
           onClick={() => navigate("/login")}
-          className="tms-card basis-4/12 h-screen flex justify-center items-center "
+          className="tms-card basis-6/12 h-screen flex justify-center items-center "
         >
           <div className="w-10/12 h-[20rem] bg-[#FF9874] shadow-lg rounded-lg flex justify-center items-center">
             <div className="flex flex-col items-center justify-center">
@@ -45,7 +29,7 @@ const SuperLanding = () => {
         </div>
         <div
           onClick={() => navigate("/admin/login")}
-          className="tms-card basis-4/12 h-screen flex justify-center items-center "
+          className="tms-card basis-6/12 h-screen flex justify-center items-center "
         >
           <div className="w-10/12 h-[20rem] bg-slate-700 shadow-lg rounded-lg flex justify-center items-center">
             <div className="flex flex-col items-center justify-center">
