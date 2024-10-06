@@ -30,7 +30,7 @@ const App = () => {
   return (
     <>
       <Routes>
-        <Route path="/" element={<SuperLanding />} />
+        <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/registration" element={<Registration />} />
         <Route path="/forgot" element={<Forgot />} />
@@ -64,30 +64,29 @@ const App = () => {
         />{" "}
         <Route path="/user" element={currentUser ? <User /> : <Login />} />
         {/* //Admin */}
-        <Route path="/admin/login" element={<AdminLogin />} />
         <Route
           path="/admin/home"
-          element={currentAdmin ? <AdminHome /> : <AdminLogin />}
+          element={currentAdmin ? <AdminHome /> : <Login />}
         />
         <Route
           path="/admin/users"
-          element={currentAdmin ? <AdminUsers /> : <AdminLogin />}
+          element={currentAdmin ? <AdminUsers /> : <Login />}
         />
         <Route
           path="/admin/admins"
-          element={currentAdmin ? <AdminAdmins /> : <AdminLogin />}
+          element={currentAdmin ? <AdminAdmins /> : <Login />}
         />{" "}
         <Route
           path="/admin/calendar"
-          element={currentAdmin ? <AdminCalendar /> : <AdminLogin />}
+          element={currentAdmin ? <AdminCalendar /> : <Login />}
         />
         <Route
           path="/admin/tournament"
-          element={currentAdmin ? <AdminTournament /> : <AdminLogin />}
+          element={currentAdmin ? <AdminTournament /> : <Login />}
         />
         <Route
           path="/tournament/:id"
-          element={currentAdmin ? <ViewTournament /> : <AdminLogin />}
+          element={currentAdmin ? <ViewTournament /> : <Login />}
         />
       </Routes>
     </>

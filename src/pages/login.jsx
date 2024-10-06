@@ -61,20 +61,17 @@ const Login = () => {
 
   return (
     <AuthLayout>
-      <div className="flex mx-20">
-        <div className="basis-6/12  flex justify-center items-center">
-          <Lottie
-            animationData={welcomeAnim}
-            style={{ width: 500 }}
-            loop={true}
-          />
-        </div>
-        <div className="basis-6/12 flex justify-center items-center ">
+      <div className="flex mx-20 justify-center items-center">
+        <div className="basis-10/12 flex justify-center items-center ">
           <div
             className="container rounded-lg p-14 mx-10"
             style={{
-              background:
-                "linear-gradient(87deg, rgba(255,51,50,1) 0%, rgba(255,131,76,1) 100%)",
+              margin: "0 auto",
+              background: "rgba(16, 18, 27, 0.4)",
+              border: "1px solid rgba(255, 255, 255, 0.18)",
+              borderRadius: "10px",
+              backdropFilter: "blur(2px)",
+              margin: 100,
             }}
           >
             <div className="flex justify-center items-center">
@@ -103,11 +100,11 @@ const Login = () => {
 
             <div className="flex justify-center items-center">
               <Button
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/home")}
                 className="w-8/12 mt-5 py-2"
                 gradientMonochrome="success"
               >
-                Main Menu
+                View as Guest
               </Button>
               <Button
                 onClick={handleLogin}
@@ -121,7 +118,7 @@ const Login = () => {
             <div className="flex justify-between items-center mt-5">
               <div className="wrapper flex items-center "></div>
               <div className="wrapper flex items-center ">
-                <p>Dont' have an account?</p>
+                <p className="text-white">Dont' have an account?</p>
 
                 <Button size={"xs"} className="ml-2">
                   <Link to={"/registration"}> Create an account</Link>

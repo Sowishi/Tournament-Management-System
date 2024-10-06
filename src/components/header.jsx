@@ -7,6 +7,7 @@ import useGetEventName from "../hooks/useGetEventName";
 import { useStore } from "../zustand/store";
 import { Link, useNavigate } from "react-router-dom";
 import {
+  HiLogin,
   HiOutlineCalendar,
   HiOutlineHome,
   HiOutlineMap,
@@ -87,6 +88,16 @@ export default function Header() {
                 </Button>
               </Link>
             </>
+          )}
+
+          {!currentUser && (
+            <Link to={"/login"}>
+              <Button color="gray">
+                {" "}
+                <HiLogin className="mr-2 h-5 w-5" />
+                Login
+              </Button>
+            </Link>
           )}
           {currentEvent && (
             <>

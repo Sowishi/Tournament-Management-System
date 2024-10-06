@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
 import { TMSCarousel } from "../components/carousel";
-import Header from "../components/header";
 import LoadingScreen from "../components/loadingScreen";
 import DefaultLayout from "../layout/defaultLayout";
-import { motion } from "framer-motion";
-import Title from "../components/title";
 import { Badge, Button } from "flowbite-react";
 import { useStore } from "../zustand/store";
 import { useNavigate } from "react-router-dom";
@@ -67,7 +64,7 @@ const Landing = () => {
                     className="mt-5 w-full py-3"
                     gradientDuoTone="cyanToBlue"
                   >
-                    View Tournaments
+                    Learn More About Us
                   </Button>
                 </div>
               </div>

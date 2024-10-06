@@ -97,6 +97,17 @@ const Navigation = () => {
             </Button>
           </>
         )}
+        {!currentUser && (
+          <>
+            <Link to={"/user"}>
+              {" "}
+              <Button gradientMonochrome="info" className="mx-3">
+                <HiOutlineUser className="mr-2 h-5 w-5" />
+                Login
+              </Button>
+            </Link>
+          </>
+        )}
       </Button.Group>
     </div>
   );
