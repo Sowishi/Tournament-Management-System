@@ -31,10 +31,10 @@ export function UsersTable() {
   };
 
   const filter = data.filter((item) => {
-    if (selectedEvent == "all") {
+    if (selectedEvent == "all" && item.userType !== "admin") {
       return item;
     }
-    if (item.sportsInfo == selectedEvent) {
+    if (item.sportsEvent == selectedEvent && item.userType !== "admin") {
       return item;
     }
   });
@@ -126,19 +126,16 @@ export function UsersTable() {
       <Table>
         <Table.Head className="bg-slate-800">
           <Table.HeadCell className="bg-slate-800 text-white">
-            Full Name
+            SUCs Representative
           </Table.HeadCell>
           <Table.HeadCell className="bg-slate-800 text-white">
             College Name
           </Table.HeadCell>
           <Table.HeadCell className="bg-slate-800 text-white">
+            Sports Events
+          </Table.HeadCell>
+          <Table.HeadCell className="bg-slate-800 text-white">
             Email
-          </Table.HeadCell>
-          <Table.HeadCell className="bg-slate-800 text-white">
-            Position
-          </Table.HeadCell>
-          <Table.HeadCell className="bg-slate-800 text-white">
-            Events
           </Table.HeadCell>
           <Table.HeadCell className="bg-slate-800 text-white">
             Status
@@ -154,13 +151,16 @@ export function UsersTable() {
                 key={user.id}
                 className="bg-white dark:border-gray-700 dark:bg-gray-800"
               >
-                <Table.Cell className="font-bold">{user.fullName}</Table.Cell>
+                <Table.Cell className="font-bold">
+                  {user.schoolRepresentative}
+                </Table.Cell>
                 <Table.Cell className="font-bold">
                   {user.collegeName}
                 </Table.Cell>
+                <Table.Cell className="font-bold">
+                  {user.sportsEvent}
+                </Table.Cell>
                 <Table.Cell className="font-bold">{user.email}</Table.Cell>
-                <Table.Cell className="font-bold">{user.position}</Table.Cell>
-                <Table.Cell className="font-bold">{user.sportsInfo}</Table.Cell>
                 <Table.Cell className="font-bold">
                   <Badge
                     color={getBadgeColor(user.status ? user.status : "Pending")}
