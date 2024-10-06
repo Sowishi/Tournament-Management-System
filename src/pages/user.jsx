@@ -10,13 +10,14 @@ import { Badge, Button, Tabs } from "flowbite-react";
 import useUpdateUser from "../hooks/useUpdateUser";
 import { toast } from "react-toastify";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { storage } from "../../firebase";
+import { db, storage } from "../../firebase";
 import TmsModal from "../components/tmsModal";
 import { HiDocument, HiLogin, HiUserCircle } from "react-icons/hi";
 import useGetEventName from "../hooks/useGetEventName";
 import useCrudCollegeName from "../hooks/useCrudCollegeName";
 import { Link } from "react-router-dom";
 import { MdDashboard } from "react-icons/md";
+import { collection, query, where } from "firebase/firestore";
 
 const User = () => {
   const { currentUser, setCurrentUser } = useStore();

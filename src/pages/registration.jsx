@@ -10,6 +10,8 @@ import logo from "../assets/logo2.png";
 import { toast } from "react-toastify";
 import useGetEventName from "../hooks/useGetEventName";
 import useCrudCollegeName from "../hooks/useCrudCollegeName";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../firebase";
 
 const Registration = () => {
   const [forms, setForms] = useState({
@@ -75,12 +77,35 @@ const Registration = () => {
     setForms(output);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    addUser(forms);
-    toast.success("Successfully Registered");
-    navigate("/login");
+    const colRef = collection(db, "users");
+    const q = query(colRef, where("collegeName", "==", forms.collegeName));
+    const querySnapshot = await getDocs(q);
+    let isDuplicate = false;
+    if (querySnapshot.empty) {
+      console.log("pasok");
+      addUser(forms);
+      toast.success("Successfully Registered");
+      navigate("/login");
+      isDuplicate = true;
+    } else {
+      querySnapshot.docs.forEach((doc) => {
+        const data = doc.data();
+        if (data.collegeName == forms.collegeName && data.status == "Approve") {
+          toast.error("Duplicate School/College registration");
+          isDuplicate = true;
+          return;
+        }
+      });
+    }
+
+    if (!isDuplicate) {
+      addUser(forms);
+      toast.success("Successfully Registered");
+      navigate("/login");
+    }
   };
 
   function areAllFieldsFilled() {
