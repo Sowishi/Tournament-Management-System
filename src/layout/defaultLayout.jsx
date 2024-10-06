@@ -6,7 +6,7 @@ const DefaultLayout = ({ children, hideHeader, client }) => {
     <>
       <div
         className={`w-full min-h-screen ${
-          client ? "bg-slate-800" : "bg-gray-50"
+          client ? "bg-slate-800" : "bg-red-50"
         }`}
       >
         <Header hideHeader={hideHeader} />

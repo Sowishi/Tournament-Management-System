@@ -43,7 +43,7 @@ const Landing = () => {
                 </div>
               </div>
               <div className="basis-5/12 flex justify-center items-center">
-                <div className="shadow-xl p-10 mx-5">
+                <div className="shadow-xl p-10 mx-5 bg-white">
                   <h1 className="font-bold text-3xl">
                     Tournament Management System
                   </h1>

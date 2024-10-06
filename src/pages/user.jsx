@@ -258,7 +258,7 @@ const User = () => {
         </div>
       </TmsModal>
       <div className="container mx-auto p-10">
-        <div className="shadow-2xl flex flex-col justify-center items-center p-10 rounded-2xl">
+        <div className="shadow-2xl bg-white flex flex-col justify-center items-center p-10 rounded-2xl">
           <img
             className="ml-3"
             width={250}
@@ -295,7 +295,10 @@ const User = () => {
 
         <Tabs aria-label="Default tabs" variant="default" className="mt-5">
           <Tabs.Item active title="Profile" icon={HiUserCircle}>
-            <form onSubmit={handleSubmit} className="shadow-xl p-10">
+            <form
+              onSubmit={handleSubmit}
+              className="shadow-xl p-10 bg-white rounded-2xl"
+            >
               <h1 className=" font-bold text-3xl">SUCS details</h1>
               <div className="flex">
                 <div className="basis-full mx-3">
@@ -394,7 +397,11 @@ const User = () => {
               </div>
             </form>
           </Tabs.Item>
-          <Tabs.Item title="Documents" icon={HiDocument}>
+          <Tabs.Item
+            disabled={!currentUser.status}
+            title="Documents"
+            icon={HiDocument}
+          >
             <div className="wrapper pb-20">
               <div className="w-full flex justify-end">
                 <Button onClick={() => setAddDocumentModal(true)}>
@@ -437,7 +444,11 @@ const User = () => {
               </div>
             </div>
           </Tabs.Item>
-          <Tabs.Item title="Challonge" icon={HiLogin}>
+          <Tabs.Item
+            disabled={!currentUser.status}
+            title="Challonge"
+            icon={HiLogin}
+          >
             <div className="wrapper my-10">
               <div className="wrapper flex flex-col items-start justify-start">
                 <div className="flex flex-col">

@@ -19,7 +19,7 @@ const Participants = () => {
     <DefaultLayout>
       <Title title="Events  Participants" />
       <div className="container mx-auto p-5">
-        <div className="flex justify-center">
+        <div className="flex justify-center items-center pb-20">
           <ListGroup className="w-full">
             {filterData?.map((item) => {
               return (
