@@ -15,13 +15,23 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   const { data } = useGetUsers();
-  const { setCurrentUser, setGuest } = useStore();
+  const { setCurrentUser, setGuest, setCurrentAdmin } = useStore();
 
   const navigate = useNavigate();
 
   const handleLogin = () => {
     let userFound = false;
     data?.map((user) => {
+      if (user.userType == "admin") {
+        if (user.email == email && user.password == password) {
+          localStorage.setItem("admin", JSON.stringify(user));
+          setCurrentAdmin(user);
+          userFound = true;
+          navigate("/admin/home");
+        }
+        return;
+      }
+
       if (user.email == email && user.password == password) {
         localStorage.setItem("user", JSON.stringify(user));
         setCurrentUser(user);

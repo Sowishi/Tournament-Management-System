@@ -51,7 +51,7 @@ const AdminAdmins = () => {
   });
 
   const filterWithoutMasterAdmin = data.filter((item) => {
-    if (item.role !== "Master Admin") {
+    if (item.role !== "Master Admin" && item.userType == "admin") {
       return item;
     }
   });

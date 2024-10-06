@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 const useCrudAdmin = () => {
   const [data, setData] = useState([]);
 
-  const colRef = collection(db, "admins");
+  const colRef = collection(db, "users");
 
   useEffect(() => {
     onSnapshot(colRef, (snapshot) => {
@@ -24,13 +24,13 @@ const useCrudAdmin = () => {
     });
   }, []);
   const addAdmin = (forms) => {
-    addDoc(colRef, forms);
+    addDoc(colRef, { ...forms, userType: "admin" });
   };
   const updateAdmin = (forms) => {
-    updateDoc(doc(db, "admins", forms.id), forms);
+    updateDoc(doc(db, "users", forms.id), forms);
   };
   const deleteAdmin = (forms) => {
-    deleteDoc(doc(db, "admins", forms.id));
+    deleteDoc(doc(db, "users", forms.id));
   };
 
   return { data, addAdmin, updateAdmin, deleteAdmin };
