@@ -263,7 +263,7 @@ export default function AdminLayout({ children, client }) {
               <Button
                 onClick={() => {
                   setCurrentAdmin(null);
-                  localStorage.removeItem("admin");
+                  localStorage.removeItem("user");
                 }}
                 color={"failure"}
                 className="ml-5"

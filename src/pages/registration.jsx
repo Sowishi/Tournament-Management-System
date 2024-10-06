@@ -99,7 +99,13 @@ const Registration = () => {
     return item.eventName;
   });
 
-  const formatCollegeNames = collegeNames.map((item) => {
+  const filterCollegeNames = collegeNames.filter((item) => {
+    if (forms.sportsEvent == item.event) {
+      return item.collegeName;
+    }
+  });
+
+  const formatCollegeNames = filterCollegeNames.map((item) => {
     return item.collegeName;
   });
 
