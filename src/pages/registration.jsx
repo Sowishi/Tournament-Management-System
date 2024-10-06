@@ -1,4 +1,4 @@
-import { Button, Toast } from "flowbite-react";
+import { Button, Toast, Tooltip } from "flowbite-react";
 import Steps from "../components/steps";
 import TmsInput from "../components/tmsInput";
 import AuthLayout from "../layout/authLayout";
@@ -36,12 +36,12 @@ const Registration = () => {
     const { value, name } = event.target;
 
     if (name == "contact") {
-      if (value.length !== 10 || value[0] !== "9") {
+      if (value.length > 10 || value[0] != "9") {
         setPhoneValidation(
           "Phone number must be 10 digits long and start with '9'"
         );
       }
-      if (value.length == 10 || value[0] == "9") {
+      if (value.length <= 10 || value[0] == "9") {
         setPhoneValidation(undefined);
       }
     }
@@ -50,6 +50,13 @@ const Registration = () => {
       if (value.length < 8) {
         setPasswordValidation("Password must be at least 8 characters long");
       } else {
+        setPasswordValidation(undefined);
+      }
+      if (value !== forms.password) {
+        setPasswordValidation("Password does not match");
+      }
+
+      if (value == forms.password) {
         setPasswordValidation(undefined);
       }
     }
@@ -209,8 +216,10 @@ const Registration = () => {
                 Back to Login
               </Button>
             </Link>
+
             <Button
               className="w-full mx-3 py-4"
+              disabled={!areAllFieldsFilled()}
               gradientMonochrome="info"
               type="submit"
             >

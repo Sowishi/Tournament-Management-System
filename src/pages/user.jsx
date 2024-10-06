@@ -12,6 +12,9 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../firebase";
 import TmsModal from "../components/tmsModal";
 import { HiDocument } from "react-icons/hi";
+import useGetEventName from "../hooks/useGetEventName";
+import useCrudCollegeName from "../hooks/useCrudCollegeName";
+import { Link } from "react-router-dom";
 
 const User = () => {
   const { currentUser, setCurrentUser } = useStore();
@@ -25,27 +28,68 @@ const User = () => {
   const [logoFile, setLogoFile] = useState();
 
   const [forms, setForms] = useState({
-    fullName: currentUser?.fullName,
-    birthDate: currentUser?.birthDate,
-    gender: currentUser?.gender,
-    email: currentUser?.email,
-    contactNumber: currentUser?.contactNumber,
-    address: currentUser?.address,
-    sportsInfo: currentUser?.sportsInfo,
     collegeName: currentUser?.collegeName,
-    position: currentUser?.position,
+    contact: currentUser?.contact,
+    createdAt: currentUser?.createdAt,
     password: currentUser?.password,
     confirmPassword: currentUser?.confirmPassword,
+
+    schoolRepresentative: currentUser?.schoolRepresentative,
+    sportsEvent: currentUser?.sportsEvent,
+    username: currentUser?.username,
+    email: currentUser?.email,
   });
+
+  const [passwordValidation, setPasswordValidation] = useState("");
+  const [phoneValidation, setPhoneValidation] = useState("");
+  const { data: eventNames } = useGetEventName();
+  const { data: collegeNames } = useCrudCollegeName();
 
   const handleChange = (event) => {
     const { value, name } = event.target;
+
+    if (name == "contact") {
+      if (value.length > 10 || value[0] != "9") {
+        setPhoneValidation(
+          "Phone number must be 10 digits long and start with '9'"
+        );
+      }
+      if (value.length <= 10 || value[0] == "9") {
+        setPhoneValidation(undefined);
+      }
+    }
+
+    if (name == "password") {
+      if (value.length < 8) {
+        setPasswordValidation("Password must be at least 8 characters long");
+      } else {
+        setPasswordValidation(undefined);
+      }
+      if (value !== forms.password) {
+        setPasswordValidation("Password does not match");
+      }
+
+      if (value == forms.password) {
+        setPasswordValidation(undefined);
+      }
+    }
+
+    if (name == "confirmPassword") {
+      if (value !== forms.password) {
+        setPasswordValidation("Password does not match");
+      }
+
+      if (value == forms.password) {
+        setPasswordValidation(undefined);
+      }
+    }
     const output = { ...forms, [name]: value };
     setForms(output);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
     updateUser({
       ...forms,
       id: currentUser.id,
@@ -139,6 +183,13 @@ const User = () => {
     }
   };
 
+  const formatEventNames = eventNames.map((item) => {
+    return item.eventName;
+  });
+
+  const formatCollegeNames = collegeNames.map((item) => {
+    return item.collegeName;
+  });
   return (
     <DefaultLayout>
       <Title title={"User Account"} />
@@ -219,15 +270,15 @@ const User = () => {
               </Badge>
             </div>
 
-            <div className="wrapper flex items-center justify-start">
-              <h1 className=" text-3xl">
+            <div className="wrapper flex items-center justify-center">
+              <h1 className="text-3xl">
                 College Name:{" "}
                 <span className="font-bold">{currentUser.collegeName}</span>
               </h1>
               <img
-                className="ml-3 rounded-full"
-                width={70}
-                height={70}
+                className="ml-3"
+                width={100}
+                height={100}
                 src={currentUser.collegeLogoURL}
                 alt=""
               />
@@ -301,94 +352,105 @@ const User = () => {
             )}
           </div>
         </div>
-        <form onSubmit={handleSubmit}>
-          <h1 className=" font-bold text-3xl mt-5">Personal Details</h1>
+        {/* Forms */}
+        <form onSubmit={handleSubmit} className="shadow-xl p-10">
+          <h1 className=" font-bold text-3xl">SUCS details</h1>
           <div className="flex">
-            <div className="basis-6/12 mx-3">
+            <div className="basis-full mx-3">
               <TmsInput
-                required={true}
-                name="fullName"
+                name="schoolRepresentative"
                 onChange={handleChange}
-                value={forms?.fullName}
-                placeHolder={"Full Name"}
-                label={"Full Name"}
+                value={forms.schoolRepresentative}
+                placeHolder={"SUCs Representative"}
+                label={"SUCs Representative"}
+                dark
               />
               <TmsInput
-                required={true}
                 onChange={handleChange}
-                value={forms?.birthDate}
-                name={"birthDate"}
-                type={"date"}
-                placeHolder={"Birthdate"}
-                label={"Birth Date"}
-              />
-              <TmsSelect
-                required={true}
-                name="gender"
-                value={forms?.gender}
-                onChange={handleChange}
-                label={"Gender"}
-                data={["Male", "Female"]}
-              />
-            </div>
-            <div className="basis-6/12 mx-3">
-              <TmsInput
-                required={true}
-                value={forms?.email}
-                type={"email"}
+                value={forms.email}
                 name={"email"}
-                onChange={handleChange}
+                type={"email"}
                 placeHolder={"Email"}
-                label={"Email"}
+                label={"SUCs Email"}
+                dark
               />
               <TmsInput
-                required={true}
-                addOn="+63"
-                value={forms?.contactNumber}
+                addOn={"+63"}
                 onChange={handleChange}
-                name={"contactNumber"}
-                placeHolder={"Contact Number"}
-                label={"Contact Number"}
-              />{" "}
-              <TmsInput
-                required={true}
-                value={forms?.address}
-                name={"address"}
-                onChange={handleChange}
-                placeHolder={"Address"}
-                label={"Address"}
-              />{" "}
+                value={forms.contact}
+                name={"contact"}
+                placeHolder={"SUCs Contact"}
+                label={"SUCs Contact"}
+                error={phoneValidation}
+                dark
+              />
             </div>
           </div>
           <h1 className=" font-bold text-3xl mt-10">Sports Information</h1>
           <div className="flex mx-3 flex-col">
             <TmsSelect
-              required={true}
-              value={forms?.sportsInfo}
-              name="sportsInfo"
+              name="sportsEvent"
               onChange={handleChange}
               label={"Sports Information"}
-              data={["Provincial Meet", "RSCUAA", "Bicol Meet"]}
+              data={[forms.sportsEvent, ...formatEventNames]}
+              dark
             />
-            <TmsInput
-              required={true}
-              value={forms?.collegeName}
+            <TmsSelect
               name="collegeName"
               onChange={handleChange}
-              placeHolder={"Name of school/Institution"}
               label={"College Name"}
+              data={[forms.collegeName, ...formatCollegeNames]}
+              dark
             />
           </div>
+
+          <h1 className=" font-bold text-3xl mt-10">Account Information</h1>
+
+          <div className="flex flex-wrap mx-3">
+            <div className="basis-full">
+              <TmsInput
+                onChange={handleChange}
+                value={forms.username}
+                name={"username"}
+                placeHolder={"Username"}
+                label={"Username"}
+                dark
+              />
+            </div>
+            <div className="basis-6/12 pr-5">
+              <TmsInput
+                name={"password"}
+                value={forms.password}
+                onChange={handleChange}
+                placeHolder={"Password"}
+                label={"Password"}
+                error={passwordValidation}
+                dark
+              />
+            </div>
+            <div className="basis-6/12">
+              <TmsInput
+                value={forms.confirmPassword}
+                name={"confirmPassword"}
+                onChange={handleChange}
+                placeHolder={"Confirm Password"}
+                label={"Confirm Password"}
+                error={passwordValidation}
+                dark
+              />
+            </div>
+          </div>
+
           <div className="flex justify-center items-center mt-10">
             <Button
               className="w-full mx-3 py-4"
               gradientMonochrome="info"
               type="submit"
             >
-              Update User Account
+              Update Account
             </Button>
           </div>
-        </form>{" "}
+        </form>
       </div>
     </DefaultLayout>
   );
