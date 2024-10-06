@@ -157,6 +157,17 @@ export default function AdminLayout({ children, client }) {
                           </div>
                         </Sidebar.Item>
                       </a>
+                      <Link to="/admin/home">
+                        <Sidebar.Item
+                          onClick={() => setIsOpen(false)}
+                          className="bg-blue-950 text-white hover:text-white hover:bg-red-500 my-3"
+                        >
+                          <div className="flex items-center">
+                            Admin Dashboard
+                            <HiOutlineChartSquareBar className="ml-3" />
+                          </div>
+                        </Sidebar.Item>
+                      </Link>
 
                       <Link to="/admin/calendar">
                         <Sidebar.Item
