@@ -1,10 +1,14 @@
 import Header from "../components/header";
 import { TmsFooter } from "../components/footer";
 
-const DefaultLayout = ({ children, hideHeader }) => {
+const DefaultLayout = ({ children, hideHeader, client }) => {
   return (
     <>
-      <div className="w-full min-h-screen bg-gray-50">
+      <div
+        className={`w-full min-h-screen ${
+          client ? "bg-slate-800" : "bg-gray-50"
+        }`}
+      >
         <Header hideHeader={hideHeader} />
         {/* {hideHeader && (
           <div

@@ -10,7 +10,7 @@ const Participants = () => {
   const { currentEvent } = useStore();
 
   const filterData = data.filter((user) => {
-    if (user.status == "Approve" && user.sportsInfo == currentEvent) {
+    if (user.status == "Approve" && user.sportsEvent == currentEvent) {
       return user;
     }
   });

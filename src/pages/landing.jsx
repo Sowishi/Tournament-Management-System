@@ -54,7 +54,7 @@ const Landing = () => {
                     necessitatibus dicta. Incidunt at nihil vel aspernatur quia!
                   </p>
                   <Button
-                    onClick={() => navigation("/events")}
+                    onClick={() => navigation("/about")}
                     className="mt-5 w-full py-3"
                     gradientDuoTone="cyanToBlue"
                   >

@@ -92,7 +92,7 @@ const ViewTournament = () => {
 
   if (client) {
     return (
-      <DefaultLayout>
+      <DefaultLayout client={client}>
         <TmsModal
           onSubmit={handleAddParticpant}
           title={"Add Participant"}
