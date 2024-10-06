@@ -2,19 +2,21 @@ import DefaultLayout from "../layout/defaultLayout";
 import Title from "../components/title";
 import { useStore } from "../zustand/store";
 import TmsInput from "../components/tmsInput";
+import logo from "../assets/logo2.png";
 
 import { useEffect, useState } from "react";
 import TmsSelect from "../components/tmsSelect";
-import { Badge, Button } from "flowbite-react";
+import { Badge, Button, Tabs } from "flowbite-react";
 import useUpdateUser from "../hooks/useUpdateUser";
 import { toast } from "react-toastify";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../firebase";
 import TmsModal from "../components/tmsModal";
-import { HiDocument } from "react-icons/hi";
+import { HiDocument, HiLogin, HiUserCircle } from "react-icons/hi";
 import useGetEventName from "../hooks/useGetEventName";
 import useCrudCollegeName from "../hooks/useCrudCollegeName";
 import { Link } from "react-router-dom";
+import { MdDashboard } from "react-icons/md";
 
 const User = () => {
   const { currentUser, setCurrentUser } = useStore();
@@ -256,9 +258,28 @@ const User = () => {
         </div>
       </TmsModal>
       <div className="container mx-auto p-10">
-        <div className="wrapper flex w-full justify-between items-center px-10 my-10">
-          <div className="wrapper">
-            <div className="flex items-center justify-start">
+        <div className="shadow-2xl flex flex-col justify-center items-center p-10 rounded-2xl">
+          <img
+            className="ml-3"
+            width={250}
+            height={250}
+            src={currentUser.collegeLogoURL ? currentUser.collegeLogoURL : logo}
+            alt=""
+          />
+          <Button
+            color={"success"}
+            className="mt-3"
+            onClick={() => setAddLogoModal(true)}
+          >
+            {currentUser.collegeLogoURL ? "Change Logo" : "Add Logo"}
+          </Button>
+
+          <div className="flex items-center justify-center flex-col mt-5">
+            <h1 className="text-3xl">
+              College Name:{" "}
+              <span className="font-bold">{currentUser.collegeName}</span>
+            </h1>
+            <div className="flex mt-3">
               <h1 className=" text-3xl">Account Status: </h1>
               <Badge
                 color={getStatusColor(
@@ -269,188 +290,175 @@ const User = () => {
                 {currentUser.status ? currentUser.status : "Pending"}
               </Badge>
             </div>
-
-            <div className="wrapper flex items-center justify-center">
-              <h1 className="text-3xl">
-                College Name:{" "}
-                <span className="font-bold">{currentUser.collegeName}</span>
-              </h1>
-              <img
-                className="ml-3"
-                width={100}
-                height={100}
-                src={currentUser.collegeLogoURL}
-                alt=""
-              />
-            </div>
-          </div>
-          <div className="wrapper flex">
-            <Button
-              color={"success"}
-              className="mx-3"
-              onClick={() => setAddLogoModal(true)}
-            >
-              Add Logo
-            </Button>
-            <Button onClick={() => setAddDocumentModal(true)}>
-              Add Documents
-            </Button>
           </div>
         </div>
-        <div className="wrapper my-10">
-          <div className="wrapper flex flex-col items-start justify-start">
-            <div className="flex flex-col">
-              <h1 className=" font-bold text-3xl">Register to Challonge</h1>
-              <p className=" mt-2">
-                Register to Challonge to add your own custom logo use your
-                registered email as your challonge account
-              </p>
-            </div>
 
-            <a
-              className="mt-5"
-              target="_blank"
-              href="https://challonge.com/users/new?continue=/dashboard"
-            >
-              <Button>Register to Challonge</Button>
-            </a>
-          </div>
-        </div>
-        <div className="wrapper pb-20">
-          <h1 className=" font-bold text-3xl mt-10">Attached Documents</h1>
-          <div className="flex py-5 flex-wrap">
-            {documentsFilter?.map((item) => {
-              return (
-                <div
-                  key={item.id}
-                  className="wrapper basis-4/12 flex items-center justify-center flex-col"
+        <Tabs aria-label="Default tabs" variant="default" className="mt-5">
+          <Tabs.Item active title="Profile" icon={HiUserCircle}>
+            <form onSubmit={handleSubmit} className="shadow-xl p-10">
+              <h1 className=" font-bold text-3xl">SUCS details</h1>
+              <div className="flex">
+                <div className="basis-full mx-3">
+                  <TmsInput
+                    name="schoolRepresentative"
+                    onChange={handleChange}
+                    value={forms.schoolRepresentative}
+                    placeHolder={"SUCs Representative"}
+                    label={"SUCs Representative"}
+                    dark
+                  />
+                  <TmsInput
+                    onChange={handleChange}
+                    value={forms.email}
+                    name={"email"}
+                    type={"email"}
+                    placeHolder={"Email"}
+                    label={"SUCs Email"}
+                    dark
+                  />
+                  <TmsInput
+                    addOn={"+63"}
+                    onChange={handleChange}
+                    value={forms.contact}
+                    name={"contact"}
+                    placeHolder={"SUCs Contact"}
+                    label={"SUCs Contact"}
+                    error={phoneValidation}
+                    dark
+                  />
+                </div>
+              </div>
+              <h1 className=" font-bold text-3xl mt-10">Sports Information</h1>
+              <div className="flex mx-3 flex-col">
+                <TmsSelect
+                  name="sportsEvent"
+                  onChange={handleChange}
+                  label={"Sports Information"}
+                  data={[forms.sportsEvent, ...formatEventNames]}
+                  dark
+                />
+                <TmsSelect
+                  name="collegeName"
+                  onChange={handleChange}
+                  label={"College Name"}
+                  data={[forms.collegeName, ...formatCollegeNames]}
+                  dark
+                />
+              </div>
+
+              <h1 className=" font-bold text-3xl mt-10">Account Information</h1>
+
+              <div className="flex flex-wrap mx-3">
+                <div className="basis-full">
+                  <TmsInput
+                    onChange={handleChange}
+                    value={forms.username}
+                    name={"username"}
+                    placeHolder={"Username"}
+                    label={"Username"}
+                    dark
+                  />
+                </div>
+                <div className="basis-6/12 pr-5">
+                  <TmsInput
+                    name={"password"}
+                    value={forms.password}
+                    onChange={handleChange}
+                    placeHolder={"Password"}
+                    label={"Password"}
+                    error={passwordValidation}
+                    dark
+                  />
+                </div>
+                <div className="basis-6/12">
+                  <TmsInput
+                    value={forms.confirmPassword}
+                    name={"confirmPassword"}
+                    onChange={handleChange}
+                    placeHolder={"Confirm Password"}
+                    label={"Confirm Password"}
+                    error={passwordValidation}
+                    dark
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-center items-center mt-10">
+                <Button
+                  className="w-full mx-3 py-4"
+                  gradientMonochrome="info"
+                  type="submit"
                 >
-                  {/* <HiDocument color="white" size={100} /> */}
-                  <iframe src={item.file} />
-
-                  <div className="wrapper flex items-center justify-center">
-                    <h1 className=" font-bold my-5">{item.fileLabel}</h1>
-                    <Button
-                      onClick={() => deleteDocument(item.id)}
-                      className="ml-3"
-                      color={"failure"}
+                  Update Account
+                </Button>
+              </div>
+            </form>
+          </Tabs.Item>
+          <Tabs.Item title="Documents" icon={HiDocument}>
+            <div className="wrapper pb-20">
+              <div className="w-full flex justify-end">
+                <Button onClick={() => setAddDocumentModal(true)}>
+                  Add Documents
+                </Button>
+              </div>
+              <h1 className=" font-bold text-3xl mt-10">Attached Documents</h1>
+              <div className="flex py-5 flex-wrap">
+                {documentsFilter?.map((item) => {
+                  return (
+                    <div
+                      key={item.id}
+                      className="wrapper basis-4/12 flex items-center justify-center flex-col"
                     >
-                      Remove
-                    </Button>
-                  </div>
+                      {/* <HiDocument color="white" size={100} /> */}
+                      <iframe src={item.file} />
+
+                      <div className="wrapper flex items-center justify-center">
+                        <h1 className=" font-bold my-5">{item.fileLabel}</h1>
+                        <Button
+                          onClick={() => deleteDocument(item.id)}
+                          className="ml-3"
+                          color={"failure"}
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                })}
+                {documentsFilter.length <= 0 && (
+                  <>
+                    <div className="flex justify-center items-center w-full">
+                      <h1 className=" text-center font-bold my-5">
+                        No Documents Provided
+                      </h1>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+          </Tabs.Item>
+          <Tabs.Item title="Challonge" icon={HiLogin}>
+            <div className="wrapper my-10">
+              <div className="wrapper flex flex-col items-start justify-start">
+                <div className="flex flex-col">
+                  <h1 className=" font-bold text-3xl">Register to Challonge</h1>
+                  <p className=" mt-2">
+                    Register to Challonge to add your own custom logo use your
+                    registered email as your challonge account
+                  </p>
                 </div>
-              );
-            })}
-            {documentsFilter.length <= 0 && (
-              <>
-                <div className="flex justify-center items-center w-full">
-                  <h1 className=" text-center font-bold my-5">
-                    No Documents Provided
-                  </h1>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-        {/* Forms */}
-        <form onSubmit={handleSubmit} className="shadow-xl p-10">
-          <h1 className=" font-bold text-3xl">SUCS details</h1>
-          <div className="flex">
-            <div className="basis-full mx-3">
-              <TmsInput
-                name="schoolRepresentative"
-                onChange={handleChange}
-                value={forms.schoolRepresentative}
-                placeHolder={"SUCs Representative"}
-                label={"SUCs Representative"}
-                dark
-              />
-              <TmsInput
-                onChange={handleChange}
-                value={forms.email}
-                name={"email"}
-                type={"email"}
-                placeHolder={"Email"}
-                label={"SUCs Email"}
-                dark
-              />
-              <TmsInput
-                addOn={"+63"}
-                onChange={handleChange}
-                value={forms.contact}
-                name={"contact"}
-                placeHolder={"SUCs Contact"}
-                label={"SUCs Contact"}
-                error={phoneValidation}
-                dark
-              />
-            </div>
-          </div>
-          <h1 className=" font-bold text-3xl mt-10">Sports Information</h1>
-          <div className="flex mx-3 flex-col">
-            <TmsSelect
-              name="sportsEvent"
-              onChange={handleChange}
-              label={"Sports Information"}
-              data={[forms.sportsEvent, ...formatEventNames]}
-              dark
-            />
-            <TmsSelect
-              name="collegeName"
-              onChange={handleChange}
-              label={"College Name"}
-              data={[forms.collegeName, ...formatCollegeNames]}
-              dark
-            />
-          </div>
 
-          <h1 className=" font-bold text-3xl mt-10">Account Information</h1>
-
-          <div className="flex flex-wrap mx-3">
-            <div className="basis-full">
-              <TmsInput
-                onChange={handleChange}
-                value={forms.username}
-                name={"username"}
-                placeHolder={"Username"}
-                label={"Username"}
-                dark
-              />
+                <a
+                  className="mt-5"
+                  target="_blank"
+                  href="https://challonge.com/users/new?continue=/dashboard"
+                >
+                  <Button>Register to Challonge</Button>
+                </a>
+              </div>
             </div>
-            <div className="basis-6/12 pr-5">
-              <TmsInput
-                name={"password"}
-                value={forms.password}
-                onChange={handleChange}
-                placeHolder={"Password"}
-                label={"Password"}
-                error={passwordValidation}
-                dark
-              />
-            </div>
-            <div className="basis-6/12">
-              <TmsInput
-                value={forms.confirmPassword}
-                name={"confirmPassword"}
-                onChange={handleChange}
-                placeHolder={"Confirm Password"}
-                label={"Confirm Password"}
-                error={passwordValidation}
-                dark
-              />
-            </div>
-          </div>
-
-          <div className="flex justify-center items-center mt-10">
-            <Button
-              className="w-full mx-3 py-4"
-              gradientMonochrome="info"
-              type="submit"
-            >
-              Update Account
-            </Button>
-          </div>
-        </form>
+          </Tabs.Item>
+        </Tabs>
       </div>
     </DefaultLayout>
   );
