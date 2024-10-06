@@ -24,7 +24,7 @@ const Login = () => {
     data?.map((user) => {
       if (user.userType == "admin") {
         if (user.email == email && user.password == password) {
-          localStorage.setItem("admin", JSON.stringify(user));
+          localStorage.setItem("user", JSON.stringify(user));
           setCurrentAdmin(user);
           userFound = true;
           navigate("/admin/home");
@@ -49,6 +49,10 @@ const Login = () => {
     const getUsers = async () => {
       const res = localStorage.getItem("user");
       const user = await JSON.parse(res);
+
+      if (user?.userType == "admin") {
+        setCurrentAdmin(user);
+      }
       if (user) {
         setCurrentUser(user);
       } else {
