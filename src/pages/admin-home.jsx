@@ -1,4 +1,4 @@
-import { Button, ListGroup, Spinner } from "flowbite-react";
+import { Badge, Button, ListGroup, Spinner } from "flowbite-react";
 import AdminLayout from "../layout/adminLayout";
 import { useState } from "react";
 import TmsInput from "../components/tmsInput";
@@ -15,6 +15,7 @@ import TmsModal from "../components/tmsModal";
 import ConfirmationModals from "../components/confirmationModal";
 import { HiOutlineTrash } from "react-icons/hi";
 import useCrudCollegeName from "../hooks/useCrudCollegeName";
+import TmsSelect from "../components/tmsSelect";
 
 const AdminHome = () => {
   const [addPicModal, setAddPicModal] = useState(false);
@@ -30,6 +31,7 @@ const AdminHome = () => {
   const [collegeName, setCollegeName] = useState("");
   const [selectedCollegeName, setSelectedCollegeName] = useState();
   const [collegeDeleteModal, setCollegeDeleteModal] = useState(false);
+  const [selectedEventName, setSelectedEventName] = useState();
 
   // Hooks
 
@@ -102,10 +104,14 @@ const AdminHome = () => {
   };
 
   const handleUploadCollege = () => {
-    addCollegeName(collegeName);
+    addCollegeName({ collegeName, selectedEventName });
     setAddCollegeModal(false);
     toast.success("Successfully Added College Name");
   };
+
+  const formatEventNames = eventNameData.map((item) => {
+    return item.eventName;
+  });
 
   return (
     <AdminLayout>
@@ -187,6 +193,12 @@ const AdminHome = () => {
             onChange={(event) => setCollegeName(event.target.value)}
             type={"text"}
           />
+          <TmsSelect
+            onChange={(event) => setSelectedEventName(event.target.value)}
+            dark
+            label={"Enter Event Name"}
+            data={["Please Select Event Name", ...formatEventNames]}
+          />
         </div>
       </TmsModal>
       <div className="wrapper mx-10 mt-10">
@@ -246,7 +258,7 @@ const AdminHome = () => {
                   Delete
                 </Button>
                 <div className="ml-10">
-                  <h1>{event.eventName} </h1>
+                  <h1 className="text-lg">{event.eventName} </h1>
                 </div>
               </ListGroup.Item>
             );
@@ -273,8 +285,9 @@ const AdminHome = () => {
                   <HiOutlineTrash className="mr-2 h-5 w-5" />
                   Delete
                 </Button>
-                <div className="ml-10">
-                  <h1>{event.collegeName} </h1>
+                <div className="ml-10 flex justify-start items-center">
+                  <h1 className="text-lg">{event.collegeName} </h1>
+                  <Badge className="ml-3">{event.event}</Badge>
                 </div>
               </ListGroup.Item>
             );

@@ -23,9 +23,13 @@ const useCrudCollegeName = () => {
     });
   }, []);
 
-  const addCollegeName = (collegeName) => {
+  const addCollegeName = (data) => {
     const colRef = collection(db, "college-name");
-    addDoc(colRef, { collegeName, createdAt: serverTimestamp() });
+    addDoc(colRef, {
+      collegeName: data.collegeName,
+      event: data.selectedEventName,
+      createdAt: serverTimestamp(),
+    });
   };
 
   const deleteCollegeName = (id) => {
