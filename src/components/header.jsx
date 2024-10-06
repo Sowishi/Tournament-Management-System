@@ -1,11 +1,11 @@
 "use client";
 
-import { Avatar, Button, Dropdown, Navbar } from "flowbite-react";
+import { Avatar, Badge, Button, Dropdown, Navbar } from "flowbite-react";
 import logo from "../assets/logo2.png";
 import { useEffect } from "react";
 import useGetEventName from "../hooks/useGetEventName";
 import { useStore } from "../zustand/store";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   HiLogin,
   HiOutlineCalendar,
@@ -28,12 +28,17 @@ export default function Header() {
   }, []);
 
   const navigation = useNavigate();
+
+  const { pathname } = useLocation();
   return (
     <Navbar fluid rounded className="py-3 shadow-lg">
-      <Navbar.Brand href="https://flowbite-react.com" className="ml-5">
+      <Navbar.Brand className="ml-5">
         <img src={logo} className="mr-3 h-6 sm:h-9" alt="Flowbite React Logo" />
-        <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-          TMS
+        <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white flex items-center justify-start">
+          Sports Event:{" "}
+          <Badge size={"md"} color={"warning"} className="ml-5 px-5 py-2">
+            {currentEvent ? currentEvent : "No Event Selected"}
+          </Badge>
         </span>
       </Navbar.Brand>
       <div className="flex md:order-2 mr-5">
@@ -71,7 +76,7 @@ export default function Header() {
       <Navbar.Collapse>
         <Button.Group>
           <Link to="/home">
-            <Button color="grLinky">
+            <Button color={pathname == "/home" ? "info" : "gray"}>
               {" "}
               <HiOutlineHome className="mr-2 h-5 w-5" />
               Home
@@ -81,7 +86,7 @@ export default function Header() {
           {!currentEvent && (
             <>
               <Link to={"/about"}>
-                <Button color="gray">
+                <Button color={pathname == "/about" ? "info" : "gray"}>
                   {" "}
                   <HiOutlineMap className="mr-2 h-5 w-5" />
                   About Us
@@ -102,28 +107,28 @@ export default function Header() {
           {currentEvent && (
             <>
               <Link to={"/calendar"}>
-                <Button color="gray">
+                <Button color={pathname == "/calendar" ? "info" : "gray"}>
                   {" "}
                   <HiOutlineCalendar className="mr-2 h-5 w-5" />
                   Calendar
                 </Button>
               </Link>
               <Link to={"/events"}>
-                <Button color="gray">
+                <Button color={pathname == "/events" ? "info" : "gray"}>
                   {" "}
                   <HiOutlineRss className="mr-2 h-5 w-5" />
                   Events
                 </Button>
               </Link>
               <Link to={"/participants"}>
-                <Button color="gray">
+                <Button color={pathname == "/participants" ? "info" : "gray"}>
                   {" "}
                   <HiOutlineUserGroup className="mr-2 h-5 w-5" />
                   Participants
                 </Button>
               </Link>
               <Link to={"/tally"}>
-                <Button color="gray">
+                <Button color={pathname == "/tally" ? "info" : "gray"}>
                   {" "}
                   <HiViewBoards className="mr-2 h-5 w-5" />
                   Tally

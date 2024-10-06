@@ -11,7 +11,7 @@ import useGetEventName from "../hooks/useGetEventName";
 import useCrudCalendar from "../hooks/useCrudCalendar";
 import moment from "moment";
 
-const AdminTournament = ({ client }) => {
+const AdminTournament = ({ client, currentEvent }) => {
   const [createModal, setCreateModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selectedTournament, setSelectedTournament] = useState();
@@ -62,12 +62,18 @@ const AdminTournament = ({ client }) => {
   });
 
   const filterTournament = data.filter((item) => {
-    if (selectedEvent == "all") {
-      return item;
-    }
+    if (client) {
+      if (currentEvent == item.tournament.description) {
+        return item;
+      }
+    } else {
+      if (selectedEvent == "all") {
+        return item;
+      }
 
-    if (item.tournament.description == selectedEvent) {
-      return item;
+      if (item.tournament.description == selectedEvent) {
+        return item;
+      }
     }
   });
 
@@ -122,30 +128,31 @@ const AdminTournament = ({ client }) => {
             </Button>
           </div>
         )}
-
-        <div className="container mx-auto mt-5">
-          <div className="wrapper flex mb-3 py-3">
-            <Button
-              color={selectedEvent == "all" ? "info" : "gray"}
-              onClick={() => setSelectedEvent("all")}
-              className="mx-3"
-            >
-              All
-            </Button>
-            {eventNames.map((event) => {
-              return (
-                <Button
-                  key={event.id}
-                  color={selectedEvent == event.eventName ? "info" : "gray"}
-                  className="mx-3"
-                  onClick={() => setSelectedEvent(event.eventName)}
-                >
-                  {event.eventName}
-                </Button>
-              );
-            })}
+        {!client && (
+          <div className="container mx-auto mt-5">
+            <div className="wrapper flex mb-3 py-3">
+              <Button
+                color={selectedEvent == "all" ? "info" : "gray"}
+                onClick={() => setSelectedEvent("all")}
+                className="mx-3"
+              >
+                All
+              </Button>
+              {eventNames.map((event) => {
+                return (
+                  <Button
+                    key={event.id}
+                    color={selectedEvent == event.eventName ? "info" : "gray"}
+                    className="mx-3"
+                    onClick={() => setSelectedEvent(event.eventName)}
+                  >
+                    {event.eventName}
+                  </Button>
+                );
+              })}
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="flex flex-wrap">
           {loading && (

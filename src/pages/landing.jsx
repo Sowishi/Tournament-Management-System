@@ -36,12 +36,6 @@ const Landing = () => {
       ) : (
         <DefaultLayout>
           <div className="container mx-auto mt-10">
-            <h1 className="text-center text-3xl font-bold flex justify-center items-center">
-              Tournament Event:{" "}
-              <Badge size={"xl"} className="ml-3 px-10">
-                {currentEvent}
-              </Badge>
-            </h1>
             <div className="flex">
               <div className="basis-7/12 p-10">
                 <div className="container mx-auto h-[30rem] flex justify-center items-center flex-col">
