@@ -32,6 +32,7 @@ const AdminHome = () => {
   const [selectedCollegeName, setSelectedCollegeName] = useState();
   const [collegeDeleteModal, setCollegeDeleteModal] = useState(false);
   const [selectedEventName, setSelectedEventName] = useState();
+  const [selectedEventFilter, setSelectedEventFilter] = useState("all");
 
   // Hooks
 
@@ -111,6 +112,15 @@ const AdminHome = () => {
 
   const formatEventNames = eventNameData.map((item) => {
     return item.eventName;
+  });
+
+  const filterCollegeName = collegeNameData.filter((item) => {
+    if (selectedEventFilter == "all") {
+      return item;
+    }
+    if (item.event == selectedEventFilter) {
+      return item;
+    }
   });
 
   return (
@@ -269,9 +279,30 @@ const AdminHome = () => {
         <div className="header w-full flex justify-between items-center">
           <h1 className="text-white text-4xl font-bold">College Names</h1>
           <Button onClick={() => setAddCollegeModal(true)}>Add College</Button>
-        </div>{" "}
+        </div>
+        <div className="wrapper flex mb-3 py-3">
+          <Button
+            color={selectedEventFilter == "all" ? "info" : "gray"}
+            onClick={() => setSelectedEventFilter("all")}
+            className="mx-3"
+          >
+            All
+          </Button>
+          {eventNameData.map((event) => {
+            return (
+              <Button
+                key={event.id}
+                color={selectedEventFilter == event.eventName ? "info" : "gray"}
+                className="mx-3"
+                onClick={() => setSelectedEventFilter(event.eventName)}
+              >
+                {event.eventName}
+              </Button>
+            );
+          })}
+        </div>
         <ListGroup className="w-full mt-10">
-          {collegeNameData?.map((event) => {
+          {filterCollegeName?.map((event) => {
             return (
               <ListGroup.Item key={event.id}>
                 <Button
