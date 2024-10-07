@@ -51,14 +51,10 @@ const Registration = () => {
     if (name == "password") {
       if (value.length < 8) {
         setPasswordValidation("Password must be at least 8 characters long");
-      } else {
-        setPasswordValidation(undefined);
-      }
-      if (value !== forms.password) {
+      } else if (value !== forms.password) {
         setPasswordValidation("Password does not match");
-      }
-
-      if (value == forms.password) {
+      } else if (value == forms.password || value.length >= 8) {
+        setPasswordValidation(undefined);
         setPasswordValidation(undefined);
       }
     }

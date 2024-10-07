@@ -14,7 +14,7 @@ const About = () => {
           alike with tools that enhance the experience, foster competition, and
           promote a sense of community.
         </p>
-        <h1 className="text-4xl font-bold my-5">Our Our Vision</h1>
+        <h1 className="text-4xl font-bold my-5">Our Vision</h1>
         <p className="text-lg">
           Our mission is to revolutionize the way tournaments are organized by
           providing a seamless, user-friendly platform that simplifies every
