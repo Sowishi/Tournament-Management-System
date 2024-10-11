@@ -96,11 +96,7 @@ const Login = () => {
               placeHolder="Enter your password"
               label="Password"
             />
-            <div className="flex justify-end items-center mt-2">
-              <Link className="text-blue-950 font-bold" to={"/forgot"}>
-                Forgot Password?
-              </Link>
-            </div>
+           
 
             <div className="flex justify-center items-center">
               <Button

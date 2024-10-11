@@ -90,7 +90,7 @@ const Registration = () => {
       querySnapshot.docs.forEach((doc) => {
         const data = doc.data();
         if (data.collegeName == forms.collegeName && data.status == "Approve") {
-          toast.error("Duplicate School/College registration");
+          toast.error("School/Colleges is already exist. Please check your account if approved or declined");
           isDuplicate = true;
           return;
         }
@@ -173,7 +173,7 @@ const Registration = () => {
                 onChange={handleChange}
                 value={forms.contact}
                 name={"contact"}
-                placeHolder={"SUCs Contact"}
+                placeHolder={"9-xxx-xxx-xx"}
                 label={"SUCs Contact"}
                 error={phoneValidation}
               />

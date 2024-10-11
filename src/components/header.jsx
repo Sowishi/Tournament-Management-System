@@ -30,6 +30,9 @@ export default function Header() {
   const navigation = useNavigate();
 
   const { pathname } = useLocation();
+
+
+
   return (
     <Navbar fluid rounded className="py-3 shadow-lg">
       <Navbar.Brand className="ml-5">
@@ -106,29 +109,29 @@ export default function Header() {
           )}
           {currentEvent && (
             <>
-              <Link to={"/calendar"}>
+              {/* <Link to={"/calendar"}>
                 <Button color={pathname == "/calendar" ? "info" : "gray"}>
                   {" "}
                   <HiOutlineCalendar className="mr-2 h-5 w-5" />
                   Calendar
                 </Button>
-              </Link>
+              </Link> */}
               <Link to={"/events"}>
-                <Button color={pathname == "/events" ? "info" : "gray"}>
+                <Button disabled={currentUser.status == undefined} color={pathname == "/events" ? "info" : "gray"}>
                   {" "}
                   <HiOutlineRss className="mr-2 h-5 w-5" />
                   Events
                 </Button>
               </Link>
               <Link to={"/participants"}>
-                <Button color={pathname == "/participants" ? "info" : "gray"}>
+                <Button disabled={currentUser.status == undefined}  color={pathname == "/participants" ? "info" : "gray"}>
                   {" "}
                   <HiOutlineUserGroup className="mr-2 h-5 w-5" />
                   Participants
                 </Button>
               </Link>
               <Link to={"/tally"}>
-                <Button color={pathname == "/tally" ? "info" : "gray"}>
+                <Button disabled={currentUser.status == undefined}  color={pathname == "/tally" ? "info" : "gray"}>
                   {" "}
                   <HiViewBoards className="mr-2 h-5 w-5" />
                   Tally
