@@ -31,10 +31,12 @@ export default function Header() {
 
   const { pathname } = useLocation();
 
-
-
   return (
-    <Navbar fluid rounded className="py-3 shadow-lg">
+    <Navbar
+      fluid
+      rounded
+      className="fixed top-0 left-0 w-full h-16 shadow-lg z-10 bg-white"
+    >
       <Navbar.Brand className="ml-5">
         <img src={logo} className="mr-3 h-6 sm:h-9" alt="Flowbite React Logo" />
         <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white flex items-center justify-start">
@@ -117,21 +119,30 @@ export default function Header() {
                 </Button>
               </Link> */}
               <Link to={"/events"}>
-                <Button disabled={currentUser.status == undefined} color={pathname == "/events" ? "info" : "gray"}>
+                <Button
+                  disabled={currentUser.status == undefined}
+                  color={pathname == "/events" ? "info" : "gray"}
+                >
                   {" "}
                   <HiOutlineRss className="mr-2 h-5 w-5" />
                   Events
                 </Button>
               </Link>
               <Link to={"/participants"}>
-                <Button disabled={currentUser.status == undefined}  color={pathname == "/participants" ? "info" : "gray"}>
+                <Button
+                  disabled={currentUser.status == undefined}
+                  color={pathname == "/participants" ? "info" : "gray"}
+                >
                   {" "}
                   <HiOutlineUserGroup className="mr-2 h-5 w-5" />
                   Participants
                 </Button>
               </Link>
               <Link to={"/tally"}>
-                <Button disabled={currentUser.status == undefined}  color={pathname == "/tally" ? "info" : "gray"}>
+                <Button
+                  disabled={currentUser.status == undefined}
+                  color={pathname == "/tally" ? "info" : "gray"}
+                >
                   {" "}
                   <HiViewBoards className="mr-2 h-5 w-5" />
                   Tally

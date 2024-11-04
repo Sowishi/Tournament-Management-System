@@ -34,7 +34,7 @@ const Landing = () => {
       {loading ? (
         <LoadingScreen />
       ) : (
-        <DefaultLayout>
+        <DefaultLayout hideWaves={true}>
           <div className="container mx-auto mt-10">
             <div className="flex">
               <div className="basis-7/12 p-10">
