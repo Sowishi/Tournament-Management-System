@@ -1,4 +1,4 @@
-import { Badge, Button, ListGroup, Spinner } from "flowbite-react";
+import { Badge, Button, ListGroup, Spinner, Tabs } from "flowbite-react";
 import AdminLayout from "../layout/adminLayout";
 import { useState } from "react";
 import TmsInput from "../components/tmsInput";
@@ -16,6 +16,7 @@ import ConfirmationModals from "../components/confirmationModal";
 import { HiOutlineTrash } from "react-icons/hi";
 import useCrudCollegeName from "../hooks/useCrudCollegeName";
 import TmsSelect from "../components/tmsSelect";
+import { motion } from "framer-motion";
 
 const AdminHome = () => {
   const [addPicModal, setAddPicModal] = useState(false);
@@ -35,7 +36,6 @@ const AdminHome = () => {
   const [selectedEventFilter, setSelectedEventFilter] = useState("all");
 
   // Hooks
-
   const { addCarouselPic } = useAddCarouselPic();
   const { addEventName } = useAddEventName();
   const { data } = useGetCarouselPic();
@@ -132,11 +132,9 @@ const AdminHome = () => {
         handleClose={() => setAddPicModal(false)}
       >
         {loading && (
-          <>
-            <div className="flex justify-center items-center h-[5rem]">
-              <Spinner size={"lg"} />
-            </div>
-          </>
+          <div className="flex justify-center items-center h-[5rem]">
+            <Spinner size={"lg"} />
+          </div>
         )}
         {!loading && (
           <div className="container p-10">
@@ -211,119 +209,169 @@ const AdminHome = () => {
           />
         </div>
       </TmsModal>
-      <div className="wrapper mx-10 mt-10">
-        <div className="header w-full flex justify-between items-center">
-          <h1 className="text-white text-4xl font-bold">
-            Home Page Carousel Pictures
-          </h1>
-          <Button onClick={() => setAddPicModal(true)}>Add Picture</Button>
-        </div>
-        <div className="flex mt-5 flex-wrap">
-          {data?.map((pic) => {
-            return (
-              <div key={pic.id} className="basis-3/12 my-3">
-                <div className="wrapper flex flex-col justify-center items-center">
-                  <img
-                    className="rounded-md"
-                    style={{ width: 300, height: 250, objectFit: "cover" }}
-                    src={pic.url}
-                    alt=""
-                  />
-                  <Button
-                    style={{ marginTop: 10 }}
-                    color={"failure"}
-                    onClick={() => {
-                      setSelectedCarousel(pic.id);
-                      setDeleteCarouselModal(true);
-                    }}
-                  >
-                    {" "}
-                    <HiOutlineTrash className="mr-2 h-5 w-5" />
-                    Delete Picture
-                  </Button>
-                </div>
+
+      <div className="container mx-auto mt-10">
+        <Tabs aria-label="Default tabs" variant="default">
+          <Tabs.Item active title="Dashboard">
+            <motion.div
+              className="wrapper mx-10 mt-10"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="header w-full flex justify-between items-center">
+                <h1 className="text-white text-4xl font-bold">
+                  Home Page Carousel Pictures
+                </h1>
+                <Button onClick={() => setAddPicModal(true)}>
+                  Add Picture
+                </Button>
               </div>
-            );
-          })}
-        </div>
-      </div>
-      <div className="wrapper mx-10 mt-10 pb-20">
-        <div className="header w-full flex justify-between items-center">
-          <h1 className="text-white text-4xl font-bold">Events Name</h1>
-          <Button onClick={() => setAddEventModal(true)}>Add Event</Button>
-        </div>{" "}
-        <ListGroup className="w-full mt-10">
-          {eventNameData?.map((event) => {
-            return (
-              <ListGroup.Item key={event.id}>
+              <div className="flex mt-5 flex-wrap">
+                {data?.map((pic) => {
+                  return (
+                    <motion.div
+                      key={pic.id}
+                      className="relative basis-3/12 my-3 flex items-center justify-center" // Set the parent div to relative
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.5, delay: 0.2 }}
+                    >
+                      <img
+                        className="rounded-md shadow-lg"
+                        style={{ width: 300, height: 250, objectFit: "cover" }}
+                        src={pic.url}
+                        alt=""
+                      />
+                      <Button
+                        className="absolute top-2 right-10" // Position the button absolutely
+                        color={"failure"}
+                        onClick={() => {
+                          setDeleteCarouselModal(true);
+                          setSelectedCarousel(pic.id);
+                        }}
+                      >
+                        <HiOutlineTrash />
+                      </Button>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </motion.div>
+          </Tabs.Item>
+
+          <Tabs.Item title="Event Name">
+            <motion.div
+              className="wrapper mx-10 mt-10"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="header w-full flex justify-between items-center mb-5">
+                <h1 className="text-white text-4xl font-bold">Event Names</h1>
                 <Button
-                  onClick={() => {
-                    setSelectedEvent(event.id);
-                    setDeleteModal(true);
-                  }}
-                  className="ml-10"
-                  color={"failure"}
+                  onClick={() => setAddEventModal(true)}
+                  color={"success"}
                 >
-                  <HiOutlineTrash className="mr-2 h-5 w-5" />
-                  Delete
+                  Add Event
                 </Button>
-                <div className="ml-10">
-                  <h1 className="text-lg">{event.eventName} </h1>
-                </div>
-              </ListGroup.Item>
-            );
-          })}
-        </ListGroup>
-      </div>
-      <div className="wrapper mx-10 mt-10 pb-20">
-        <div className="header w-full flex justify-between items-center">
-          <h1 className="text-white text-4xl font-bold">College Names</h1>
-          <Button onClick={() => setAddCollegeModal(true)}>Add College</Button>
-        </div>
-        <div className="wrapper flex mb-3 py-3">
-          <Button
-            color={selectedEventFilter == "all" ? "info" : "gray"}
-            onClick={() => setSelectedEventFilter("all")}
-            className="mx-3"
-          >
-            All
-          </Button>
-          {eventNameData.map((event) => {
-            return (
-              <Button
-                key={event.id}
-                color={selectedEventFilter == event.eventName ? "info" : "gray"}
-                className="mx-3"
-                onClick={() => setSelectedEventFilter(event.eventName)}
-              >
-                {event.eventName}
-              </Button>
-            );
-          })}
-        </div>
-        <ListGroup className="w-full mt-10">
-          {filterCollegeName?.map((event) => {
-            return (
-              <ListGroup.Item key={event.id}>
+              </div>
+              <table className="min-w-full bg-gray-800 rounded-md shadow-md">
+                <thead>
+                  <tr className="text-white">
+                    <th className="py-3 px-4 text-left">Event Name</th>
+                    <th className="py-3 px-4 text-center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {eventNameData?.map((event) => (
+                    <motion.tr
+                      key={event.id}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.5, delay: 0.2 }}
+                    >
+                      <td className="text-dark py-3 px-4 text-white">
+                        {event.eventName}
+                      </td>
+                      <td className="py-3 px-4 text-right items-center flex justify-center">
+                        <Button
+                          onClick={() => {
+                            setDeleteModal(true);
+                            setSelectedEvent(event.id);
+                          }}
+                          color={"failure"}
+                          className="ml-2"
+                        >
+                          <HiOutlineTrash />
+                        </Button>
+                      </td>
+                    </motion.tr>
+                  ))}
+                </tbody>
+              </table>
+            </motion.div>
+          </Tabs.Item>
+
+          <Tabs.Item title="College Names">
+            <motion.div
+              className="wrapper mx-10 mt-10"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="header w-full flex justify-between items-center mb-5">
+                <h1 className="text-white text-4xl font-bold">College Names</h1>
                 <Button
-                  onClick={() => {
-                    setSelectedCollegeName(event.id);
-                    setCollegeDeleteModal(true);
-                  }}
-                  className="ml-10"
-                  color={"failure"}
+                  onClick={() => setAddCollegeModal(true)}
+                  color={"success"}
                 >
-                  <HiOutlineTrash className="mr-2 h-5 w-5" />
-                  Delete
+                  Add College
                 </Button>
-                <div className="ml-10 flex justify-start items-center">
-                  <h1 className="text-lg">{event.collegeName} </h1>
-                  <Badge className="ml-3">{event.event}</Badge>
-                </div>
-              </ListGroup.Item>
-            );
-          })}
-        </ListGroup>
+              </div>
+              <TmsSelect
+                onChange={(event) => setSelectedEventFilter(event.target.value)}
+                dark
+                label={"Select Event Name"}
+                data={["all", ...formatEventNames]}
+              />
+              <table className="min-w-full bg-gray-800 rounded-md shadow-md mt-5">
+                <thead>
+                  <tr className="text-white">
+                    <th className="py-3 px-4 text-left">College Name</th>
+                    <th className="py-3 px-4 text-center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filterCollegeName.map((college) => (
+                    <motion.tr
+                      key={college.id}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.5, delay: 0.2 }}
+                    >
+                      <td className="text-dark py-3 px-4 text-white">
+                        {college.collegeName}
+                      </td>
+                      <td className="py-3 px-4 text-right flex items-center justify-center">
+                        <Button
+                          onClick={() => {
+                            setCollegeDeleteModal(true);
+                            setSelectedCollegeName(college.id);
+                          }}
+                          color={"failure"}
+                          className="ml-2"
+                        >
+                          <HiOutlineTrash />
+                        </Button>
+                      </td>
+                    </motion.tr>
+                  ))}
+                </tbody>
+              </table>
+            </motion.div>
+          </Tabs.Item>
+        </Tabs>
       </div>
     </AdminLayout>
   );

@@ -21,6 +21,7 @@ export function UsersTable() {
   const [deleteModal, setDeleteModal] = useState(false);
   const [approveModal, setApproveModal] = useState(false);
   const [rejectModal, setRejectModal] = useState(false);
+  const [selectedDocument, setSelectedDocument] = useState(null);
 
   const getBadgeColor = (status) => {
     if (status === "Pending") {
@@ -48,6 +49,40 @@ export function UsersTable() {
 
   return (
     <div className="overflow-x-auto mt-10">
+      {/* Document View Modal */}
+      <TmsModal
+        size="7xl" // Increase size for better visibility
+        title={"View Document"}
+        openModal={!!selectedDocument} // Show modal if a document is selected
+        handleClose={() => setSelectedDocument(null)} // Close modal
+      >
+        {selectedDocument ? (
+          <div className="flex flex-col items-center">
+            <h1 className="text-2xl font-bold mb-4">
+              {selectedDocument.fileLabel}
+            </h1>
+            <iframe
+              src={selectedDocument.file}
+              title={selectedDocument.fileLabel}
+              className="w-full h-screen border border-gray-300"
+            />
+            <div className="mt-10 w-full">
+              <Button
+                className="w-full py-3"
+                onClick={() => setSelectedDocument(null)}
+              >
+                Close
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <h1 className="text-dark text-center font-bold">
+            No Document Selected
+          </h1>
+        )}
+      </TmsModal>
+
+      {/* Existing Document Modal */}
       <TmsModal
         size="5xl"
         title={"Documents"}
@@ -61,17 +96,12 @@ export function UsersTable() {
           {documentsFilter?.map((item) => (
             <div
               key={item.id}
-              className="wrapper basis-4/12 flex items-center justify-center flex-col"
+              className="wrapper basis-4/12 flex items-center justify-center flex-col mb-4"
             >
-              <iframe src={item.file} title={item.fileLabel} />
-              <div className="wrapper flex items-center justify-center">
-                <h1 className="text-dark font-bold my-5">{item.fileLabel}</h1>
-                <Button className="ml-3">
-                  <a href={item.file} target="_blank" rel="noopener noreferrer">
-                    View Document
-                  </a>
-                </Button>
-              </div>
+              <iframe src={item.file} frameborder="0"></iframe>
+              <Button onClick={() => setSelectedDocument(item)}>
+                View Document
+              </Button>
             </div>
           ))}
         </div>
