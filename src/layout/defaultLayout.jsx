@@ -1,7 +1,7 @@
 import Header from "../components/header";
 import { TmsFooter } from "../components/footer";
 
-const DefaultLayout = ({ children, hideHeader, client }) => {
+const DefaultLayout = ({ children, hideHeader, client, removeMargin }) => {
   return (
     <>
       <div
@@ -9,7 +9,7 @@ const DefaultLayout = ({ children, hideHeader, client }) => {
           client ? "bg-slate-800" : "bg-red-50"
         }`}
       >
-        <Header hideHeader={hideHeader} />
+        <Header hideHeader={hideHeader} removeMargin={removeMargin} />
         {/* {hideHeader && (
           <div
             style={{
