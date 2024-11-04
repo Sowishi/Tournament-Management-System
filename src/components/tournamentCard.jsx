@@ -19,38 +19,29 @@ export default function TournamentCard({
   const navigation = useNavigate();
 
   const getBadgeColor = (state) => {
-    if (state == "pending") {
+    if (state === "pending") {
       return "bg-blue-500";
-    } else if (state == "underway") {
+    } else if (state === "underway") {
       return "bg-yellow-200";
-    } else if (state == "complete") {
+    } else if (state === "complete") {
       return "bg-green-500";
-    } else if (state == "awaiting_review") {
+    } else if (state === "awaiting_review") {
       return "bg-yellow-500";
     }
   };
+
   return (
     <Card
-      renderImage={() => {
-        return (
-          <div className="flex justify-center items- opacity-20">
-            <img
-              style={{ objectFit: "cover", position: "absolute" }}
-              src={logo}
-              width={200}
-            />
-          </div>
-        );
-      }}
-      className="max-w-sm min-h-[29rem] border"
+      className="max-w-sm min-h-[29rem] border flex flex-col justify-between" // Ensure the card uses flexbox
       style={{
         background: "rgb(2,6,23)",
         background:
           "linear-gradient(164deg, rgba(2,6,23,1) 59%, rgba(252,172,127,1) 91%)",
+        height: "350px", // Set a fixed height for uniformity
       }}
     >
-      <div className="container mx-auto">
-        <div className="header flex justify-between">
+      <div className="container mx-auto flex flex-col h-full">
+        <div className="header flex justify-between items-start">
           <div className="flex items-center justify-start">
             <div
               className={`${getBadgeColor(data.state)}`}
@@ -68,18 +59,20 @@ export default function TournamentCard({
             {moment(data.start_at).format("LL")}{" "}
           </p>
         </div>
-        <div className="content">
+        <div className="content flex-grow">
+          {" "}
+          {/* Allows the content area to grow */}
           <h1 className="text-white font-bold text-3xl my-5">{data.name}</h1>
           <div className="badge flex flex-col items-start">
             <Badge size={"md"} className="mt-3">
               {data.tournament_type}
             </Badge>
           </div>
-          <h1 className="text-white font-bold text-md mt-5 flex items-center ">
+          <h1 className="text-white font-bold text-md mt-5 flex items-center">
             <HiOutlineUsers className="mr-1" />
             Participants: {data.participants_count}
           </h1>
-          <h1 className="text-white font-bold text-md  flex items-center ">
+          <h1 className="text-white font-bold text-md flex items-center">
             <HiOutlineSpeakerphone className="mr-1" />
             Event: {data.description}
           </h1>

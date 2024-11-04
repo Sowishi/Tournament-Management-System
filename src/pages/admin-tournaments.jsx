@@ -10,6 +10,7 @@ import TournamentCard from "../components/tournamentCard";
 import useGetEventName from "../hooks/useGetEventName";
 import useCrudCalendar from "../hooks/useCrudCalendar";
 import moment from "moment";
+import { motion } from "framer-motion"; // Import Framer Motion
 
 const AdminTournament = ({ client, currentEvent }) => {
   const [createModal, setCreateModal] = useState(false);
@@ -119,7 +120,7 @@ const AdminTournament = ({ client, currentEvent }) => {
         </form>
       </TmsModal>
 
-      <div className="container  mx-auto my-10">
+      <div className="container mx-auto my-10">
         {!client && (
           <div className="wrapper flex justify-between items-center">
             <h1 className="text-white text-4xl font-bold mb-5">Tournament</h1>
@@ -156,16 +157,21 @@ const AdminTournament = ({ client, currentEvent }) => {
 
         <div className="flex flex-wrap">
           {loading && (
-            <>
-              <div className="flex justify-center items-center w-full p-20">
-                <Spinner size={"lg"} />
-              </div>
-            </>
+            <div className="flex justify-center items-center w-full p-20">
+              <Spinner size={"lg"} />
+            </div>
           )}
           {!loading &&
             filterTournament.map((item) => {
               return (
-                <div key={item.id} className="basis-3/12 my-5 p-5">
+                <motion.div
+                  key={item.id}
+                  className="basis-3/12 my-5 p-5"
+                  initial={{ opacity: 0, scale: 0.8 }} // Initial state
+                  animate={{ opacity: 1, scale: 1 }} // Animate to this state
+                  exit={{ opacity: 0, scale: 0.8 }} // Exit animation
+                  transition={{ duration: 0.3 }} // Transition properties
+                >
                   <TournamentCard
                     client={client}
                     deleteTournament={deleteTournament}
@@ -173,7 +179,7 @@ const AdminTournament = ({ client, currentEvent }) => {
                     setSelectedTournament={setSelectedTournament}
                     tournament={item}
                   />
-                </div>
+                </motion.div>
               );
             })}
         </div>

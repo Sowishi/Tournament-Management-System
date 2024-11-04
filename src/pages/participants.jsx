@@ -10,6 +10,7 @@ const Participants = () => {
   const { currentEvent } = useStore();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isPlayersModalOpen, setIsPlayersModalOpen] = useState(false); // State for the second modal
   const [selectedParticipant, setSelectedParticipant] = useState(null);
 
   const filterData = data.filter((user) => {
@@ -22,10 +23,20 @@ const Participants = () => {
     setIsOpen(true);
   };
 
-  // Function to close modal
+  // Function to close modals
   const handleCloseModal = () => {
     setIsOpen(false);
     setSelectedParticipant(null);
+  };
+
+  // Function to open the players modal
+  const handleOpenPlayersModal = () => {
+    setIsPlayersModalOpen(true);
+  };
+
+  // Function to close players modal
+  const handleClosePlayersModal = () => {
+    setIsPlayersModalOpen(false);
   };
 
   return (
@@ -63,43 +74,97 @@ const Participants = () => {
         </Modal.Header>
         <Modal.Body>
           {selectedParticipant && (
+            <>
+              <table className="min-w-full divide-y divide-gray-200 mb-4">
+                <thead>
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Detail
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Value
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  <tr>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      College Name
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {selectedParticipant.collegeName}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="px-6 py-4 whitespace-nowrap">Status</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {selectedParticipant.status}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="px-6 py-4 whitespace-nowrap">Event</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {selectedParticipant.sportsEvent}
+                    </td>
+                  </tr>
+                  {/* Add more rows as necessary */}
+                </tbody>
+              </table>
+              <Button onClick={handleOpenPlayersModal}>
+                View Participants
+              </Button>
+            </>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={handleCloseModal}>Close</Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Modal for displaying players */}
+      <Modal
+        size={"4xl"}
+        show={isPlayersModalOpen}
+        onClose={handleClosePlayersModal}
+      >
+        <Modal.Header>Participants/Players List</Modal.Header>
+        <Modal.Body>
+          {/* Assuming you have a list of players for the selected participant */}
+          {selectedParticipant && selectedParticipant.players && (
             <table className="min-w-full divide-y divide-gray-200">
               <thead>
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Detail
+                    Player Name
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Value
+                    Position
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Status
                   </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                <tr>
-                  <td className="px-6 py-4 whitespace-nowrap">College Name</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {selectedParticipant.collegeName}
-                  </td>
-                </tr>
-                <tr>
-                  <td className="px-6 py-4 whitespace-nowrap">Status</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {selectedParticipant.status}
-                  </td>
-                </tr>
-                <tr>
-                  <td className="px-6 py-4 whitespace-nowrap">Event</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {selectedParticipant.sportsEvent}
-                  </td>
-                </tr>
-                {/* Add more rows as necessary */}
+                {selectedParticipant.players.map((player, index) => (
+                  <tr key={index}>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {player.name}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {player.position}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {player.status}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={handleCloseModal}>Close</Button>
+          <Button onClick={handleClosePlayersModal}>Close</Button>
         </Modal.Footer>
       </Modal>
     </DefaultLayout>

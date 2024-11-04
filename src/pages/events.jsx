@@ -6,7 +6,6 @@ import AdminTournament from "../pages/admin-tournaments";
 import { useStore } from "../zustand/store";
 
 const Events = () => {
-  const teams = ["team1", "team2", "team3", "team4"];
   const { currentEvent } = useStore();
   return (
     <DefaultLayout>
