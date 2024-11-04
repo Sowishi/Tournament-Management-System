@@ -1,6 +1,8 @@
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import useGetCarouselPic from "../hooks/useGetCarouselPic";
+import { Button } from "flowbite-react";
+import { motion } from "framer-motion";
 
 const responsive = {
   superLargeDesktop: {
@@ -30,7 +32,7 @@ export function TMSCarousel() {
         responsive={responsive}
         infinite
         autoPlay
-        autoPlaySpeed={3000}
+        autoPlaySpeed={1500}
         showDots={true}
         draggable={false} // Disable dragging
         className="h-full"
@@ -38,23 +40,13 @@ export function TMSCarousel() {
         {data?.map((pic) => (
           <div
             key={pic.id}
-            className="relative h-screen w-screen bg-cover bg-center" // Set as background
+            className="relative h-screen w-screen bg-cover bg-center"
             style={{
               backgroundImage: `url(${pic.url})`,
               filter: "brightness(60%)", // Darken the image
             }}
           >
-            {/* Overlay text (optional) */}
-            <div className="absolute inset-0 flex items-center justify-center text-white px-4 md:px-10 lg:px-20">
-              <div className="bg-black bg-opacity-40 p-4 md:p-8 rounded-lg">
-                <h2 className="text-3xl md:text-5xl font-bold">
-                  Tournament Management System
-                </h2>
-                <p className="mt-2 text-md md:text-lg">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                </p>
-              </div>
-            </div>
+            {/* Overlay text with Framer Motion */}
           </div>
         ))}
       </Carousel>
