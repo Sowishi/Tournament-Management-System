@@ -18,11 +18,17 @@ import useCrudCollegeName from "../hooks/useCrudCollegeName";
 import { Link } from "react-router-dom";
 import { MdDashboard } from "react-icons/md";
 import { collection, query, where } from "firebase/firestore";
+import useCrudDocs from "../hooks/useCrudDocs";
+import { FaFolder } from "react-icons/fa"; // Example: Folder icon from react-icons
+import FolderItem from "../components/folderItem";
 
 const User = () => {
   const { currentUser, setCurrentUser } = useStore();
   const { updateUser, addDocument, deleteDocument, documents, uploadLogo } =
     useUpdateUser();
+
+  const { handleCreateFolder, getUserFolders, handleDeleteFolder } =
+    useCrudDocs();
   const [documentModal, setDocumentModal] = useState(false);
   const [addDocumentModal, setAddDocumentModal] = useState(false);
   const [addLogoModal, setAddLogoModal] = useState(false);
@@ -47,7 +53,9 @@ const User = () => {
   const [phoneValidation, setPhoneValidation] = useState("");
   const { data: eventNames } = useGetEventName();
   const { data: collegeNames } = useCrudCollegeName();
-
+  const [folderModal, setFolderModal] = useState(false);
+  const [folderName, setFolerName] = useState("");
+  const [folders, setFolders] = useState([]);
   const handleChange = (event) => {
     const { value, name } = event.target;
 
@@ -193,6 +201,15 @@ const User = () => {
   const formatCollegeNames = collegeNames.map((item) => {
     return item.collegeName;
   });
+
+  const getFolders = async () => {
+    getUserFolders(currentUser, setFolders);
+  };
+
+  useEffect(() => {
+    getFolders();
+  }, []);
+
   return (
     <DefaultLayout>
       <Title title={"User Account"} />
@@ -230,6 +247,7 @@ const User = () => {
           />
         </div>
       </TmsModal>
+      {/* Documents Modal */}
       <TmsModal
         disableButton={file == undefined}
         onSubmit={handleUploadDocument}
@@ -255,6 +273,25 @@ const User = () => {
             }}
             placeHolder={"Document"}
             label={"Document"}
+          />
+        </div>
+      </TmsModal>
+      {/* Folder Modal */}
+      <TmsModal
+        onSubmit={() => {
+          handleCreateFolder(folderName, currentUser.id);
+          setFolderModal(false);
+        }}
+        title={"Add Folders"}
+        openModal={folderModal}
+        handleClose={() => setFolderModal(false)}
+      >
+        <div className="container">
+          <TmsInput
+            dark={true}
+            onChange={(e) => setFolerName(e.target.value)}
+            placeHolder={"Folder Name"}
+            label={"Folder Name"}
           />
         </div>
       </TmsModal>
@@ -408,41 +445,58 @@ const User = () => {
                 <Button onClick={() => setAddDocumentModal(true)}>
                   Add Documents
                 </Button>
+                <Button className="ml-3" onClick={() => setFolderModal(true)}>
+                  Add Folder
+                </Button>
               </div>
               <h1 className=" font-bold text-3xl mt-10">Attached Documents</h1>
-              <div className="flex py-5 flex-wrap">
-                {documentsFilter?.map((item) => {
-                  return (
-                    <div
-                      key={item.id}
-                      className="wrapper basis-4/12 flex items-center justify-center flex-col"
-                    >
-                      {/* <HiDocument color="white" size={100} /> */}
-                      <iframe src={item.file} />
 
-                      <div className="wrapper flex items-center justify-center">
-                        <h1 className=" font-bold my-5">{item.fileLabel}</h1>
-                        <Button
-                          onClick={() => deleteDocument(item.id)}
-                          className="ml-3"
-                          color={"failure"}
-                        >
-                          Remove
-                        </Button>
-                      </div>
-                    </div>
+              <div className="flex flex-wrap">
+                {folders.map((folder) => {
+                  return (
+                    <FolderItem
+                      folder={folder}
+                      onDelete={() => handleDeleteFolder(folder.id)}
+                    />
                   );
                 })}
-                {documentsFilter.length <= 0 && (
-                  <>
-                    <div className="flex justify-center items-center w-full">
-                      <h1 className=" text-center font-bold my-5">
-                        No Documents Provided
-                      </h1>
-                    </div>
-                  </>
-                )}
               </div>
+
+              <>
+                <div className="flex py-5 flex-wrap">
+                  {documentsFilter?.map((item) => {
+                    return (
+                      <div
+                        key={item.id}
+                        className="wrapper basis-4/12 flex items-center justify-center flex-col"
+                      >
+                        {/* <HiDocument color="white" size={100} /> */}
+                        <iframe src={item.file} />
+
+                        <div className="wrapper flex items-center justify-center">
+                          <h1 className=" font-bold my-5">{item.fileLabel}</h1>
+                          <Button
+                            onClick={() => deleteDocument(item.id)}
+                            className="ml-3"
+                            color={"failure"}
+                          >
+                            Remove
+                          </Button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                  {documentsFilter.length <= 0 && (
+                    <>
+                      <div className="flex justify-center items-center w-full">
+                        <h1 className=" text-center font-bold my-5">
+                          No Documents Provided
+                        </h1>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </>
             </div>
           </Tabs.Item>
           <Tabs.Item
