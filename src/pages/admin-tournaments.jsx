@@ -106,7 +106,12 @@ const AdminTournament = ({ client, currentEvent }) => {
           <TmsSelect
             name={"tournamentType"}
             onChange={handleChange}
-            data={["single elimination", "double elimination", "swiss"]}
+            data={[
+              "single elimination",
+              "double elimination",
+              "swiss",
+              "round robin",
+            ]}
             label={"Tournament Type"}
             dark={true}
           />
