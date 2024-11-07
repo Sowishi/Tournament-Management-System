@@ -21,7 +21,7 @@ app.get("/get-participants", async (req, res) => {
   const id = req.query.id;
   try {
     const response = await fetch(
-      `https://api.challonge.com/v1/tournaments/${id}/participants.json?api_key=RloHpyQkc1CVVlZvv48DtBqq16d8XTAYUhNVLau7`,
+      `https://api.challonge.com/v1/tournaments/${id}/participants.json?api_key=UeuI5bUZKaMwWFf1TEsnJTj1VhQ2EWdvQ5KZ8g5M`,
       {
         method: "GET",
         headers: {
@@ -51,7 +51,7 @@ app.get("/show-participant", async (req, res) => {
 
   try {
     const response = await fetch(
-      `https://api.challonge.com/v1/tournaments/${tourID}/participants/${userID}.json?api_key=RloHpyQkc1CVVlZvv48DtBqq16d8XTAYUhNVLau7`,
+      `https://api.challonge.com/v1/tournaments/${tourID}/participants/${userID}.json?api_key=UeuI5bUZKaMwWFf1TEsnJTj1VhQ2EWdvQ5KZ8g5M`,
       {
         method: "GET",
         headers: {
@@ -79,14 +79,14 @@ app.get("/show-participant", async (req, res) => {
 app.post("/add-participant", async (req, res) => {
   const { users, id } = req.body;
   const names = users
-    .filter((user) => user.fullName)
+    .filter((user) => user.username)
     .map((user) => {
       return { name: user.collegeName };
     });
   console.log(id, names);
   try {
     const response = await fetch(
-      `https://api.challonge.com/v1/tournaments/${id}/participants/bulk_add.json?api_key=RloHpyQkc1CVVlZvv48DtBqq16d8XTAYUhNVLau7`,
+      `https://api.challonge.com/v1/tournaments/${id}/participants/bulk_add.json?api_key=UeuI5bUZKaMwWFf1TEsnJTj1VhQ2EWdvQ5KZ8g5M`,
       {
         method: "POST",
         headers: {
@@ -126,7 +126,7 @@ app.delete("/delete-participant", async (req, res) => {
   const { tourID, userID } = req.body;
   try {
     const response = await fetch(
-      `https://api.challonge.com/v1/tournaments/${tourID}/participants/${userID}.json?api_key=RloHpyQkc1CVVlZvv48DtBqq16d8XTAYUhNVLau7`,
+      `https://api.challonge.com/v1/tournaments/${tourID}/participants/${userID}.json?api_key=UeuI5bUZKaMwWFf1TEsnJTj1VhQ2EWdvQ5KZ8g5M`,
       {
         method: "DELETE",
         headers: {
@@ -163,7 +163,7 @@ app.delete("/delete-participant", async (req, res) => {
 app.get("/get-tournaments", async (req, res) => {
   try {
     const response = await fetch(
-      "https://api.challonge.com/v1/tournaments.json?api_key=RloHpyQkc1CVVlZvv48DtBqq16d8XTAYUhNVLau7",
+      "https://api.challonge.com/v1/tournaments.json?api_key=UeuI5bUZKaMwWFf1TEsnJTj1VhQ2EWdvQ5KZ8g5M",
       {
         method: "GET",
         headers: {
@@ -207,7 +207,7 @@ app.post("/create-tournament", async (req, res) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          api_key: "RloHpyQkc1CVVlZvv48DtBqq16d8XTAYUhNVLau7",
+          api_key: "UeuI5bUZKaMwWFf1TEsnJTj1VhQ2EWdvQ5KZ8g5M",
           tournament: {
             name: tournamentName,
             tournament_type: tournamentType,
@@ -250,7 +250,7 @@ app.get("/show-tournament", async (req, res) => {
 
   try {
     const response = await fetch(
-      `https://api.challonge.com/v1/tournaments/${id}.json?api_key=RloHpyQkc1CVVlZvv48DtBqq16d8XTAYUhNVLau7`
+      `https://api.challonge.com/v1/tournaments/${id}.json?api_key=UeuI5bUZKaMwWFf1TEsnJTj1VhQ2EWdvQ5KZ8g5M`
     );
 
     if (!response.ok) {
@@ -281,7 +281,7 @@ app.post("/start-tournament", async (req, res) => {
 
   try {
     const response = await fetch(
-      `https://api.challonge.com/v1/tournaments/${id}/start.json?api_key=RloHpyQkc1CVVlZvv48DtBqq16d8XTAYUhNVLau7`,
+      `https://api.challonge.com/v1/tournaments/${id}/start.json?api_key=UeuI5bUZKaMwWFf1TEsnJTj1VhQ2EWdvQ5KZ8g5M`,
       {
         method: "POST",
       }
@@ -314,7 +314,7 @@ app.post("/finalize-tournament", async (req, res) => {
 
   try {
     const response = await fetch(
-      `https://api.challonge.com/v1/tournaments/${id}/finalize.json?api_key=RloHpyQkc1CVVlZvv48DtBqq16d8XTAYUhNVLau7`,
+      `https://api.challonge.com/v1/tournaments/${id}/finalize.json?api_key=UeuI5bUZKaMwWFf1TEsnJTj1VhQ2EWdvQ5KZ8g5M`,
       {
         method: "POST",
       }
@@ -346,7 +346,7 @@ app.delete("/delete-tournament", async (req, res) => {
   const { id } = req.body;
   try {
     const response = await fetch(
-      `https://api.challonge.com/v1/tournaments/${id}.json?api_key=RloHpyQkc1CVVlZvv48DtBqq16d8XTAYUhNVLau7`,
+      `https://api.challonge.com/v1/tournaments/${id}.json?api_key=UeuI5bUZKaMwWFf1TEsnJTj1VhQ2EWdvQ5KZ8g5M`,
       {
         method: "DELETE",
         headers: {
@@ -380,7 +380,7 @@ app.get("/get-matches", async (req, res) => {
   const id = req.query.id;
   try {
     const response = await fetch(
-      `https://api.challonge.com/v1/tournaments/${id}/matches.json?api_key=RloHpyQkc1CVVlZvv48DtBqq16d8XTAYUhNVLau7`,
+      `https://api.challonge.com/v1/tournaments/${id}/matches.json?api_key=UeuI5bUZKaMwWFf1TEsnJTj1VhQ2EWdvQ5KZ8g5M`,
       {
         method: "GET",
         headers: {
@@ -412,7 +412,7 @@ app.put("/update-match-winner", async (req, res) => {
   const { tourID, winnerID, matchID } = req.query;
 
   const data = {
-    api_key: "RloHpyQkc1CVVlZvv48DtBqq16d8XTAYUhNVLau7",
+    api_key: "UeuI5bUZKaMwWFf1TEsnJTj1VhQ2EWdvQ5KZ8g5M",
     match: {
       scores_csv: "1-0",
       winner_id: winnerID,

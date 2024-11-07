@@ -16,7 +16,7 @@ export default function AddParticipantsTable({
   };
 
   const filterUsers = users.filter((user) => {
-    if (user.sportsInfo == event) {
+    if (user.sportsEvent == event) {
       return user;
     }
   });
