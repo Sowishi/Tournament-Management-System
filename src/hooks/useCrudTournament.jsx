@@ -25,7 +25,9 @@ const useCrudTournament = () => {
   const getTournament = async () => {
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:5000/get-tournaments");
+      const res = await fetch(
+        "https://tournament-management-system-2.onrender.com/get-tournaments"
+      );
       if (!res.ok) {
         throw new Error(`HTTP error! Status: ${res.status}`);
       }
@@ -41,7 +43,9 @@ const useCrudTournament = () => {
 
   const showTournament = async (id) => {
     try {
-      const res = await fetch(`http://localhost:5000/show-tournament?id=${id}`);
+      const res = await fetch(
+        `https://tournament-management-system-2.onrender.com/show-tournament?id=${id}`
+      );
       if (!res.ok) {
         throw new Error(`HTTP error! Status: ${res.status}`);
       }
@@ -56,7 +60,7 @@ const useCrudTournament = () => {
   const startTournament = async (id) => {
     try {
       const res = await fetch(
-        `http://localhost:5000/start-tournament?id=${id}`,
+        `https://tournament-management-system-2.onrender.com/start-tournament?id=${id}`,
         {
           method: "POST",
         }
@@ -75,7 +79,7 @@ const useCrudTournament = () => {
   const finalizeTournament = async (id) => {
     try {
       const res = await fetch(
-        `http://localhost:5000/finalize-tournament?id=${id}`,
+        `https://tournament-management-system-2.onrender.com/finalize-tournament?id=${id}`,
         {
           method: "POST",
         }
@@ -92,25 +96,31 @@ const useCrudTournament = () => {
   };
 
   const addTournament = async (forms) => {
-    const res = await fetch("http://localhost:5000/create-tournament", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json", // Set the Content-Type header
-      },
-      body: JSON.stringify(forms),
-    });
+    const res = await fetch(
+      "https://tournament-management-system-2.onrender.com/create-tournament",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // Set the Content-Type header
+        },
+        body: JSON.stringify(forms),
+      }
+    );
     const output = await res.json();
     return output;
   };
 
   const deleteTournament = async (forms) => {
-    const res = await fetch("http://localhost:5000/delete-tournament", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json", // Set the Content-Type header
-      },
-      body: JSON.stringify(forms.tournament),
-    });
+    const res = await fetch(
+      "https://tournament-management-system-2.onrender.com/delete-tournament",
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json", // Set the Content-Type header
+        },
+        body: JSON.stringify(forms.tournament),
+      }
+    );
     const output = await res.json();
     return output;
   };

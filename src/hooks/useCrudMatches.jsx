@@ -3,7 +3,9 @@ import { toast } from "react-toastify";
 const useCrudMatches = () => {
   const getMatches = async (id) => {
     try {
-      const res = await fetch(`http://localhost:5000/get-matches?id=${id}`);
+      const res = await fetch(
+        `https://tournament-management-system-2.onrender.com/get-matches?id=${id}`
+      );
       if (!res.ok) {
         throw new Error(`HTTP error! Status: ${res.status}`);
       }
@@ -18,7 +20,7 @@ const useCrudMatches = () => {
   const updateMatchWinner = async (tourID, matchID, winnerID) => {
     try {
       const res = await fetch(
-        `http://localhost:5000/update-match-winner?matchID=${matchID}&tourID=${tourID}&winnerID=${winnerID}`,
+        `https://tournament-management-system-2.onrender.com/update-match-winner?matchID=${matchID}&tourID=${tourID}&winnerID=${winnerID}`,
         {
           method: "PUT",
         }

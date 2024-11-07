@@ -5,7 +5,7 @@ const useCrudParticipants = () => {
   const getParticipants = async (id) => {
     try {
       const res = await fetch(
-        `http://localhost:5000/get-participants?id=${id}`
+        `https://tournament-management-system-2.onrender.com/get-participants?id=${id}`
       );
       if (!res.ok) {
         throw new Error(`HTTP error! Status: ${res.status}`);
@@ -20,13 +20,16 @@ const useCrudParticipants = () => {
 
   const addParticipant = async (users, id) => {
     try {
-      const res = await fetch("http://localhost:5000/add-participant", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json", // Set the Content-Type header
-        },
-        body: JSON.stringify({ users, id }),
-      });
+      const res = await fetch(
+        "https://tournament-management-system-2.onrender.com/add-participant",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json", // Set the Content-Type header
+          },
+          body: JSON.stringify({ users, id }),
+        }
+      );
       if (!res.ok) {
         throw new Error(`HTTP error! Status: ${res.status}`);
       }
@@ -40,7 +43,7 @@ const useCrudParticipants = () => {
   const showParticipant = async (tourID, userID) => {
     try {
       const res = await fetch(
-        `http://localhost:5000/show-participant?tourID=${tourID}&userID=${userID}`,
+        `https://tournament-management-system-2.onrender.com/show-participant?tourID=${tourID}&userID=${userID}`,
         {
           method: "GET",
           headers: {
@@ -60,13 +63,16 @@ const useCrudParticipants = () => {
 
   const deleteParticipant = async (tourID, id) => {
     try {
-      const res = await fetch("http://localhost:5000/delete-participant", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json", // Set the Content-Type header
-        },
-        body: JSON.stringify({ tourID, userID: id }),
-      });
+      const res = await fetch(
+        "https://tournament-management-system-2.onrender.com/delete-participant",
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json", // Set the Content-Type header
+          },
+          body: JSON.stringify({ tourID, userID: id }),
+        }
+      );
       if (!res.ok) {
         throw new Error(`HTTP error! Status: ${res.status}`);
       }
