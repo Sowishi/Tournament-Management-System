@@ -31,7 +31,6 @@ app.use(
   })
 );
 
-app.use(cors(corsOption));
 app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
