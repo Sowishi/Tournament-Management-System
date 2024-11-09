@@ -34,6 +34,7 @@ const User = () => {
     handleDeleteFolder,
     handleCreateFile,
     getFilesInFolder,
+    deleteFile,
   } = useCrudDocs();
   const [documentModal, setDocumentModal] = useState(false);
   const [addDocumentModal, setAddDocumentModal] = useState(false);
@@ -297,6 +298,7 @@ const User = () => {
         onSubmit={() => {
           handleCreateFolder(folderName, currentUser.id);
           setFolderModal(false);
+          setCurrentFolder(null);
         }}
         title={"Add Folders"}
         openModal={folderModal}
@@ -487,13 +489,56 @@ const User = () => {
                         event={() => {
                           setCurrentFolder(folder);
                         }}
-                        key={folder.key}
                         folder={folder}
-                        onDelete={() => handleDeleteFolder(folder.id)}
+                        onDelete={() => {
+                          handleDeleteFolder(folder.id);
+                          setCurrentFolder(null);
+                        }}
                       />
                     );
                   })}
                 </div>
+              )}
+              {currentFolder && (
+                <>
+                  <div className="flex py-5 flex-wrap">
+                    {currentFiles?.map((item) => {
+                      return (
+                        <div
+                          key={item.id}
+                          className="wrapper basis-4/12 flex items-center justify-center flex-col"
+                        >
+                          {/* <HiDocument color="white" size={100} /> */}
+                          <iframe src={item.fileUrl} />
+
+                          <div className="wrapper flex items-center justify-center">
+                            <h1 className=" font-bold my-5">
+                              {item.fileLabel}
+                            </h1>
+                            <Button
+                              onClick={() =>
+                                deleteFile(currentFolder.id, item.id)
+                              }
+                              className="ml-3"
+                              color={"failure"}
+                            >
+                              Remove
+                            </Button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                    {documentsFilter.length <= 0 && (
+                      <>
+                        <div className="flex justify-center items-center w-full">
+                          <h1 className=" text-center font-bold my-5">
+                            No Documents Provided
+                          </h1>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </>
               )}
             </div>
           </Tabs.Item>

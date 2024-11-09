@@ -92,23 +92,40 @@ const useCrudDocs = () => {
     }
   };
 
-  const getFilesInFolder = async (folderId, setCurrentFiles) => {
+  const getFilesInFolder = (folderId, setCurrentFiles) => {
     try {
       // Reference to the files sub-collection within the specified folder
       const folderRef = doc(db, "folders", folderId);
       const filesCollectionRef = collection(folderRef, "files");
 
-      // Fetch all documents in the files sub-collection
-      const querySnapshot = await getDocs(filesCollectionRef);
-      const files = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      // Real-time listener for the files sub-collection
+      const unsubscribe = onSnapshot(filesCollectionRef, (querySnapshot) => {
+        const files = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setCurrentFiles(files);
+      });
 
-      setCurrentFiles(files);
+      // Return the unsubscribe function to stop listening when needed
+      return unsubscribe;
     } catch (error) {
-      console.error("Error retrieving files: ", error);
+      console.error("Error setting up real-time listener for files: ", error);
       setCurrentFiles([]);
+    }
+  };
+
+  const deleteFile = async (folderId, fileId) => {
+    try {
+      // Reference to the specific file document within the folder's files sub-collection
+      const fileRef = doc(db, "folders", folderId, "files", fileId);
+
+      // Delete the file document
+      await deleteDoc(fileRef);
+
+      console.log("File deleted successfully.");
+    } catch (error) {
+      console.error("Error deleting file: ", error);
     }
   };
 
@@ -118,6 +135,7 @@ const useCrudDocs = () => {
     handleDeleteFolder,
     handleCreateFile,
     getFilesInFolder,
+    deleteFile,
   };
 };
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { FaFolder, FaTrash } from "react-icons/fa"; // Import the trash icon for deleting
 
-const FolderItem = ({ folder, onDelete, event }) => {
+const FolderItem = ({ folder, onDelete, event, key }) => {
   const handleDelete = () => {
     if (
       window.confirm(
@@ -14,11 +14,10 @@ const FolderItem = ({ folder, onDelete, event }) => {
 
   return (
     <div
-      onClick={event}
-      key={folder.key}
+      key={folder.id}
       className="flex-shrink-0 w-32 p-4 bg-white rounded-lg shadow-md hover:bg-gray-50 basis-2/12 m-3 cursor-pointer"
     >
-      <div className="flex justify-center items-center mb-2">
+      <div onClick={event} className="flex justify-center items-center mb-2">
         <FaFolder className="text-4xl text-blue-500" />
       </div>
       <p className="text-center text-sm font-medium">{folder.folderName}</p>
