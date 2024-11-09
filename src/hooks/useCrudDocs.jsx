@@ -41,6 +41,7 @@ const useCrudDocs = () => {
   };
 
   const getUserFolders = (currentUser, setFolders) => {
+    console.log(currentUser, setFolders);
     const colRef = collection(db, "folders");
 
     // Query to get all folders where the owner is the current user
