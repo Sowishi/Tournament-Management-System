@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      "/api": "http://localhost:5000", // Adjust if your Express server runs on a different port
+      "/api": "https://tournament-management-system-2.onrender.com", // Adjust if your Express server runs on a different port
     },
   },
 });

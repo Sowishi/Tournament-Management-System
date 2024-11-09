@@ -455,6 +455,7 @@ const User = () => {
                 {folders.map((folder) => {
                   return (
                     <FolderItem
+                      key={folder.key}
                       folder={folder}
                       onDelete={() => handleDeleteFolder(folder.id)}
                     />
