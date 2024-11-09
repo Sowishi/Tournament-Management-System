@@ -16,17 +16,21 @@ const useCrudDocs = () => {
   const handleCreateFolder = async (folderName, owner) => {
     const colRef = collection(db, "folders");
 
-    // Query to check if a folder with the same name already exists
-    const q = query(colRef, where("folderName", "==", folderName));
+    // Query to check if a folder with the same name exists for the current user
+    const q = query(
+      colRef,
+      where("folderName", "==", folderName),
+      where("owner", "==", owner)
+    );
     const querySnapshot = await getDocs(q);
 
-    // If a folder with the same name exists, do not proceed
+    // If a folder with the same name exists for this user, do not proceed
     if (!querySnapshot.empty) {
-      toast.error("Folder with this name already exists.");
+      toast.error("You already have a folder with this name.");
       return;
     }
 
-    // Proceed to create the folder if no duplicate is found
+    // Proceed to create the folder if no duplicate is found for this user
     await addDoc(colRef, {
       folderName,
       owner,
@@ -67,7 +71,54 @@ const useCrudDocs = () => {
     }
   };
 
-  return { handleCreateFolder, getUserFolders, handleDeleteFolder };
+  const handleCreateFile = async (file, fileLabel, ownerId, folderId) => {
+    try {
+      // Reference to the specific folder's files sub-collection
+      const folderRef = doc(db, "folders", folderId);
+      const filesCollectionRef = collection(folderRef, "files");
+
+      // Add a new file document to the files sub-collection
+      await addDoc(filesCollectionRef, {
+        fileUrl: file,
+        fileLabel,
+        ownerId,
+        createdAt: serverTimestamp(),
+      });
+
+      toast.success("File created successfully.");
+    } catch (error) {
+      console.error("Error creating file: ", error);
+      toast.error("Failed to create file.");
+    }
+  };
+
+  const getFilesInFolder = async (folderId, setCurrentFiles) => {
+    try {
+      // Reference to the files sub-collection within the specified folder
+      const folderRef = doc(db, "folders", folderId);
+      const filesCollectionRef = collection(folderRef, "files");
+
+      // Fetch all documents in the files sub-collection
+      const querySnapshot = await getDocs(filesCollectionRef);
+      const files = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      setCurrentFiles(files);
+    } catch (error) {
+      console.error("Error retrieving files: ", error);
+      setCurrentFiles([]);
+    }
+  };
+
+  return {
+    handleCreateFolder,
+    getUserFolders,
+    handleDeleteFolder,
+    handleCreateFile,
+    getFilesInFolder,
+  };
 };
 
 export default useCrudDocs;

@@ -21,14 +21,20 @@ import { collection, query, where } from "firebase/firestore";
 import useCrudDocs from "../hooks/useCrudDocs";
 import { FaFolder } from "react-icons/fa"; // Example: Folder icon from react-icons
 import FolderItem from "../components/folderItem";
+import { Breadcrumb } from "flowbite-react";
 
 const User = () => {
   const { currentUser, setCurrentUser } = useStore();
   const { updateUser, addDocument, deleteDocument, documents, uploadLogo } =
     useUpdateUser();
 
-  const { handleCreateFolder, getUserFolders, handleDeleteFolder } =
-    useCrudDocs();
+  const {
+    handleCreateFolder,
+    getUserFolders,
+    handleDeleteFolder,
+    handleCreateFile,
+    getFilesInFolder,
+  } = useCrudDocs();
   const [documentModal, setDocumentModal] = useState(false);
   const [addDocumentModal, setAddDocumentModal] = useState(false);
   const [addLogoModal, setAddLogoModal] = useState(false);
@@ -56,6 +62,10 @@ const User = () => {
   const [folderModal, setFolderModal] = useState(false);
   const [folderName, setFolerName] = useState("");
   const [folders, setFolders] = useState([]);
+
+  const [currentFolder, setCurrentFolder] = useState(null);
+  const [currentFiles, setCurrentFiles] = useState([]);
+
   const handleChange = (event) => {
     const { value, name } = event.target;
 
@@ -154,7 +164,7 @@ const User = () => {
   };
 
   const handleUploadDocument = () => {
-    addDocument(file, fileLabel, currentUser.id);
+    handleCreateFile(file, fileLabel, currentUser.id, currentFolder.id);
     toast.success("Uploaded Successfully");
     setAddDocumentModal(false);
   };
@@ -209,6 +219,12 @@ const User = () => {
   useEffect(() => {
     getFolders();
   }, []);
+
+  useEffect(() => {
+    if (currentFolder) {
+      getFilesInFolder(currentFolder.id, setCurrentFiles);
+    }
+  }, [currentFolder]);
 
   return (
     <DefaultLayout>
@@ -295,7 +311,7 @@ const User = () => {
           />
         </div>
       </TmsModal>
-      <div className="container mx-auto p-10">
+      <div className="container mx-auto p-10 mb-20">
         <div className="shadow-2xl bg-white flex flex-col justify-center items-center p-10 rounded-2xl">
           <img
             className="ml-3"
@@ -440,64 +456,45 @@ const User = () => {
             title="Documents"
             icon={HiDocument}
           >
-            <div className="wrapper pb-20">
+            <div className="wrapper pb-52">
               <div className="w-full flex justify-end">
-                <Button onClick={() => setAddDocumentModal(true)}>
-                  Add Documents
-                </Button>
+                {folders.length >= 1 && currentFolder !== null && (
+                  <Button onClick={() => setAddDocumentModal(true)}>
+                    Add Documents
+                  </Button>
+                )}
                 <Button className="ml-3" onClick={() => setFolderModal(true)}>
                   Add Folder
                 </Button>
               </div>
               <h1 className=" font-bold text-3xl mt-10">Attached Documents</h1>
-
-              <div className="flex flex-wrap">
-                {folders.map((folder) => {
-                  return (
-                    <FolderItem
-                      key={folder.key}
-                      folder={folder}
-                      onDelete={() => handleDeleteFolder(folder.id)}
-                    />
-                  );
-                })}
-              </div>
-
-              <>
-                <div className="flex py-5 flex-wrap">
-                  {documentsFilter?.map((item) => {
+              <Breadcrumb aria-label="Breadcrumb navigation" className="my-4">
+                <Breadcrumb.Item
+                  onClick={() => setCurrentFolder(null)}
+                  icon="home"
+                >
+                  User
+                </Breadcrumb.Item>
+                <Breadcrumb.Item href="/category">
+                  {currentFolder?.folderName}
+                </Breadcrumb.Item>
+              </Breadcrumb>
+              {!currentFolder && (
+                <div className="flex flex-wrap">
+                  {folders.map((folder) => {
                     return (
-                      <div
-                        key={item.id}
-                        className="wrapper basis-4/12 flex items-center justify-center flex-col"
-                      >
-                        {/* <HiDocument color="white" size={100} /> */}
-                        <iframe src={item.file} />
-
-                        <div className="wrapper flex items-center justify-center">
-                          <h1 className=" font-bold my-5">{item.fileLabel}</h1>
-                          <Button
-                            onClick={() => deleteDocument(item.id)}
-                            className="ml-3"
-                            color={"failure"}
-                          >
-                            Remove
-                          </Button>
-                        </div>
-                      </div>
+                      <FolderItem
+                        event={() => {
+                          setCurrentFolder(folder);
+                        }}
+                        key={folder.key}
+                        folder={folder}
+                        onDelete={() => handleDeleteFolder(folder.id)}
+                      />
                     );
                   })}
-                  {documentsFilter.length <= 0 && (
-                    <>
-                      <div className="flex justify-center items-center w-full">
-                        <h1 className=" text-center font-bold my-5">
-                          No Documents Provided
-                        </h1>
-                      </div>
-                    </>
-                  )}
                 </div>
-              </>
+              )}
             </div>
           </Tabs.Item>
           <Tabs.Item
