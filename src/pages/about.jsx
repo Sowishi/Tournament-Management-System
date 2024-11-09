@@ -5,7 +5,7 @@ import DefaultLayout from "../layout/defaultLayout";
 const AboutPage = () => {
   return (
     <DefaultLayout>
-      <div className="container mx-auto p-8">
+      <div className="container mx-auto p-8 py-20">
         {/* Header */}
         <section className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-800 mb-4">About Us</h1>
