@@ -1,14 +1,16 @@
 "use client";
 
-import { Badge, Button, Dropdown, Table } from "flowbite-react";
+import { Badge, Breadcrumb, Button, Dropdown, Table } from "flowbite-react";
 import useGetUsers from "../hooks/useGetUsers";
 import useUpdateUser from "../hooks/useUpdateUser";
 import useGetEventName from "../hooks/useGetEventName";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TmsModal from "./tmsModal";
 import { useStore } from "../zustand/store";
 import ConfirmationModals from "./confirmationModal";
 import { toast } from "react-toastify";
+import useCrudDocs from "../hooks/useCrudDocs";
+import FolderItem from "./folderItem";
 
 export function UsersTable() {
   const { data } = useGetUsers();
@@ -23,6 +25,11 @@ export function UsersTable() {
   const [rejectModal, setRejectModal] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState(null);
 
+  const [folders, setFolders] = useState([]);
+  const [currentFiles, setCurrentFiles] = useState([]);
+  const [currentFolder, setCurrentFolder] = useState();
+  const { getUserFolders, handleDeleteFolder, getFilesInFolder, deleteFile } =
+    useCrudDocs();
   const getBadgeColor = (status) => {
     if (status === "Pending") {
       return "info";
@@ -46,6 +53,18 @@ export function UsersTable() {
   const documentsFilter = documents.filter((doc) => {
     return doc.owner === selectedUser;
   });
+
+  useEffect(() => {
+    if (selectedUser) {
+      getUserFolders(selectedUser, setFolders);
+    }
+  }, [selectedUser]);
+
+  useEffect(() => {
+    if (currentFolder) {
+      getFilesInFolder(currentFolder.id, setCurrentFiles);
+    }
+  }, [currentFolder]);
 
   return (
     <div className="overflow-x-auto mt-10">
@@ -90,25 +109,60 @@ export function UsersTable() {
         handleClose={() => {
           setDocumentModal(false);
           setSelectedUser(null);
+          setCurrentFolder(null);
         }}
       >
-        <div className="flex flex-wrap m-5">
-          {documentsFilter?.map((item) => (
-            <div
-              key={item.id}
-              className="wrapper basis-4/12 flex items-center justify-center flex-col mb-4"
-            >
-              <iframe src={item.file} frameborder="0"></iframe>
-              <Button onClick={() => setSelectedDocument(item)}>
-                View Document
-              </Button>
+        <Breadcrumb aria-label="Breadcrumb navigation" className="my-4">
+          <Breadcrumb.Item onClick={() => setCurrentFolder(null)} icon="home">
+            User
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>{currentFolder?.folderName}</Breadcrumb.Item>
+        </Breadcrumb>
+        {!currentFolder && (
+          <div className="flex flex-wrap">
+            {folders.map((folder) => {
+              return (
+                <FolderItem
+                  event={() => {
+                    setCurrentFolder(folder);
+                  }}
+                  folder={folder}
+                  onDelete={() => {
+                    handleDeleteFolder(folder.id);
+                    setCurrentFolder(null);
+                  }}
+                />
+              );
+            })}
+          </div>
+        )}
+        {currentFolder && (
+          <>
+            <div className="flex py-5 flex-wrap">
+              {currentFiles?.map((item) => {
+                return (
+                  <div
+                    key={item.id}
+                    className="wrapper basis-4/12 flex items-center justify-center flex-col"
+                  >
+                    {/* <HiDocument color="white" size={100} /> */}
+                    <iframe src={item.fileUrl} />
+
+                    <div className="wrapper flex items-center justify-center">
+                      <h1 className=" font-bold my-5">{item.fileLabel}</h1>
+                      <Button
+                        onClick={() => deleteFile(currentFolder.id, item.id)}
+                        className="ml-3"
+                        color={"failure"}
+                      >
+                        Remove
+                      </Button>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-          ))}
-        </div>
-        {documentsFilter.length <= 0 && (
-          <h1 className="text-dark text-center font-bold my-5">
-            No Documents Provided
-          </h1>
+          </>
         )}
       </TmsModal>
 
@@ -208,7 +262,7 @@ export function UsersTable() {
                   <Dropdown.Item
                     onClick={() => {
                       setDocumentModal(true);
-                      setSelectedUser(user.id);
+                      setSelectedUser(user);
                     }}
                   >
                     View Documents

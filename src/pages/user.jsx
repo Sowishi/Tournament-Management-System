@@ -477,9 +477,7 @@ const User = () => {
                 >
                   User
                 </Breadcrumb.Item>
-                <Breadcrumb.Item href="/category">
-                  {currentFolder?.folderName}
-                </Breadcrumb.Item>
+                <Breadcrumb.Item>{currentFolder?.folderName}</Breadcrumb.Item>
               </Breadcrumb>
               {!currentFolder && (
                 <div className="flex flex-wrap">
