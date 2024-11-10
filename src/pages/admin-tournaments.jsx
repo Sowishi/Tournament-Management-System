@@ -26,7 +26,7 @@ const AdminTournament = ({ client, currentEvent }) => {
     tournamentName: "",
     tournamentEvent: "RSCUAA",
     tournamentType: "single elimination",
-    startAt: "",
+    // startAt: "",
   });
 
   const handleChange = (event) => {
@@ -96,13 +96,13 @@ const AdminTournament = ({ client, currentEvent }) => {
             label={"Tournament Name"}
             dark={true}
           />
-          <TmsInput
+          {/* <TmsInput
             name={"startAt"}
             type={"datetime-local"}
             onChange={handleChange}
             label={"Tournament Start"}
             dark={true}
-          />
+          /> */}
           <TmsSelect
             name={"tournamentType"}
             onChange={handleChange}

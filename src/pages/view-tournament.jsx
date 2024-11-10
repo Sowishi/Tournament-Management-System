@@ -20,8 +20,11 @@ import { TbTournament } from "react-icons/tb";
 import RankingTable from "../components/rankingTable";
 import { HiCalendar } from "react-icons/hi";
 import { motion } from "framer-motion";
+import { Calendar, momentLocalizer } from "react-big-calendar";
 
 const ViewTournament = () => {
+  const localizer = momentLocalizer(moment);
+
   const { id } = useParams();
   const navigation = useNavigate();
   const location = useLocation();
@@ -401,7 +404,7 @@ const ViewTournament = () => {
                 <div className="participants my-20">
                   <div className="wrapper flex items-center my-5">
                     <h1 className="text-white text-3xl font-bold">
-                      Tournament Participants
+                      Tournament Ranking
                     </h1>
                     <Badge className="ml-3">{participants.length}</Badge>
                   </div>
@@ -418,6 +421,23 @@ const ViewTournament = () => {
                     />
                   )}
                 </div>
+              </>
+            )}
+            {page == "schedule" && (
+              <>
+                <div className="wrapper flex items-center my-5">
+                  <h1 className="text-white text-3xl font-bold">
+                    Schedule of Tournament
+                  </h1>
+                </div>
+                <Calendar
+                  localizer={localizer}
+                  views={["month", "agenda"]}
+                  className="mx-5 bg-white rounded p-6"
+                  startAccessor="start"
+                  endAccessor="end"
+                  style={{ height: 500 }}
+                />
               </>
             )}
           </div>

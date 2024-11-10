@@ -83,7 +83,10 @@ const App = () => {
           path="/admin/tournament"
           element={currentAdmin ? <AdminTournament /> : <Login />}
         />
-        <Route path="/tournament/:id" element={<ViewTournament />} />
+        <Route
+          path="/tournament/:id"
+          element={currentAdmin || currentUser ? <ViewTournament /> : <Login />}
+        />
       </Routes>
     </>
   );
