@@ -272,9 +272,12 @@ export default function AdminLayout({ children, client }) {
               </div>
 
               <Button
-                onClick={() => {
+                onClick={async () => {
+                  setCurrentUser(null);
                   setCurrentAdmin(null);
                   localStorage.removeItem("user");
+                  window.location.reload();
+
                   navigation("/");
                 }}
                 color={"failure"}
