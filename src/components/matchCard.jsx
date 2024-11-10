@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import useCrudParticipants from "../hooks/useCrudParticipants";
 import useCrudMatches from "../hooks/useCrudMatches";
 
-export default function MatchCard({ match, id }) {
+export default function MatchCard({ match, id, client }) {
   const { showParticipant } = useCrudParticipants();
   const { updateMatchWinner } = useCrudMatches();
   const [player1, setPlayer1] = useState(null);
@@ -74,7 +74,7 @@ export default function MatchCard({ match, id }) {
         </h5>
       </div>
 
-      {match?.state === "open" && (
+      {match?.state === "open" && !client && (
         <div className="winner-selection text-center mt-5">
           <h5 className="text-lg text-white mb-3">Who is the winner?</h5>
           <div className="flex justify-around items-center space-x-3">

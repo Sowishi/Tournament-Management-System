@@ -14,6 +14,7 @@ export default function RankingTable({
   tournamentState,
   handleFinalizeTournament,
   handleGetParticipants,
+  client,
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -63,7 +64,7 @@ export default function RankingTable({
     <div className="overflow-x-auto">
       <div className="wrapper">
         {/* Submit Results Button */}
-        {tournamentState == "awaiting_review" && (
+        {tournamentState == "awaiting_review" && !client && (
           <motion.div
             className="flex justify-end items-center my-5"
             initial={{ opacity: 0, y: 10 }}

@@ -110,79 +110,239 @@ const ViewTournament = () => {
 
   const tournamentID = id;
 
-  console.log(participants);
-
   if (client) {
     return (
-      <DefaultLayout client={client}>
-        <TmsModal
-          onSubmit={handleAddParticpant}
-          title={"Add Participant"}
-          size={"5xl"}
-          openModal={addModal}
-          handleClose={() => setAddModal(false)}
-        >
-          <AddParticipantsTable
-            setSelectedUsers={setSelectedUsers}
-            users={users}
-          />
-        </TmsModal>
-        <div className="container mx-auto mt-10 pb-20">
-          <div className="wrapper flex items-center justify-between mb-5">
-            <div className="wrapper flex items-center">
-              <Button onClick={() => navigation("/events")} className="mr-5">
-                Back
-              </Button>
-              <h1 className="text-white text-3xl font-bold ">
-                {tournament?.name}
-              </h1>
-              <Badge size={"lg"} className="ml-5">
-                {tournament?.tournament_type}
-              </Badge>
+      <DefaultLayout client={true}>
+        <div className="flex">
+          <div className="basis-1/12 flex justify-start items-center flex-col py-20  bg-slate-800">
+            <div
+              onClick={() => setPage("tournament")}
+              className={`flex flex-col justify-center items-center my-5 p-3 rounded-lg cursor-pointer ${
+                page == "tournament" ? "bg-slate-500" : ""
+              }`}
+            >
+              <FaTrophy color="white" size={35} />
+              <h1 className="text-white">Tournament</h1>
+            </div>
+            <div
+              onClick={() => setPage("ranking")}
+              className={`flex flex-col justify-center items-center my-5 p-3 rounded-lg cursor-pointer ${
+                page == "ranking" ? "bg-slate-500" : ""
+              }`}
+            >
+              <GiStairs color="white" size={35} />
+              <h1 className="text-white">Ranking</h1>
+            </div>
+            <div
+              onClick={() => setPage("participants")}
+              className={`flex flex-col justify-center items-center my-5 p-3 rounded-lg cursor-pointer ${
+                page == "participants" ? "bg-slate-500" : ""
+              }`}
+            >
+              <BsFillPeopleFill color="white" size={35} />
+              <h1 className="text-white">Participants</h1>
+            </div>
+            <div
+              onClick={() => setPage("matches")}
+              className={`flex flex-col justify-center items-center my-5 p-3 rounded-lg cursor-pointer ${
+                page == "matches" ? "bg-slate-500" : ""
+              }`}
+            >
+              <TbTournament color="white" size={35} />
+              <h1 className="text-white">Matches</h1>
+            </div>
+            <div
+              onClick={() => setPage("schedule")}
+              className={`flex flex-col justify-center items-center my-5 p-3 rounded-lg cursor-pointer ${
+                page == "schedule" ? "bg-slate-500" : ""
+              }`}
+            >
+              <HiCalendar color="white" size={35} />
+              <h1 className="text-white">Schedule</h1>
             </div>
           </div>
-          <div className="mb-5">
-            <Table hoverable>
-              <Table.Head>
-                <Table.HeadCell className="text-center bg-slate-900 text-white font-bold border">
-                  Tournament State
-                </Table.HeadCell>
-                <Table.HeadCell className="text-center bg-slate-900 text-white font-bold border">
-                  Registered Event
-                </Table.HeadCell>
-                <Table.HeadCell className="text-center bg-slate-900 text-white font-bold border">
-                  Tournament Start Date
-                </Table.HeadCell>
-              </Table.Head>
-              <Table.Body className="divide-y">
-                <Table.Cell className="text-center flex items-center justify-center">
-                  <Badge color={"warning"} size={"lg"} className="px-10">
-                    <h1 className="text-lg"> {tournament?.state}</h1>
+          <div className="basis-11/12 p-10">
+            <div className="container mx-auto mt-10 pb-20">
+              <div className="wrapper flex items-center justify-between mb-5">
+                <div className="wrapper flex items-center">
+                  <Button
+                    onClick={() => navigation("/events")}
+                    className="mr-5"
+                  >
+                    Back
+                  </Button>
+                  <h1 className="text-white text-3xl font-bold ">
+                    {tournament?.name}
+                  </h1>
+                  <Badge size={"lg"} className="ml-5">
+                    {tournament?.tournament_type}
                   </Badge>
-                </Table.Cell>
-                <Table.Cell className="text-center">
-                  <h1 className="text-lg text-white">
-                    {" "}
-                    {/* {tournament?.description} */}
-                    Provinical Meetds
-                  </h1>
-                </Table.Cell>
-                <Table.Cell className="text-center">
-                  <h1 className="text-lg text-white">
-                    {moment(tournament?.start_at).format("LL")}
-                  </h1>
-                </Table.Cell>
-              </Table.Body>
-            </Table>
+                </div>
+              </div>
+              {page == "tournament" && (
+                <>
+                  <div className="mb-5">
+                    <Table hoverable>
+                      <Table.Head>
+                        <Table.HeadCell className="text-center bg-slate-900 text-white font-bold border">
+                          Tournament State
+                        </Table.HeadCell>
+                        <Table.HeadCell className="text-center bg-slate-900 text-white font-bold border">
+                          Registered Event
+                        </Table.HeadCell>
+                        <Table.HeadCell className="text-center bg-slate-900 text-white font-bold border">
+                          Tournament Start Date
+                        </Table.HeadCell>
+                      </Table.Head>
+                      <Table.Body className="divide-y">
+                        <Table.Cell className="text-center flex items-center justify-center">
+                          <Badge
+                            color={"warning"}
+                            size={"lg"}
+                            className="px-10"
+                          >
+                            <h1 className="text-lg"> {tournament?.state}</h1>
+                          </Badge>
+                        </Table.Cell>
+                        <Table.Cell className="text-center">
+                          <h1 className="text-lg text-white">
+                            {tournament?.description}
+                          </h1>
+                        </Table.Cell>
+                        <Table.Cell className="text-center">
+                          <h1 className="text-lg text-white">
+                            {moment(tournament?.start_at).format("LL")}
+                          </h1>
+                        </Table.Cell>
+                      </Table.Body>
+                    </Table>
+                  </div>
+
+                  <iframe
+                    src={`https://challonge.com/${id}/module`}
+                    width="100%"
+                    height="500"
+                    frameborder="0"
+                    scrolling="auto"
+                    allowtransparency="true"
+                  ></iframe>
+                </>
+              )}
+
+              {page == "matches" && (
+                <>
+                  {matches.length >= 1 && (
+                    <div className="matches my-20">
+                      <div className="wrapper flex items-center my-5">
+                        <h1 className="text-white text-3xl font-bold">
+                          Tournament Matches
+                        </h1>
+                        <Badge className="ml-3">{matches.length}</Badge>
+                      </div>
+                      <div className="flex justify-start items-start flex-wrap">
+                        {matches.map((item, index) => {
+                          const { match } = item;
+
+                          return (
+                            <div
+                              className="basis-4/12 flex justify-center items-center"
+                              key={index}
+                            >
+                              <motion.div
+                                key={match.id}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: index * 0.1 }}
+                              >
+                                <MatchCard
+                                  client={true}
+                                  id={id}
+                                  match={match}
+                                />
+                              </motion.div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+
+              {page == "participants" && (
+                <>
+                  <div className="participants my-20">
+                    <div className="wrapper flex items-center my-5">
+                      <h1 className="text-white text-3xl font-bold">
+                        Tournament Participants
+                      </h1>
+                      <Badge className="ml-3">{participants.length}</Badge>
+                    </div>
+                    {participants.length <= 0 && (
+                      <h1 className="text-white text-center text-3xl">
+                        No Participants yet.
+                      </h1>
+                    )}
+                    {participants.length >= 1 && (
+                      <ParticipantsTables
+                        client={true}
+                        removeRanking={true}
+                        tournament={tournament}
+                        handleDeleteParticipant={handleDeleteParticipant}
+                        participants={participants}
+                      />
+                    )}
+                  </div>
+                </>
+              )}
+              {page == "ranking" && (
+                <>
+                  <div className="participants my-20">
+                    <div className="wrapper flex items-center my-5">
+                      <h1 className="text-white text-3xl font-bold">
+                        Tournament Ranking
+                      </h1>
+                      <Badge className="ml-3">{participants.length}</Badge>
+                    </div>
+                    {participants.length <= 0 && (
+                      <h1 className="text-white text-center text-3xl">
+                        No Participants yet.
+                      </h1>
+                    )}
+                    {participants.length >= 1 && (
+                      <RankingTable
+                        client={true}
+                        handleFinalizeTournament={handleFinalizeTournament}
+                        handleGetParticipants={handleGetParticipantsRanking}
+                        tournamentState={tournament?.state}
+                        tournament={tournament}
+                        handleDeleteParticipant={handleDeleteParticipant}
+                        participants={participants}
+                      />
+                    )}
+                  </div>
+                </>
+              )}
+              {page == "schedule" && (
+                <>
+                  <div className="wrapper flex items-center my-5">
+                    <h1 className="text-white text-3xl font-bold">
+                      Schedule of Tournament
+                    </h1>
+                  </div>
+                  <Calendar
+                    events={matchDates}
+                    localizer={localizer}
+                    views={["month", "agenda"]}
+                    className="mx-5 bg-white rounded p-6"
+                    startAccessor="start"
+                    endAccessor="end"
+                    style={{ height: 500 }}
+                  />
+                </>
+              )}
+            </div>
           </div>
-          <iframe
-            src={`https://challonge.com/${id}/module`}
-            width="100%"
-            height="500"
-            frameborder="0"
-            scrolling="auto"
-            allowtransparency="true"
-          ></iframe>
         </div>
       </DefaultLayout>
     );

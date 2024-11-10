@@ -9,6 +9,7 @@ export default function ParticipantsTables({
   handleDeleteParticipant,
   tournament,
   removeRanking,
+  client,
 }) {
   // State for modal visibility and selected participant
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,9 +46,11 @@ export default function ParticipantsTables({
               <h1 className="text-lg">Ranking</h1>
             </Table.HeadCell>
           )}
-          <Table.HeadCell className="bg-slate-800 text-white flex justify-center items-center">
-            <h1 className="text-lg">Action</h1>
-          </Table.HeadCell>
+          {!client && (
+            <Table.HeadCell className="bg-slate-800 text-white flex justify-center items-center">
+              <h1 className="text-lg">Action</h1>
+            </Table.HeadCell>
+          )}
         </Table.Head>
         <Table.Body className="divide-y">
           {participants.map((item, index) => {
@@ -70,15 +73,17 @@ export default function ParticipantsTables({
                     {participant.final_rank ? participant.final_rank : "----"}
                   </Table.Cell>
                 )}
-                <Table.Cell className="text-white flex justify-center items-center">
-                  <Button
-                    disabled={tournament?.state !== "pending"}
-                    onClick={() => openModal(participant.id)}
-                    color={"failure"}
-                  >
-                    Delete Participant
-                  </Button>
-                </Table.Cell>
+                {!client && (
+                  <Table.Cell className="text-white flex justify-center items-center">
+                    <Button
+                      disabled={tournament?.state !== "pending"}
+                      onClick={() => openModal(participant.id)}
+                      color={"failure"}
+                    >
+                      Delete Participant
+                    </Button>
+                  </Table.Cell>
+                )}
               </motion.tr>
             );
           })}
