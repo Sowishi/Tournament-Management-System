@@ -17,6 +17,9 @@ import { FaTrophy } from "react-icons/fa";
 import { GiStairs } from "react-icons/gi";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { TbTournament } from "react-icons/tb";
+import RankingTable from "../components/rankingTable";
+import { HiCalendar } from "react-icons/hi";
+import { motion } from "framer-motion";
 
 const ViewTournament = () => {
   const { id } = useParams();
@@ -187,7 +190,7 @@ const ViewTournament = () => {
         />
       </TmsModal>
       <div className="flex">
-        <div className="basis-1/12 flex justify-start items-center flex-col py-20 m-3">
+        <div className="basis-1/12 flex justify-start items-center flex-col py-20  bg-slate-800">
           <div
             onClick={() => setPage("tournament")}
             className={`flex flex-col justify-center items-center my-5 p-3 rounded-lg cursor-pointer ${
@@ -197,15 +200,15 @@ const ViewTournament = () => {
             <FaTrophy color="white" size={35} />
             <h1 className="text-white">Tournament</h1>
           </div>
-          {/* <div
-            onClick={() => setPage("standing")}
+          <div
+            onClick={() => setPage("ranking")}
             className={`flex flex-col justify-center items-center my-5 p-3 rounded-lg cursor-pointer ${
-              page == "standing" ? "bg-slate-500" : ""
+              page == "ranking" ? "bg-slate-500" : ""
             }`}
           >
             <GiStairs color="white" size={35} />
-            <h1 className="text-white">Standing</h1>
-          </div> */}
+            <h1 className="text-white">Ranking</h1>
+          </div>
           <div
             onClick={() => setPage("participants")}
             className={`flex flex-col justify-center items-center my-5 p-3 rounded-lg cursor-pointer ${
@@ -224,64 +227,73 @@ const ViewTournament = () => {
             <TbTournament color="white" size={35} />
             <h1 className="text-white">Matches</h1>
           </div>
+          <div
+            onClick={() => setPage("schedule")}
+            className={`flex flex-col justify-center items-center my-5 p-3 rounded-lg cursor-pointer ${
+              page == "schedule" ? "bg-slate-500" : ""
+            }`}
+          >
+            <HiCalendar color="white" size={35} />
+            <h1 className="text-white">Schedule</h1>
+          </div>
         </div>
         <div className="basis-11/12 p-10">
           <div className="container mx-auto mt-10 pb-20">
+            <div className="wrapper flex items-center justify-between mb-5">
+              <div className="wrapper flex items-center">
+                <Button
+                  onClick={() => navigation("/admin/tournament")}
+                  className="mr-5"
+                >
+                  Back
+                </Button>
+                <h1 className="text-white text-3xl font-bold ">
+                  {tournament?.name}
+                </h1>
+                <Badge size={"lg"} className="ml-5">
+                  {tournament?.tournament_type}
+                </Badge>
+              </div>
+              <div className="wrapper flex items-center justify-center">
+                {tournament?.state == "pending" && (
+                  <Tooltip content="Add Participants in the tournament">
+                    <Button
+                      disabled={tournament?.state == "underway"}
+                      onClick={() => {
+                        setAddModal(true);
+                      }}
+                    >
+                      Add Participants
+                    </Button>
+                  </Tooltip>
+                )}
+
+                {tournament?.state == "pending" && (
+                  <Tooltip content="Start the tournament">
+                    <Button
+                      color={"success"}
+                      className="ml-5"
+                      onClick={handleStartTournament}
+                    >
+                      Start Tournament
+                    </Button>
+                  </Tooltip>
+                )}
+                {tournament?.state == "awaiting_review" && (
+                  <Tooltip content="Finalize tournament">
+                    <Button
+                      color={"success"}
+                      className="ml-5"
+                      onClick={handleFinalizeTournament}
+                    >
+                      Finalize Tournament
+                    </Button>
+                  </Tooltip>
+                )}
+              </div>
+            </div>
             {page == "tournament" && (
               <>
-                <div className="wrapper flex items-center justify-between mb-5">
-                  <div className="wrapper flex items-center">
-                    <Button
-                      onClick={() => navigation("/admin/tournament")}
-                      className="mr-5"
-                    >
-                      Back
-                    </Button>
-                    <h1 className="text-white text-3xl font-bold ">
-                      {tournament?.name}
-                    </h1>
-                    <Badge size={"lg"} className="ml-5">
-                      {tournament?.tournament_type}
-                    </Badge>
-                  </div>
-                  <div className="wrapper flex items-center justify-center">
-                    {tournament?.state == "pending" && (
-                      <Tooltip content="Add Participants in the tournament">
-                        <Button
-                          disabled={tournament?.state == "underway"}
-                          onClick={() => {
-                            setAddModal(true);
-                          }}
-                        >
-                          Add Participants
-                        </Button>
-                      </Tooltip>
-                    )}
-
-                    {tournament?.state == "pending" && (
-                      <Tooltip content="Start the tournament">
-                        <Button
-                          color={"success"}
-                          className="ml-5"
-                          onClick={handleStartTournament}
-                        >
-                          Start Tournament
-                        </Button>
-                      </Tooltip>
-                    )}
-                    {tournament?.state == "awaiting_review" && (
-                      <Tooltip content="Finalize tournament">
-                        <Button
-                          color={"success"}
-                          className="ml-5"
-                          onClick={handleFinalizeTournament}
-                        >
-                          Finalize Tournament
-                        </Button>
-                      </Tooltip>
-                    )}
-                  </div>
-                </div>
                 <div className="mb-5">
                   <Table hoverable>
                     <Table.Head>
@@ -337,11 +349,20 @@ const ViewTournament = () => {
                       <Badge className="ml-3">{matches.length}</Badge>
                     </div>
                     <div className="flex justify-start items-start flex-wrap">
-                      {matches.map((item) => {
+                      {matches.map((item, index) => {
                         const { match } = item;
 
                         return (
-                          <MatchCard id={id} key={match.id} match={match} />
+                          <div className="basis-4/12" key={index}>
+                            <motion.div
+                              key={match.id}
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: index * 0.1 }}
+                            >
+                              <MatchCard id={id} match={match} />
+                            </motion.div>
+                          </div>
                         );
                       })}
                     </div>
@@ -366,6 +387,31 @@ const ViewTournament = () => {
                   )}
                   {participants.length >= 1 && (
                     <ParticipantsTables
+                      removeRanking={true}
+                      tournament={tournament}
+                      handleDeleteParticipant={handleDeleteParticipant}
+                      participants={participants}
+                    />
+                  )}
+                </div>
+              </>
+            )}
+            {page == "ranking" && (
+              <>
+                <div className="participants my-20">
+                  <div className="wrapper flex items-center my-5">
+                    <h1 className="text-white text-3xl font-bold">
+                      Tournament Participants
+                    </h1>
+                    <Badge className="ml-3">{participants.length}</Badge>
+                  </div>
+                  {participants.length <= 0 && (
+                    <h1 className="text-white text-center text-3xl">
+                      No Participants yet. try adding one.
+                    </h1>
+                  )}
+                  {participants.length >= 1 && (
+                    <RankingTable
                       tournament={tournament}
                       handleDeleteParticipant={handleDeleteParticipant}
                       participants={participants}
