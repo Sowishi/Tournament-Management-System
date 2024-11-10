@@ -56,6 +56,8 @@ const AdminCalendar = () => {
     }
   });
 
+  console.log(filterCalendarData);
+
   return (
     <AdminLayout>
       <TmsModal

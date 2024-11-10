@@ -21,6 +21,7 @@ import RankingTable from "../components/rankingTable";
 import { HiCalendar } from "react-icons/hi";
 import { motion } from "framer-motion";
 import { Calendar, momentLocalizer } from "react-big-calendar";
+import MatchDateCard from "../components/matchDateCard";
 
 const ViewTournament = () => {
   const localizer = momentLocalizer(moment);
@@ -35,7 +36,7 @@ const ViewTournament = () => {
     useCrudParticipants();
   const { showTournament, startTournament, finalizeTournament } =
     useCrudTournament();
-  const { getMatches } = useCrudMatches();
+  const { getMatches, updateMatchDate, getMatchDates } = useCrudMatches();
 
   const { data: users } = useGetUsers();
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -44,7 +45,7 @@ const ViewTournament = () => {
   const [addModal, setAddModal] = useState(false);
   const [tournament, setTournament] = useState();
   const [page, setPage] = useState("tournament");
-
+  const [matchDates, setMatchDates] = useState([]);
   const handleGetParticipants = async () => {
     const output = await getParticipants(id);
     setParticipants(output.data);
@@ -99,7 +100,12 @@ const ViewTournament = () => {
     handleGetParticipants();
     handleShowTournament();
     handleGetMatches();
+    getMatchDates(id, setMatchDates);
   }, []);
+
+  const tournamentID = id;
+
+  console.log(matchDates);
 
   if (client) {
     return (
@@ -356,7 +362,10 @@ const ViewTournament = () => {
                         const { match } = item;
 
                         return (
-                          <div className="basis-4/12" key={index}>
+                          <div
+                            className="basis-4/12 flex justify-center items-center"
+                            key={index}
+                          >
                             <motion.div
                               key={match.id}
                               initial={{ opacity: 0, y: 20 }}
@@ -431,6 +440,7 @@ const ViewTournament = () => {
                   </h1>
                 </div>
                 <Calendar
+                  events={matchDates}
                   localizer={localizer}
                   views={["month", "agenda"]}
                   className="mx-5 bg-white rounded p-6"
@@ -438,6 +448,37 @@ const ViewTournament = () => {
                   endAccessor="end"
                   style={{ height: 500 }}
                 />
+                <>
+                  {matches.length >= 1 && (
+                    <div className="matches my-20">
+                      <div className="flex justify-start items-start flex-wrap">
+                        {matches.map((item, index) => {
+                          const { match } = item;
+
+                          return (
+                            <div
+                              className="basis-4/12 flex justify-center items-center"
+                              key={index}
+                            >
+                              <motion.div
+                                key={match.id}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: index * 0.1 }}
+                              >
+                                <MatchDateCard
+                                  tournamentID={tournamentID}
+                                  id={id}
+                                  match={match}
+                                />
+                              </motion.div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </>{" "}
               </>
             )}
           </div>
