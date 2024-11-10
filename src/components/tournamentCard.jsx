@@ -7,6 +7,8 @@ import logo from "../assets/logo2.png";
 import { HiOutlineUsers } from "react-icons/hi";
 import { HiOutlineSpeakerphone } from "react-icons/hi";
 import moment from "moment";
+import useCrudLogs from "../hooks/useCrudLogs";
+import { useStore } from "../zustand/store";
 
 export default function TournamentCard({
   tournament,
@@ -17,7 +19,8 @@ export default function TournamentCard({
 }) {
   const { tournament: data } = tournament;
   const navigation = useNavigate();
-
+  const { addLog } = useCrudLogs();
+  const { currentUser } = useStore();
   const getBadgeColor = (state) => {
     if (state === "pending") {
       return "bg-blue-500";
@@ -109,13 +112,18 @@ export default function TournamentCard({
             className="mt-3"
             color={"failure"}
             onClick={async () => {
+              addLog(currentUser, `Deleted a tournament: ${data.name}`);
+
               const res = await deleteTournament(tournament);
               if (res.error) {
                 toast.error(res.message);
                 return;
               }
+
               toast.success(res.message);
-              window.location.reload();
+              setTimeout(() => {
+                window.location.reload();
+              }, 2000);
             }}
           >
             Delete

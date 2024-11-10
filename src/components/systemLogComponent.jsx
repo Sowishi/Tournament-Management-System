@@ -1,38 +1,14 @@
 import React from "react";
 import { Badge } from "flowbite-react";
 import { motion } from "framer-motion";
+import useCrudLogs from "../hooks/useCrudLogs";
+import moment from "moment";
 
 // Dummy data for the logs
-const logs = [
-  { date: "2024-11-11", label: "Added new user", user: "Admin" },
-  { date: "2024-11-10", label: "Deleted event", user: "Moderator" },
-  { date: "2024-11-09", label: "Updated carousel picture", user: "Admin" },
-  { date: "2024-11-08", label: "Added new event", user: "User123" },
-  { date: "2024-11-11", label: "Added new user", user: "Admin" },
-  { date: "2024-11-10", label: "Deleted event", user: "Moderator" },
-  { date: "2024-11-09", label: "Updated carousel picture", user: "Admin" },
-  { date: "2024-11-08", label: "Added new event", user: "User123" },
-  { date: "2024-11-11", label: "Added new user", user: "Admin" },
-  { date: "2024-11-10", label: "Deleted event", user: "Moderator" },
-  { date: "2024-11-09", label: "Updated carousel picture", user: "Admin" },
-  { date: "2024-11-08", label: "Added new event", user: "User123" },
-  { date: "2024-11-11", label: "Added new user", user: "Admin" },
-  { date: "2024-11-10", label: "Deleted event", user: "Moderator" },
-  { date: "2024-11-09", label: "Updated carousel picture", user: "Admin" },
-  { date: "2024-11-08", label: "Added new event", user: "User123" },
-  { date: "2024-11-11", label: "Added new user", user: "Admin" },
-  { date: "2024-11-10", label: "Deleted event", user: "Moderator" },
-  { date: "2024-11-09", label: "Updated carousel picture", user: "Admin" },
-  { date: "2024-11-08", label: "Added new event", user: "User123" },
-
-  { date: "2024-11-11", label: "Added new user", user: "Admin" },
-  { date: "2024-11-10", label: "Deleted event", user: "Moderator" },
-  { date: "2024-11-09", label: "Updated carousel picture", user: "Admin" },
-  { date: "2024-11-08", label: "Added new event", user: "User123" },
-  // Add more log entries as needed
-];
 
 const SystemLogsComponent = () => {
+  const { data: logs } = useCrudLogs();
+
   return (
     <motion.div
       className="container mx-auto mt-10"
@@ -50,7 +26,6 @@ const SystemLogsComponent = () => {
                 <th className="py-3 px-6 text-left">Date</th>
                 <th className="py-3 px-6 text-left">Action</th>
                 <th className="py-3 px-6 text-left">User</th>
-                <th className="py-3 px-6 text-center">Label</th>
               </tr>
             </thead>
             <tbody>
@@ -62,12 +37,11 @@ const SystemLogsComponent = () => {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   className="text-white hover:bg-gray-700"
                 >
-                  <td className="py-3 px-6">{log.date}</td>
-                  <td className="py-3 px-6">{log.label}</td>
-                  <td className="py-3 px-6">{log.user}</td>
-                  <td className="py-3 px-6 text-center">
-                    <Badge color="info">{log.label}</Badge>
+                  <td className="py-3 px-6">
+                    {moment(log.createdAt.toDate()).format("LLL")}
                   </td>
+                  <td className="py-3 px-6">{log.label}</td>
+                  <td className="py-3 px-6">{log.user.fullName}</td>
                 </motion.tr>
               ))}
             </tbody>

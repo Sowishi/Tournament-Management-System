@@ -11,6 +11,8 @@ import useGetEventName from "../hooks/useGetEventName";
 import useCrudCalendar from "../hooks/useCrudCalendar";
 import moment from "moment";
 import { motion } from "framer-motion"; // Import Framer Motion
+import useCrudLogs from "../hooks/useCrudLogs";
+import { useStore } from "../zustand/store";
 
 const AdminTournament = ({ client, currentEvent }) => {
   const [createModal, setCreateModal] = useState(false);
@@ -21,6 +23,9 @@ const AdminTournament = ({ client, currentEvent }) => {
   const { data: eventNames } = useGetEventName();
   const [selectedEvent, setSelectedEvent] = useState("all");
   const { addCalendar } = useCrudCalendar();
+  const { currentUser } = useStore();
+
+  const { addLog } = useCrudLogs();
 
   const [forms, setForms] = useState({
     tournamentName: "",
@@ -50,6 +55,7 @@ const AdminTournament = ({ client, currentEvent }) => {
       ["end"]: endDateMoment,
     };
     addCalendar(output);
+    addLog(currentUser, `Created a tournament: ${forms.tournamentName}`);
 
     setTimeout(() => {
       toast.success(res.message);
