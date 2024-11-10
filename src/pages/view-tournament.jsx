@@ -424,6 +424,7 @@ const ViewTournament = () => {
                   )}
                   {participants.length >= 1 && (
                     <RankingTable
+                      tournamentState={tournament?.state}
                       tournament={tournament}
                       handleDeleteParticipant={handleDeleteParticipant}
                       participants={participants}

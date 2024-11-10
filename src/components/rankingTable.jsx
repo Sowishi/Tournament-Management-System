@@ -4,15 +4,18 @@ import { Button, Table, Modal } from "flowbite-react";
 import { FaCrown, FaMedal } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import useCrudTally from "../hooks/useCrudTally";
 
 export default function RankingTable({
   participants,
   handleDeleteParticipant,
   handleSubmitResults, // Function triggered on confirmation
   tournament,
+  tournamentState,
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const { addTally } = useCrudTally();
   // Sort participants by ascending rank
   const sortedParticipants = [...participants].sort((a, b) => {
     const rankA = a.participant.final_rank || Infinity;
@@ -33,7 +36,15 @@ export default function RankingTable({
 
   // Close modal and handle submit confirmation
   const handleConfirmSubmit = () => {
-    handleSubmitResults();
+    // Log the ranking results to the console
+    sortedParticipants.slice(0, 3).map((item) =>
+      addTally({
+        name: item.participant.name,
+        rank: item.participant.final_rank || "Unranked",
+        event: tournament.description,
+      })
+    );
+
     setIsModalOpen(false);
   };
 
@@ -41,19 +52,21 @@ export default function RankingTable({
     <div className="overflow-x-auto">
       <div className="wrapper">
         {/* Submit Results Button */}
-        <motion.div
-          className="flex justify-end items-center my-5"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          <Button
-            onClick={handleOpenModal}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 font-semibold rounded-lg"
+        {tournamentState == "complete" && (
+          <motion.div
+            className="flex justify-end items-center my-5"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
           >
-            Submit Results
-          </Button>
-        </motion.div>
+            <Button
+              onClick={handleOpenModal}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 font-semibold rounded-lg"
+            >
+              Submit Results
+            </Button>
+          </motion.div>
+        )}
       </div>
 
       <Table className="min-w-full text-center text-gray-100">

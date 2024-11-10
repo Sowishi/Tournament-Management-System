@@ -39,7 +39,7 @@ export default function MatchCard({ match, id }) {
 
   return (
     <Card
-      className="w-80 h-[25rem] my-5 border flex flex-col justify-between dark"
+      className="w-80 h-[28rem] my-5 border flex flex-col justify-between dark"
       style={{
         background:
           "linear-gradient(164deg, rgba(2,6,23,1) 59%, rgba(252,172,127,1) 91%)",
@@ -113,10 +113,10 @@ export default function MatchCard({ match, id }) {
 
       {match?.state === "complete" && (
         <div className="winner-display text-center mt-10">
-          <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+          <h5 className="text-lg font-bold tracking-tight text-gray-900 dark:text-white">
             Winner 🎉🎉🎉
           </h5>
-          <h5 className="text-3xl font-bold tracking-tight mt-3 text-gray-900 dark:text-white">
+          <h5 className="text-lg font-bold tracking-tight mt-3 text-gray-900 dark:text-white">
             {match.winner_id === player1?.id ? player1?.name : player2?.name}
           </h5>
         </div>

@@ -273,6 +273,9 @@ const User = () => {
         handleClose={() => setAddDocumentModal(false)}
       >
         <div className="container">
+          <p className="my-5 text-center italic">
+            The participant's requirement must be compiled in a single file
+          </p>
           <TmsInput
             dark={true}
             name="label"
@@ -465,9 +468,11 @@ const User = () => {
                     Add Documents
                   </Button>
                 )}
-                <Button className="ml-3" onClick={() => setFolderModal(true)}>
-                  Add Folder
-                </Button>
+                {!currentFolder && (
+                  <Button className="ml-3" onClick={() => setFolderModal(true)}>
+                    Add Folder
+                  </Button>
+                )}
               </div>
               <h1 className=" font-bold text-3xl mt-10">Attached Documents</h1>
               <Breadcrumb aria-label="Breadcrumb navigation" className="my-4">
@@ -526,15 +531,6 @@ const User = () => {
                         </div>
                       );
                     })}
-                    {documentsFilter.length <= 0 && (
-                      <>
-                        <div className="flex justify-center items-center w-full">
-                          <h1 className=" text-center font-bold my-5">
-                            No Documents Provided
-                          </h1>
-                        </div>
-                      </>
-                    )}
                   </div>
                 </>
               )}
