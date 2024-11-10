@@ -17,6 +17,8 @@ import { HiOutlineTrash } from "react-icons/hi";
 import useCrudCollegeName from "../hooks/useCrudCollegeName";
 import TmsSelect from "../components/tmsSelect";
 import { motion } from "framer-motion";
+import useGetUsers from "../hooks/useGetUsers";
+import useCrudTournament from "../hooks/useCrudTournament";
 
 const AdminHome = () => {
   const [addPicModal, setAddPicModal] = useState(false);
@@ -42,6 +44,10 @@ const AdminHome = () => {
   const { data: eventNameData } = useGetEventName();
   const { deleteCarouselPic } = useDeleteCarouselPic();
   const { deleteEventName } = useDeleteEventName();
+
+  const { data: users } = useGetUsers();
+  const { data: tournaments } = useCrudTournament();
+
   const {
     addCollegeName,
     data: collegeNameData,
@@ -211,6 +217,55 @@ const AdminHome = () => {
       </TmsModal>
 
       <div className="container mx-auto mt-10">
+        <div className="grid grid-cols-3 gap-4 mb-6">
+          {/* Users Card */}
+          <motion.div
+            className="bg-gray-800 text-white p-4 rounded-lg shadow-md flex items-center justify-between"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
+            <div>
+              <h4 className="text-2xl font-bold">Users</h4>
+              <p>{users?.length}</p>
+            </div>
+            <Badge color="info" size={"lg"}>
+              Active Users
+            </Badge>
+          </motion.div>
+
+          {/* Tournaments Card */}
+          <motion.div
+            className="bg-gray-800 text-white p-4 rounded-lg shadow-md flex items-center justify-between"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <div>
+              <h4 className="text-2xl font-bold">Tournaments</h4>
+              <p>{tournaments.length}</p>
+            </div>
+            <Badge color="info" size={"lg"}>
+              On Going Tournaments
+            </Badge>
+          </motion.div>
+
+          {/* Events Card */}
+          <motion.div
+            className="bg-gray-800 text-white p-4 rounded-lg shadow-md flex items-center justify-between"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            <div>
+              <h4 className="text-2xl font-bold">Events</h4>
+              <p>{eventNameData.length}</p>
+            </div>
+            <Badge color="info" size={"lg"}>
+              Events
+            </Badge>
+          </motion.div>
+        </div>
         <Tabs aria-label="Default tabs" variant="default">
           <Tabs.Item active title="Dashboard">
             <motion.div
