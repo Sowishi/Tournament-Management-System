@@ -12,6 +12,8 @@ export default function RankingTable({
   handleSubmitResults, // Function triggered on confirmation
   tournament,
   tournamentState,
+  handleFinalizeTournament,
+  handleGetParticipants,
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -35,15 +37,24 @@ export default function RankingTable({
   };
 
   // Close modal and handle submit confirmation
-  const handleConfirmSubmit = () => {
-    // Log the ranking results to the console
-    sortedParticipants.slice(0, 3).map((item) =>
+  const handleConfirmSubmit = async () => {
+    // Finalize the tournament (make sure this function works correctly)
+    await handleFinalizeTournament();
+
+    // Get updated participants after finalization
+    const output = await handleGetParticipants();
+
+    // Add each participant to the tally with their name, rank, and event
+    output.data.forEach((item) => {
+      const participantName = item.participant.name;
+      const participantRank = item.participant.final_rank || "Unranked"; // If no rank, set as "Unranked"
+
       addTally({
-        name: item.participant.name,
-        rank: item.participant.final_rank || "Unranked",
-        event: tournament.description,
-      })
-    );
+        name: participantName,
+        rank: participantRank, // Assuming the rank is a number or string
+        event: tournament.description, // Ensure tournament description is correct
+      });
+    });
 
     setIsModalOpen(false);
   };
@@ -52,7 +63,7 @@ export default function RankingTable({
     <div className="overflow-x-auto">
       <div className="wrapper">
         {/* Submit Results Button */}
-        {tournamentState == "complete" && (
+        {tournamentState == "awaiting_review" && (
           <motion.div
             className="flex justify-end items-center my-5"
             initial={{ opacity: 0, y: 10 }}
@@ -79,7 +90,7 @@ export default function RankingTable({
           </Table.HeadCell>
         </Table.Head>
         <Table.Body className="divide-y divide-gray-700">
-          {sortedParticipants.map((item, index) => {
+          {sortedParticipants?.map((item, index) => {
             const { participant } = item;
             let rankIcon = null;
             let rankStyle = "";

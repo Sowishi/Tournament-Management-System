@@ -86,7 +86,7 @@ const ViewTournament = () => {
     const output = await finalizeTournament(id);
     if (!output.error) {
       toast.success(output.message);
-      window.location.reload();
+      // window.location.reload();
     }
   };
 
@@ -94,6 +94,11 @@ const ViewTournament = () => {
     const output = await getMatches(id);
     const { data } = output;
     setMatches(data);
+  };
+
+  const handleGetParticipantsRanking = async () => {
+    const output = await getParticipants(id);
+    return output;
   };
 
   useEffect(() => {
@@ -105,7 +110,7 @@ const ViewTournament = () => {
 
   const tournamentID = id;
 
-  console.log(matchDates);
+  console.log(participants);
 
   if (client) {
     return (
@@ -288,17 +293,6 @@ const ViewTournament = () => {
                     </Button>
                   </Tooltip>
                 )}
-                {tournament?.state == "awaiting_review" && (
-                  <Tooltip content="Finalize tournament">
-                    <Button
-                      color={"success"}
-                      className="ml-5"
-                      onClick={handleFinalizeTournament}
-                    >
-                      Finalize Tournament
-                    </Button>
-                  </Tooltip>
-                )}
               </div>
             </div>
             {page == "tournament" && (
@@ -424,6 +418,8 @@ const ViewTournament = () => {
                   )}
                   {participants.length >= 1 && (
                     <RankingTable
+                      handleFinalizeTournament={handleFinalizeTournament}
+                      handleGetParticipants={handleGetParticipantsRanking}
                       tournamentState={tournament?.state}
                       tournament={tournament}
                       handleDeleteParticipant={handleDeleteParticipant}
