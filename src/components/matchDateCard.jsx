@@ -12,11 +12,14 @@ import "react-toastify/dist/ReactToastify.css";
 
 export default function MatchDateCard({ match, id, tournamentID }) {
   const { showParticipant } = useCrudParticipants();
-  const { updateMatchWinner, updateMatchDate } = useCrudMatches();
+  const { updateMatchWinner, updateMatchDate, getMatchDate, deleteMatchData } =
+    useCrudMatches();
   const [player1, setPlayer1] = useState(null);
   const [player2, setPlayer2] = useState(null);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+
+  const [matchData, setMatchData] = useState();
 
   const getBadgeColor = (state) => {
     switch (state) {
@@ -54,7 +57,8 @@ export default function MatchDateCard({ match, id, tournamentID }) {
       startDate,
       endDate,
       tournamentID,
-      player1?.name + " VS " + player2?.name
+      player1?.name + " VS " + player2?.name,
+      match.id
     );
 
     toast.success("Match dates updated successfully!");
@@ -63,7 +67,10 @@ export default function MatchDateCard({ match, id, tournamentID }) {
   useEffect(() => {
     handleGetPlayer(match.player1_id, setPlayer1);
     handleGetPlayer(match.player2_id, setPlayer2);
+    getMatchDate(tournamentID, match.id, setMatchData);
   }, []);
+
+  console.log(matchData);
 
   return (
     <>
@@ -118,11 +125,12 @@ export default function MatchDateCard({ match, id, tournamentID }) {
               Select Start Date and Time:
             </label>
             <DatePicker
-              selected={startDate}
+              disabled={matchData}
+              selected={matchData ? matchData.start : startDate}
               onChange={(date) => setStartDate(date)}
               showTimeSelect
               dateFormat="Pp"
-              className="rounded p-2 w-full bg-gray-800 text-white mb-4"
+              className="rounded  p-2 w-full bg-gray-800 text-white mb-4"
               placeholderText="Select start date and time"
             />
 
@@ -130,11 +138,12 @@ export default function MatchDateCard({ match, id, tournamentID }) {
               Select End Date and Time:
             </label>
             <DatePicker
-              selected={endDate}
+              disabled={matchData}
+              selected={matchData ? matchData.end : endDate}
               onChange={(date) => setEndDate(date)}
               showTimeSelect
               dateFormat="Pp"
-              className="rounded p-2 w-full bg-gray-800 text-white"
+              className="rounded  p-2 w-full bg-gray-800 text-white"
               placeholderText="Select end date and time"
             />
 
@@ -143,13 +152,26 @@ export default function MatchDateCard({ match, id, tournamentID }) {
               whileTap={{ scale: 0.95 }}
               className="w-full mt-4"
             >
-              <Button
-                onClick={handleDateSubmit}
-                color="success"
-                className="w-full"
-              >
-                Submit Match Dates
-              </Button>
+              {!matchData ? (
+                <Button
+                  onClick={handleDateSubmit}
+                  color="success"
+                  className="w-full"
+                >
+                  Submit Match Dates
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => {
+                    deleteMatchData(tournamentID, match.id);
+                    setMatchData(undefined);
+                  }}
+                  color="failure"
+                  className="w-full"
+                >
+                  Remove Date
+                </Button>
+              )}
             </motion.div>
           </div>
         </Card>

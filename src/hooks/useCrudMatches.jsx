@@ -5,6 +5,7 @@ import {
   query,
   where,
   onSnapshot,
+  deleteDoc,
 } from "firebase/firestore";
 import { db } from "../../firebase";
 import moment from "moment";
@@ -45,7 +46,7 @@ const useCrudMatches = () => {
     }
   };
 
-  const updateMatchDate = async (start, end, tournamentID, label) => {
+  const updateMatchDate = async (start, end, tournamentID, label, matchID) => {
     const colRef = collection(db, "matches-calendar");
     const startDateMoment = moment(start).format("LLL");
     const endDateMoment = moment(end).format("LLL");
@@ -53,6 +54,7 @@ const useCrudMatches = () => {
     try {
       await addDoc(colRef, {
         tournamentID,
+        matchID,
         start: startDateMoment,
         end: endDateMoment,
         title: label,
@@ -71,7 +73,7 @@ const useCrudMatches = () => {
       where("tournamentID", "==", tournamentID)
     );
 
-    // Set up a real-time listener
+    // Set up a real-time listener using onSnapshot
     const unsubscribe = onSnapshot(
       matchDatesQuery,
       (snapshot) => {
@@ -91,7 +93,83 @@ const useCrudMatches = () => {
     return unsubscribe; // Return the unsubscribe function to clean up the listener when needed
   };
 
-  return { getMatches, updateMatchWinner, updateMatchDate, getMatchDates };
+  const getMatchDate = (tournamentID, matchID, setMatchData) => {
+    // Reference to the "matches-calendar" collection
+    const colRef = collection(db, "matches-calendar");
+
+    // Query to find a document where tournamentID and matchID both match
+    const q = query(
+      colRef,
+      where("tournamentID", "==", tournamentID),
+      where("matchID", "==", matchID)
+    );
+
+    // Set up a real-time listener using onSnapshot
+    const unsubscribe = onSnapshot(
+      q,
+      (snapshot) => {
+        if (!snapshot.empty) {
+          const matchData = snapshot.docs[0].data();
+          setMatchData(matchData); // Assuming one match per tournament and matchID
+        } else {
+          console.log("No matching match found.");
+        }
+      },
+      (error) => {
+        console.error("Error fetching match dates: ", error);
+        throw error;
+      }
+    );
+
+    return unsubscribe; // Return the unsubscribe function to clean up the listener when needed
+  };
+
+  const deleteMatchData = (tournamentID, matchID) => {
+    // Reference to the "matches-calendar" collection
+    const colRef = collection(db, "matches-calendar");
+
+    // Query to find a document where tournamentID and matchID both match
+    const q = query(
+      colRef,
+      where("tournamentID", "==", tournamentID),
+      where("matchID", "==", matchID)
+    );
+
+    // Set up a real-time listener using onSnapshot
+    const unsubscribe = onSnapshot(
+      q,
+      (snapshot) => {
+        if (!snapshot.empty) {
+          const docRef = snapshot.docs[0].ref; // Get the document reference
+          deleteDoc(docRef)
+            .then(() => {
+              console.log("Match successfully deleted.");
+            })
+            .catch((error) => {
+              console.error("Error deleting match: ", error);
+              throw error;
+            });
+        } else {
+          console.log("No matching match found.");
+        }
+      },
+      (error) => {
+        console.error("Error deleting match: ", error);
+        throw error;
+      }
+    );
+
+    return unsubscribe; // Return the unsubscribe function to clean up the listener when needed
+  };
+
+  return {
+    getMatches,
+    updateMatchWinner,
+    updateMatchDate,
+    getMatchDates,
+    getMatchDate,
+    deleteMatchData,
+  };
 };
 
 export default useCrudMatches;
