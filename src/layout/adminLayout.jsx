@@ -249,7 +249,7 @@ export default function AdminLayout({ children, client }) {
       <div
         className={`w-full ${
           client ? "background-[#FC7F72]" : "bg-slate-950"
-        } min-h-screen pb-20`}
+        } min-h-screen `}
       >
         {!client && (
           <div

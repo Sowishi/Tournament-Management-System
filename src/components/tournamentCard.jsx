@@ -55,9 +55,9 @@ export default function TournamentCard({
               {data.state}
             </Badge>
           </div>
-          <p className="text-white text-xs">
+          {/* <p className="text-white text-xs">
             {moment(data.start_at).format("LL")}{" "}
-          </p>
+          </p> */}
         </div>
         <div className="content flex-grow">
           {" "}

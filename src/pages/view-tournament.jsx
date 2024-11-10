@@ -211,7 +211,9 @@ const ViewTournament = () => {
                         </Table.Cell>
                         <Table.Cell className="text-center">
                           <h1 className="text-lg text-white">
-                            {moment(tournament?.start_at).format("LL")}
+                            {tournament?.started_at
+                              ? moment(tournament?.started_at).format("LLL")
+                              : "Waiting to start"}{" "}
                           </h1>
                         </Table.Cell>
                       </Table.Body>
@@ -483,7 +485,9 @@ const ViewTournament = () => {
                       </Table.Cell>
                       <Table.Cell className="text-center">
                         <h1 className="text-lg text-white">
-                          {moment(tournament?.start_at).format("LL")}
+                          {tournament?.started_at
+                            ? moment(tournament?.started_at).format("LLL")
+                            : "Waiting to start"}
                         </h1>
                       </Table.Cell>
                     </Table.Body>
