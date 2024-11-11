@@ -19,6 +19,8 @@ import TmsSelect from "../components/tmsSelect";
 import { motion } from "framer-motion";
 import useGetUsers from "../hooks/useGetUsers";
 import useCrudTournament from "../hooks/useCrudTournament";
+import { useStore } from "../zustand/store";
+import { useNavigate } from "react-router-dom";
 
 const AdminHome = () => {
   const [addPicModal, setAddPicModal] = useState(false);
@@ -47,7 +49,8 @@ const AdminHome = () => {
 
   const { data: users } = useGetUsers();
   const { data: tournaments } = useCrudTournament();
-
+  const { currentAdmin } = useStore();
+  const navigation = useNavigate();
   const {
     addCollegeName,
     data: collegeNameData,
@@ -220,7 +223,10 @@ const AdminHome = () => {
         <div className="grid grid-cols-3 gap-4 mb-6">
           {/* Users Card */}
           <motion.div
-            className="bg-gray-800 text-white p-4 rounded-lg shadow-md flex items-center justify-between"
+            onClick={() => {
+              navigation("/admin/users");
+            }}
+            className="bg-gray-800 text-white p-4 rounded-lg shadow-md flex items-center justify-between cursor-pointer"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
@@ -236,7 +242,10 @@ const AdminHome = () => {
 
           {/* Tournaments Card */}
           <motion.div
-            className="bg-gray-800 text-white p-4 rounded-lg shadow-md flex items-center justify-between"
+            onClick={() => {
+              navigation("/admin/tournament");
+            }}
+            className="bg-gray-800 text-white p-4 rounded-lg shadow-md flex items-center justify-between cursor-pointer"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
