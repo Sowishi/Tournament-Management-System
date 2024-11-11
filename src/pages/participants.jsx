@@ -4,6 +4,7 @@ import { ListGroup, Modal, Button } from "flowbite-react";
 import useGetUsers from "../hooks/useGetUsers";
 import { useStore } from "../zustand/store";
 import { useState } from "react";
+import logo from "../assets/logo2.png";
 
 const Participants = () => {
   const { data } = useGetUsers();
@@ -53,11 +54,19 @@ const Participants = () => {
               >
                 <div className="wrapper flex justify-between items-center w-full">
                   <h1 className="text-3xl">{item.collegeName}</h1>
-                  <img
-                    src={item.collegeLogoURL}
-                    style={{ width: "50px" }}
-                    alt={item.collegeName} // Added alt text for accessibility
-                  />
+                  {item.collegeLogoURL ? (
+                    <img
+                      src={item.collegeLogoURL}
+                      style={{ width: "50px" }}
+                      alt={item.collegeName} // Added alt text for accessibility
+                    />
+                  ) : (
+                    <img
+                      src={logo}
+                      style={{ width: "50px" }}
+                      alt={item.collegeName} // Added alt text for accessibility
+                    />
+                  )}
                 </div>
               </ListGroup.Item>
             ))}
