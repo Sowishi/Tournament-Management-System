@@ -19,7 +19,7 @@ export function UsersTable() {
   const [selectedEvent, setSelectedEvent] = useState("all");
   const [documentModal, setDocumentModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
-  const { currentUser } = useStore();
+  const { currentAdmin } = useStore();
   const [deleteModal, setDeleteModal] = useState(false);
   const [approveModal, setApproveModal] = useState(false);
   const [rejectModal, setRejectModal] = useState(false);
@@ -131,6 +131,7 @@ export function UsersTable() {
 
       {/* Existing Document Modal */}
       <TmsModal
+        hideFooter
         size="5xl"
         title={"Documents"}
         openModal={documentModal}
@@ -272,84 +273,96 @@ export function UsersTable() {
         handleClose={() => setRejectModal(false)}
       />
 
-      <Table>
-        <Table.Head className="bg-slate-800">
-          <Table.HeadCell className="bg-slate-800 text-white">
-            SUCs Representative
-          </Table.HeadCell>
-          <Table.HeadCell className="bg-slate-800 text-white">
-            College Name
-          </Table.HeadCell>
-          <Table.HeadCell className="bg-slate-800 text-white">
-            Sports Events
-          </Table.HeadCell>
-          <Table.HeadCell className="bg-slate-800 text-white">
-            Email
-          </Table.HeadCell>
-          <Table.HeadCell className="bg-slate-800 text-white">
-            Status
-          </Table.HeadCell>
-          <Table.HeadCell className="bg-slate-800 text-white">
-            Action
-          </Table.HeadCell>
-        </Table.Head>
-        <Table.Body className="divide-y">
-          {filter?.map((user) => (
-            <Table.Row
-              key={user.id}
-              className="bg-white dark:border-gray-700 dark:bg-gray-800"
-            >
-              <Table.Cell className="font-bold">
-                {user.schoolRepresentative}
-              </Table.Cell>
-              <Table.Cell className="font-bold">{user.collegeName}</Table.Cell>
-              <Table.Cell className="font-bold">{user.sportsEvent}</Table.Cell>
-              <Table.Cell className="font-bold">{user.email}</Table.Cell>
-              <Table.Cell className="font-bold">
-                <Badge color={getBadgeColor(user.status || "Pending")}>
-                  {user.status || "Pending"}
-                </Badge>
-              </Table.Cell>
-              <Table.Cell className="font-bold">
-                <Dropdown label="Action" placement="left">
-                  <Dropdown.Item
-                    onClick={() => {
-                      setDocumentModal(true);
-                      setSelectedUser(user);
-                    }}
-                  >
-                    View Documents
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={() => {
-                      setApproveModal(true);
-                      setSelectedUser(user.id);
-                    }}
-                  >
-                    Accept User
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={() => {
-                      setRejectModal(true);
-                      setSelectedUser(user.id);
-                    }}
-                  >
-                    Reject User
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={() => {
-                      setDeleteModal(true);
-                      setSelectedUser(user.id);
-                    }}
-                  >
-                    Delete User
-                  </Dropdown.Item>
-                </Dropdown>
-              </Table.Cell>
-            </Table.Row>
-          ))}
-        </Table.Body>
-      </Table>
+      {currentAdmin && (
+        <Table>
+          <Table.Head className="bg-slate-800">
+            <Table.HeadCell className="bg-slate-800 text-white">
+              SUCs Representative
+            </Table.HeadCell>
+            <Table.HeadCell className="bg-slate-800 text-white">
+              College Name
+            </Table.HeadCell>
+            <Table.HeadCell className="bg-slate-800 text-white">
+              Sports Events
+            </Table.HeadCell>
+            <Table.HeadCell className="bg-slate-800 text-white">
+              Email
+            </Table.HeadCell>
+            <Table.HeadCell className="bg-slate-800 text-white">
+              Status
+            </Table.HeadCell>
+            <Table.HeadCell className="bg-slate-800 text-white">
+              Action
+            </Table.HeadCell>
+          </Table.Head>
+          <Table.Body className="divide-y">
+            {filter?.map((user) => (
+              <Table.Row
+                key={user.id}
+                className="bg-white dark:border-gray-700 dark:bg-gray-800"
+              >
+                <Table.Cell className="font-bold">
+                  {user.schoolRepresentative}
+                </Table.Cell>
+                <Table.Cell className="font-bold">
+                  {user.collegeName}
+                </Table.Cell>
+                <Table.Cell className="font-bold">
+                  {user.sportsEvent}
+                </Table.Cell>
+                <Table.Cell className="font-bold">{user.email}</Table.Cell>
+                <Table.Cell className="font-bold">
+                  <Badge color={getBadgeColor(user.status || "Pending")}>
+                    {user.status || "Pending"}
+                  </Badge>
+                </Table.Cell>
+                <Table.Cell className="font-bold">
+                  <Dropdown label="Action" placement="left">
+                    {currentAdmin?.role == "Document Admin" && (
+                      <Dropdown.Item
+                        onClick={() => {
+                          setDocumentModal(true);
+                          setSelectedUser(user);
+                        }}
+                      >
+                        View Documents
+                      </Dropdown.Item>
+                    )}
+                    {currentAdmin?.role == "Event Admin" && (
+                      <>
+                        <Dropdown.Item
+                          onClick={() => {
+                            setApproveModal(true);
+                            setSelectedUser(user.id);
+                          }}
+                        >
+                          Accept User
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          onClick={() => {
+                            setRejectModal(true);
+                            setSelectedUser(user.id);
+                          }}
+                        >
+                          Reject User
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          onClick={() => {
+                            setDeleteModal(true);
+                            setSelectedUser(user.id);
+                          }}
+                        >
+                          Delete User
+                        </Dropdown.Item>
+                      </>
+                    )}
+                  </Dropdown>
+                </Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table>
+      )}
     </div>
   );
 }

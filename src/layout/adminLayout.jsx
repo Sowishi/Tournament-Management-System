@@ -7,6 +7,7 @@ import {
   HiOutlineUserCircle,
   HiOutlineCalendar,
   HiDesktopComputer,
+  HiUsers,
 } from "react-icons/hi";
 import { Link, useNavigate } from "react-router-dom";
 import { useStore } from "../zustand/store";
@@ -169,13 +170,13 @@ export default function AdminLayout({ children, client }) {
                         </Sidebar.Item>
                       </Link>
 
-                      <Link to="/admin/calendar">
+                      <Link to="/admin/users">
                         <Sidebar.Item
                           onClick={() => setIsOpen(false)}
                           className="bg-blue-950 text-white hover:text-white hover:bg-red-500 my-3"
                         >
                           <div className="flex items-center">
-                            Calendar <HiOutlineCalendar className="ml-3" />
+                            Users Management <HiUsers className="ml-3" />
                           </div>
                         </Sidebar.Item>
                       </Link>
