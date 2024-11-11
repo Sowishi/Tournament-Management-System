@@ -1,6 +1,9 @@
 import React from "react";
 import { Card, Button } from "flowbite-react";
 import DefaultLayout from "../layout/defaultLayout";
+import jen from "../assets/jen.jpg";
+import kurt from "../assets/kurt.jpeg";
+import arvin from "../assets/arvin.jpg";
 
 const AboutPage = () => {
   return (
@@ -95,8 +98,8 @@ const AboutPage = () => {
             For more details, don’t hesitate to contact us:
           </p>
           <ul className="text-gray-600 mt-4">
-            <li>+63 91 86841062</li>
-            <li>+63 (XXX) YYY ZZZZ</li>
+            <li>+639186841062</li>
+            <li>+639297586496 </li>
             <li>+63 (XXX) YYY ZZZZ</li>
           </ul>
         </section>
@@ -110,45 +113,36 @@ const AboutPage = () => {
             {/* Example Team Member */}
             <Card className="text-center">
               <img
-                src="team-member-photo.jpg"
+                src={jen}
                 alt="Team Member"
                 className="w-24 h-24 mx-auto rounded-full mb-4"
               />
               <h3 className="text-xl font-semibold text-gray-800">
-                Team Member Name
+                Jenelyn E. Macarilay
               </h3>
-              <p className="text-gray-600">Role</p>
-              <Button href="https://facebook.com" color="blue" className="mt-4">
-                Facebook Profile
-              </Button>
+              <p className="text-gray-600">Front End Developer</p>
             </Card>
             <Card className="text-center">
               <img
-                src="team-member-photo.jpg"
+                src={arvin}
                 alt="Team Member"
                 className="w-24 h-24 mx-auto rounded-full mb-4"
               />
               <h3 className="text-xl font-semibold text-gray-800">
-                Team Member Name
+                Arvin C. Abina
               </h3>
-              <p className="text-gray-600">Role</p>
-              <Button href="https://facebook.com" color="blue" className="mt-4">
-                Facebook Profile
-              </Button>
+              <p className="text-gray-600">Back End Developer</p>
             </Card>
             <Card className="text-center">
               <img
-                src="team-member-photo.jpg"
+                src={kurt}
                 alt="Team Member"
                 className="w-24 h-24 mx-auto rounded-full mb-4"
               />
               <h3 className="text-xl font-semibold text-gray-800">
-                Team Member Name
+                Kurt Jostine L. Concepcion
               </h3>
-              <p className="text-gray-600">Role</p>
-              <Button href="https://facebook.com" color="blue" className="mt-4">
-                Facebook Profile
-              </Button>
+              <p className="text-gray-600">QA Tester</p>
             </Card>
             {/* Duplicate the above block for each team member */}
           </div>
