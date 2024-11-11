@@ -95,26 +95,28 @@ export function UsersTable() {
               <Button
                 color={"failure"}
                 className="w-full py-3 mx-5"
-                onClick={() =>
+                onClick={() => {
                   updateFileStatus(
                     currentFolder.id,
                     selectedDocument.id,
                     "Rejected"
-                  )
-                }
+                  );
+                  setSelectedDocument(null);
+                }}
               >
                 Reject
               </Button>
               <Button
                 color={"success"}
                 className="w-full py-3 mx-5"
-                onClick={() =>
+                onClick={() => {
                   updateFileStatus(
                     currentFolder.id,
                     selectedDocument.id,
                     "Approved"
-                  )
-                }
+                  );
+                  setSelectedDocument(null);
+                }}
               >
                 Approve
               </Button>
@@ -171,25 +173,43 @@ export function UsersTable() {
                     key={item.id}
                     className="wrapper basis-4/12 flex items-center justify-center flex-col"
                   >
+                    <p className="italic my-3 text-center flex items-center justify-center">
+                      Status:{" "}
+                      <Badge
+                        color={
+                          item.status
+                            ? item.status == "Approved"
+                              ? "success"
+                              : "failure"
+                            : "info"
+                        }
+                        size={"lg"}
+                        className="ml-3"
+                      >
+                        {item.status ? item.status : "Pending"}
+                      </Badge>
+                    </p>
                     {/* <HiDocument color="white" size={100} /> */}
                     <iframe src={item.fileUrl} />
 
-                    <div className="wrapper flex items-center justify-center">
+                    <div className="wrapper flex items-center justify-center flex-col">
                       <h1 className=" font-bold my-5">{item.fileLabel}</h1>
-                      <Button
-                        onClick={() => deleteFile(currentFolder.id, item.id)}
-                        className="ml-3"
-                        color={"failure"}
-                      >
-                        Remove
-                      </Button>
-                      <Button
-                        onClick={() => setSelectedDocument(item)}
-                        className="ml-3"
-                        color={"info"}
-                      >
-                        View
-                      </Button>
+                      <div className="flex">
+                        <Button
+                          onClick={() => deleteFile(currentFolder.id, item.id)}
+                          className="ml-3"
+                          color={"failure"}
+                        >
+                          Remove
+                        </Button>
+                        <Button
+                          onClick={() => setSelectedDocument(item)}
+                          className="ml-3"
+                          color={"info"}
+                        >
+                          View
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 );

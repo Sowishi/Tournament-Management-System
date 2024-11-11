@@ -511,6 +511,22 @@ const User = () => {
                           key={item.id}
                           className="wrapper basis-4/12 flex items-center justify-center flex-col"
                         >
+                          <p className="italic my-3 text-center flex items-center justify-center">
+                            Status:{" "}
+                            <Badge
+                              color={
+                                item.status
+                                  ? item.status == "Approved"
+                                    ? "success"
+                                    : "failure"
+                                  : "info"
+                              }
+                              size={"lg"}
+                              className="ml-3"
+                            >
+                              {item.status ? item.status : "Pending"}
+                            </Badge>
+                          </p>
                           {/* <HiDocument color="white" size={100} /> */}
                           <iframe src={item.fileUrl} />
 
