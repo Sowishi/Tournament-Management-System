@@ -31,46 +31,48 @@ const Registration = () => {
 
   const [passwordValidation, setPasswordValidation] = useState("");
   const [phoneValidation, setPhoneValidation] = useState("");
+  const [emailValidation, setEmailValidation] = useState("");
 
   const navigate = useNavigate();
 
   const handleChange = (event) => {
     const { value, name } = event.target;
 
-    if (name == "contact") {
-      if (value.length > 10 || value[0] != "9") {
-        setPhoneValidation(
-          "Phone number must be 10 digits long and start with '9'"
-        );
-      }
-      if (value.length <= 10 || value[0] == "9") {
-        setPhoneValidation(undefined);
-      }
+    // Phone validation
+    if (name === "contact") {
+      setPhoneValidation(
+        value.length !== 10 || value[0] !== "9"
+          ? "Phone number must be 10 digits long and start with '9'"
+          : undefined
+      );
     }
 
-    if (name == "password") {
-      if (value.length < 8) {
-        setPasswordValidation("Password must be at least 8 characters long");
-      } else if (value !== forms.password) {
-        setPasswordValidation("Password does not match");
-      } else if (value == forms.password || value.length >= 8) {
-        setPasswordValidation(undefined);
-        setPasswordValidation(undefined);
-      }
+    // Password validation
+    if (name === "password") {
+      setPasswordValidation(
+        value.length < 8
+          ? "Password must be at least 8 characters long"
+          : undefined
+      );
     }
 
-    if (name == "confirmPassword") {
-      if (value !== forms.password) {
-        setPasswordValidation("Password does not match");
-      }
-
-      if (value == forms.password) {
-        setPasswordValidation(undefined);
-      }
+    // Confirm password validation (only after typing starts)
+    if (name === "confirmPassword" && value) {
+      setPasswordValidation(
+        value !== forms.password ? "Passwords do not match" : undefined
+      );
     }
 
-    const output = { ...forms, [name]: value };
-    setForms(output);
+    // Email validation
+    if (name === "email") {
+      setEmailValidation(
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+          ? undefined
+          : "Please enter a valid email format"
+      );
+    }
+
+    setForms({ ...forms, [name]: value });
   };
 
   const handleSubmit = async (event) => {
@@ -80,22 +82,16 @@ const Registration = () => {
     const q = query(colRef, where("collegeName", "==", forms.collegeName));
     const querySnapshot = await getDocs(q);
     let isDuplicate = false;
-    if (querySnapshot.empty) {
-      console.log("pasok");
-      addUser(forms);
-      toast.success("Successfully Registered");
-      navigate("/login");
-      isDuplicate = true;
-    } else {
-      querySnapshot.docs.forEach((doc) => {
-        const data = doc.data();
-        if (data.collegeName == forms.collegeName && data.status == "Approve") {
-          toast.error("School/Colleges is already exist. Please check your account if approved or declined");
-          isDuplicate = true;
-          return;
-        }
-      });
-    }
+
+    querySnapshot.docs.forEach((doc) => {
+      const data = doc.data();
+      if (data.collegeName === forms.collegeName && data.status === "Approve") {
+        toast.error(
+          "School/College already exists. Check your account status."
+        );
+        isDuplicate = true;
+      }
+    });
 
     if (!isDuplicate) {
       addUser(forms);
@@ -105,44 +101,20 @@ const Registration = () => {
   };
 
   function areAllFieldsFilled() {
-    for (const key in forms) {
-      if (forms.hasOwnProperty(key)) {
-        // Check if the field has a length property and is more than 1
-        if (forms[key].length <= 1) {
-          return false;
-        }
-      }
-    }
-    return true;
+    return Object.values(forms).every((field) => field.length > 0);
   }
 
-  const formatEventNames = eventNames.map((item) => {
-    return item.eventName;
-  });
+  const formatEventNames = eventNames.map((item) => item.eventName);
 
-  const filterCollegeNames = collegeNames.filter((item) => {
-    if (forms.sportsEvent == item.event) {
-      return item.collegeName;
-    }
-  });
+  const filterCollegeNames = collegeNames.filter(
+    (item) => item.event === forms.sportsEvent
+  );
 
-  const formatCollegeNames = filterCollegeNames.map((item) => {
-    return item.collegeName;
-  });
+  const formatCollegeNames = filterCollegeNames.map((item) => item.collegeName);
 
   return (
     <AuthLayout hideHeader={true}>
-      <div
-        className="wrapper p-14 m-20 w-full rounded-lg"
-        style={{
-          margin: "0 auto",
-          background: "rgba(16, 18, 27, 0.4)",
-          border: "1px solid rgba(255, 255, 255, 0.18)",
-          borderRadius: "10px",
-          backdropFilter: "blur(2px)",
-          margin: 100,
-        }}
-      >
+      <div className="wrapper p-14 m-20 w-full rounded-lg">
         <div className="text-center flex justify-center items-center">
           <h1 className="text-white text-5xl font-bold mb-3 mr-5">
             Registration
@@ -157,28 +129,33 @@ const Registration = () => {
                 name="schoolRepresentative"
                 onChange={handleChange}
                 value={forms.schoolRepresentative}
-                placeHolder={"SUCs Representative"}
-                label={"SUCs Representative"}
+                placeHolder=""
+                label="SUCs Representative"
               />
+              <div className="flex flex-col">
+                <TmsInput
+                  placeHolder="Please enter a valid email address in the format: example@domain.com."
+                  onChange={handleChange}
+                  value={forms.email}
+                  name="email"
+                  type="email"
+                  label="SUCs Email"
+                  error={emailValidation}
+                />
+              </div>
+
               <TmsInput
-                onChange={handleChange}
-                value={forms.email}
-                name={"email"}
-                type={"email"}
-                placeHolder={"Email"}
-                label={"SUCs Email"}
-              />
-              <TmsInput
-                addOn={"+63"}
+                addOn="+63"
                 onChange={handleChange}
                 value={forms.contact}
-                name={"contact"}
-                placeHolder={"9-xxx-xxx-xx"}
-                label={"SUCs Contact"}
+                name="contact"
+                placeHolder=""
+                label="SUCs Contact"
                 error={phoneValidation}
               />
             </div>
           </div>
+
           <h1 className="text-white font-bold text-3xl mt-10">
             Sports Information
           </h1>
@@ -186,60 +163,57 @@ const Registration = () => {
             <TmsSelect
               name="sportsEvent"
               onChange={handleChange}
-              label={"Sports Information"}
+              label="Sports Information"
               data={["Please select event name", ...formatEventNames]}
             />
-            <TmsSelect
-              name="collegeName"
-              onChange={handleChange}
-              label={"College Name"}
-              data={["Please select college name", ...formatCollegeNames]}
-            />
+            {forms.sportsEvent.length >= 1 && (
+              <TmsSelect
+                name="collegeName"
+                onChange={handleChange}
+                label="College Name"
+                data={["Please select college name", ...formatCollegeNames]}
+                disabled={!forms.sportsEvent}
+              />
+            )}
           </div>
 
           <h1 className="text-white font-bold text-3xl mt-10">
             Account Information
           </h1>
-
           <div className="flex flex-wrap mx-3">
             <div className="basis-full">
               <TmsInput
                 onChange={handleChange}
                 value={forms.username}
-                name={"username"}
-                placeHolder={"Username"}
-                label={"Username"}
+                name="username"
+                placeHolder=""
+                label="Username"
               />
             </div>
             <div className="basis-6/12 pr-5">
               <TmsInput
-                type={"password"}
-                name={"password"}
+                type="password"
+                name="password"
                 onChange={handleChange}
-                placeHolder={"Password"}
-                label={"Password"}
+                placeHolder=""
+                label="Password"
                 error={passwordValidation}
               />
             </div>
             <div className="basis-6/12">
               <TmsInput
-                type={"password"}
-                name={"confirmPassword"}
+                type="password"
+                name="confirmPassword"
                 onChange={handleChange}
-                placeHolder={"Confirm Password"}
-                label={"Confirm Password"}
-                error={passwordValidation}
+                placeHolder=""
+                label="Confirm Password"
               />
             </div>
           </div>
 
           <div className="flex justify-center items-center mt-10">
-            <Link to={"/login"} className="w-full mx-3 py-4">
-              <Button
-                className="w-full py-4"
-                gradientMonochrome="success"
-                type="submit"
-              >
+            <Link to="/login" className="w-full mx-3 py-4">
+              <Button className="w-full py-4" gradientMonochrome="success">
                 Back to Login
               </Button>
             </Link>
