@@ -345,6 +345,7 @@ export function UsersTable() {
                           Accept User
                         </Dropdown.Item>
                         <Dropdown.Item
+                          disabled={user.status}
                           className={`${
                             user.status
                               ? "cursor-not-allowed"
