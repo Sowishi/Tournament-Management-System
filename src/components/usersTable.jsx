@@ -243,7 +243,7 @@ export function UsersTable() {
       <ConfirmationModals
         title={"Are you sure you want to delete this user?"}
         handleSubmit={() => {
-          deleteUser(selectedUser);
+          deleteUser(selectedUser.id);
           setDeleteModal(false);
           toast.success("Successfully Deleted User");
         }}
@@ -254,7 +254,7 @@ export function UsersTable() {
       <ConfirmationModals
         title={"Are you sure you want to approve this user?"}
         handleSubmit={() => {
-          approveUser(selectedUser);
+          approveUser(selectedUser.id);
           setApproveModal(false);
           toast.success("Successfully Approved User");
         }}
@@ -265,7 +265,7 @@ export function UsersTable() {
       <ConfirmationModals
         title={"Are you sure you want to reject this user?"}
         handleSubmit={() => {
-          rejectUser(selectedUser);
+          rejectUser(selectedUser.id);
           setRejectModal(false);
           toast.success("Successfully Rejected User");
         }}
@@ -332,8 +332,8 @@ export function UsersTable() {
                       <>
                         <Dropdown.Item
                           onClick={() => {
+                            setSelectedUser(user);
                             setApproveModal(true);
-                            setSelectedUser(user.id);
                           }}
                         >
                           Accept User
@@ -341,7 +341,7 @@ export function UsersTable() {
                         <Dropdown.Item
                           onClick={() => {
                             setRejectModal(true);
-                            setSelectedUser(user.id);
+                            setSelectedUser(user);
                           }}
                         >
                           Reject User
@@ -349,7 +349,7 @@ export function UsersTable() {
                         <Dropdown.Item
                           onClick={() => {
                             setDeleteModal(true);
-                            setSelectedUser(user.id);
+                            setSelectedUser(user);
                           }}
                         >
                           Delete User
