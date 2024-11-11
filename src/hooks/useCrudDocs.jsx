@@ -8,6 +8,7 @@ import {
   onSnapshot,
   doc,
   deleteDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { db } from "../../firebase";
 import { toast } from "react-toastify";
@@ -130,6 +131,24 @@ const useCrudDocs = () => {
     }
   };
 
+  const updateFileStatus = async (folderId, fileId, newStatus) => {
+    try {
+      // Reference to the specific file document within the folder's files sub-collection
+      const fileRef = doc(db, "folders", folderId, "files", fileId);
+
+      // Update the status field of the file document
+      await updateDoc(fileRef, {
+        status: newStatus,
+        updatedAt: serverTimestamp(),
+      });
+
+      toast.success("File status updated successfully.");
+    } catch (error) {
+      console.error("Error updating file status: ", error);
+      toast.error("Failed to update file status.");
+    }
+  };
+
   return {
     handleCreateFolder,
     getUserFolders,
@@ -137,6 +156,7 @@ const useCrudDocs = () => {
     handleCreateFile,
     getFilesInFolder,
     deleteFile,
+    updateFileStatus,
   };
 };
 

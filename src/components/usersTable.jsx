@@ -28,8 +28,13 @@ export function UsersTable() {
   const [folders, setFolders] = useState([]);
   const [currentFiles, setCurrentFiles] = useState([]);
   const [currentFolder, setCurrentFolder] = useState();
-  const { getUserFolders, handleDeleteFolder, getFilesInFolder, deleteFile } =
-    useCrudDocs();
+  const {
+    getUserFolders,
+    handleDeleteFolder,
+    getFilesInFolder,
+    deleteFile,
+    updateFileStatus,
+  } = useCrudDocs();
   const getBadgeColor = (status) => {
     if (status === "Pending") {
       return "info";
@@ -70,6 +75,7 @@ export function UsersTable() {
     <div className="overflow-x-auto mt-10">
       {/* Document View Modal */}
       <TmsModal
+        hideFooter
         size="7xl" // Increase size for better visibility
         title={"View Document"}
         openModal={!!selectedDocument} // Show modal if a document is selected
@@ -81,16 +87,36 @@ export function UsersTable() {
               {selectedDocument.fileLabel}
             </h1>
             <iframe
-              src={selectedDocument.file}
+              src={selectedDocument.fileUrl}
               title={selectedDocument.fileLabel}
-              className="w-full h-screen border border-gray-300"
+              className="w-full h-[50rem] border border-gray-300"
             />
-            <div className="mt-10 w-full">
+            <div className="mt-10 w-full flex items-center justify-between">
               <Button
-                className="w-full py-3"
-                onClick={() => setSelectedDocument(null)}
+                color={"failure"}
+                className="w-full py-3 mx-5"
+                onClick={() =>
+                  updateFileStatus(
+                    currentFolder.id,
+                    selectedDocument.id,
+                    "Rejected"
+                  )
+                }
               >
-                Close
+                Reject
+              </Button>
+              <Button
+                color={"success"}
+                className="w-full py-3 mx-5"
+                onClick={() =>
+                  updateFileStatus(
+                    currentFolder.id,
+                    selectedDocument.id,
+                    "Approved"
+                  )
+                }
+              >
+                Approve
               </Button>
             </div>
           </div>
@@ -156,6 +182,13 @@ export function UsersTable() {
                         color={"failure"}
                       >
                         Remove
+                      </Button>
+                      <Button
+                        onClick={() => setSelectedDocument(item)}
+                        className="ml-3"
+                        color={"info"}
+                      >
+                        View
                       </Button>
                     </div>
                   </div>
