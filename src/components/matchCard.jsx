@@ -7,9 +7,10 @@ import useCrudMatches from "../hooks/useCrudMatches";
 
 export default function MatchCard({ match, id, client }) {
   const { showParticipant } = useCrudParticipants();
-  const { updateMatchWinner } = useCrudMatches();
+  const { updateMatchWinner, getMatchDate } = useCrudMatches();
   const [player1, setPlayer1] = useState(null);
   const [player2, setPlayer2] = useState(null);
+  const [matchData, setMatchData] = useState();
 
   const getBadgeColor = (state) => {
     switch (state) {
@@ -35,6 +36,7 @@ export default function MatchCard({ match, id, client }) {
   useEffect(() => {
     handleGetPlayer(match.player1_id, setPlayer1);
     handleGetPlayer(match.player2_id, setPlayer2);
+    getMatchDate(id, match.id, setMatchData);
   }, []);
 
   return (
@@ -74,7 +76,7 @@ export default function MatchCard({ match, id, client }) {
         </h5>
       </div>
 
-      {match?.state === "open" && !client && (
+      {match?.state === "open" && !client && matchData && (
         <div className="winner-selection text-center mt-5">
           <h5 className="text-lg text-white mb-3">Who is the winner?</h5>
           <div className="flex justify-around items-center space-x-3">

@@ -70,8 +70,6 @@ export default function MatchDateCard({ match, id, tournamentID }) {
     getMatchDate(tournamentID, match.id, setMatchData);
   }, []);
 
-  console.log(matchData);
-
   return (
     <>
       <motion.div
