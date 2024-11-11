@@ -331,6 +331,12 @@ export function UsersTable() {
                     {currentAdmin?.role == "Event Admin" && (
                       <>
                         <Dropdown.Item
+                          disabled={user.status}
+                          className={`${
+                            user.status
+                              ? "cursor-not-allowed"
+                              : "cursor-pointer"
+                          }`}
                           onClick={() => {
                             setSelectedUser(user);
                             setApproveModal(true);
@@ -339,6 +345,11 @@ export function UsersTable() {
                           Accept User
                         </Dropdown.Item>
                         <Dropdown.Item
+                          className={`${
+                            user.status
+                              ? "cursor-not-allowed"
+                              : "cursor-pointer"
+                          }`}
                           onClick={() => {
                             setRejectModal(true);
                             setSelectedUser(user);
