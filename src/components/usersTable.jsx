@@ -328,47 +328,47 @@ export function UsersTable() {
                         View Documents
                       </Dropdown.Item>
                     )}
-                    {currentAdmin?.role == "Event Admin" ||
-                      (currentAdmin?.role == " Admin" && (
-                        <>
-                          <Dropdown.Item
-                            disabled={user.status}
-                            className={`${
-                              user.status
-                                ? "cursor-not-allowed"
-                                : "cursor-pointer"
-                            }`}
-                            onClick={() => {
-                              setSelectedUser(user);
-                              setApproveModal(true);
-                            }}
-                          >
-                            Accept User
-                          </Dropdown.Item>
-                          <Dropdown.Item
-                            disabled={user.status}
-                            className={`${
-                              user.status
-                                ? "cursor-not-allowed"
-                                : "cursor-pointer"
-                            }`}
-                            onClick={() => {
-                              setRejectModal(true);
-                              setSelectedUser(user);
-                            }}
-                          >
-                            Reject User
-                          </Dropdown.Item>
-                          <Dropdown.Item
-                            onClick={() => {
-                              setDeleteModal(true);
-                              setSelectedUser(user);
-                            }}
-                          >
-                            Delete User
-                          </Dropdown.Item>
-                        </>
-                      ))}
+                    {(currentAdmin?.role == "Event Admin" ||
+                      currentAdmin?.role == "Master Admin") && (
+                      <>
+                        <Dropdown.Item
+                          disabled={user.status}
+                          className={`${
+                            user.status
+                              ? "cursor-not-allowed"
+                              : "cursor-pointer"
+                          }`}
+                          onClick={() => {
+                            setSelectedUser(user);
+                            setApproveModal(true);
+                          }}
+                        >
+                          Accept User
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          disabled={user.status}
+                          className={`${
+                            user.status
+                              ? "cursor-not-allowed"
+                              : "cursor-pointer"
+                          }`}
+                          onClick={() => {
+                            setRejectModal(true);
+                            setSelectedUser(user);
+                          }}
+                        >
+                          Reject User
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          onClick={() => {
+                            setDeleteModal(true);
+                            setSelectedUser(user);
+                          }}
+                        >
+                          Delete User
+                        </Dropdown.Item>
+                      </>
+                    )}
                   </Dropdown>
                 </Table.Cell>
               </Table.Row>
