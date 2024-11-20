@@ -3,6 +3,7 @@ import {
   deleteDoc,
   doc,
   onSnapshot,
+  serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../../firebase";
@@ -25,10 +26,22 @@ const useUpdateUser = () => {
   }, []);
   const approveUser = (id) => {
     const docRef = doc(db, "users", id);
+    const notifRef = collection(db, "notifications");
+    addDoc(notifRef, {
+      message: "Your SUC account is approved!",
+      ownerID: id,
+      createdAt: serverTimestamp(),
+    });
     updateDoc(docRef, { status: "Approve" });
   };
   const rejectUser = (id) => {
     const docRef = doc(db, "users", id);
+    const notifRef = collection(db, "notifications");
+    addDoc(notifRef, {
+      message: "Your SUC account is rejected.",
+      ownerID: id,
+      createdAt: serverTimestamp(),
+    });
     updateDoc(docRef, { status: "Reject" });
   };
 

@@ -1,12 +1,12 @@
-// Header.js
 import { Avatar, Badge, Button, Dropdown, Navbar } from "flowbite-react";
 import logo from "../assets/logo2.png";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useGetEventName from "../hooks/useGetEventName";
 import { useStore } from "../zustand/store";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   HiLogin,
+  HiOutlineBell,
   HiOutlineCalendar,
   HiOutlineHome,
   HiOutlineMap,
@@ -16,11 +16,15 @@ import {
   HiOutlineUserGroup,
   HiViewBoards,
 } from "react-icons/hi";
+import useCrudNotifications from "../hooks/useCrudNotifications";
+import moment from "moment/moment";
 
 export default function Header({ removeMargin }) {
   const { setCurrentEvent, currentEvent, currentUser, setCurrentUser } =
     useStore();
   const { data: eventNameData } = useGetEventName();
+
+  const { data: notifications } = useCrudNotifications();
 
   useEffect(() => {
     setCurrentEvent(currentUser?.sportsEvent);
@@ -30,12 +34,18 @@ export default function Header({ removeMargin }) {
 
   const { pathname } = useLocation();
 
+  const filterNotif = notifications.filter((item) => {
+    if (item.ownerID == currentUser.id) {
+      return item;
+    }
+  });
+
   return (
     <>
       <Navbar
         fluid
         rounded
-        className="fixed top-0 left-0 w-full h-16 shadow-lg z-10 bg-white  mb-16 "
+        className="fixed top-0 left-0 w-full h-16 shadow-lg z-10 bg-white mb-16"
       >
         <Navbar.Brand className="ml-5">
           <img
@@ -50,35 +60,102 @@ export default function Header({ removeMargin }) {
             </Badge>
           </span>
         </Navbar.Brand>
-        <div className="flex md:order-2 mr-5">
+        <div className="flex md:order-2 mr-5 items-center space-x-4">
           {currentUser && (
-            <Dropdown
-              arrowIcon={false}
-              inline
-              label={<HiOutlineUserCircle size={30} />}
-            >
-              <Dropdown.Header>
-                <span className="block text-sm">{currentUser.email}</span>
-              </Dropdown.Header>
-              <Dropdown.Item
-                onClick={() => {
-                  navigation("/user");
-                }}
+            <>
+              {/* Notification Icon */}
+              <Dropdown
+                arrowIcon={false}
+                inline
+                label={
+                  <div className="relative">
+                    <HiOutlineBell size={30} />
+                    {filterNotif.length > 0 && (
+                      <Badge
+                        color="failure"
+                        className="absolute -top-1 -right-2 rounded-full"
+                      >
+                        {filterNotif.length}
+                      </Badge>
+                    )}
+                  </div>
+                }
               >
-                Profile
-              </Dropdown.Item>
-              <Dropdown.Divider />
-              <Dropdown.Item
-                onClick={() => {
-                  setCurrentUser(null);
-                  navigation("/");
-                  localStorage.removeItem("user");
-                  window.location.reload();
-                }}
+                {filterNotif.length > 0 ? (
+                  filterNotif.map((notification) => (
+                    <Dropdown.Item
+                      key={notification.id}
+                      className="flex items-center gap-3 py-3 px-4 bg-gray-100 hover:bg-gray-200 rounded-md transition-all"
+                    >
+                      {/* Icon */}
+                      <HiOutlineRss className="h-6 w-6 text-blue-500 flex-shrink-0" />
+
+                      {/* Message and Date */}
+                      <div className="flex flex-col items-center justify-center">
+                        <span
+                          className={`text-sm ${
+                            notification.unread
+                              ? "font-bold text-black"
+                              : "font-normal text-gray-700"
+                          }`}
+                        >
+                          {notification.message}
+                        </span>
+                        {/* Date and Time */}
+                        <h1>
+                          {moment(notification.createdAt.toDate()).format(
+                            "LLL"
+                          )}
+                        </h1>
+                      </div>
+                    </Dropdown.Item>
+                  ))
+                ) : (
+                  <Dropdown.Item className="text-center text-gray-500">
+                    No notifications
+                  </Dropdown.Item>
+                )}
+                <Dropdown.Divider />
+                {/* <Dropdown.Item>
+                  <Button
+                    onClick={() => navigation("/notifications")}
+                    color="info"
+                    size="sm"
+                    className="w-full"
+                  >
+                    See All Notifications
+                  </Button>
+                </Dropdown.Item> */}
+              </Dropdown>
+
+              <Dropdown
+                arrowIcon={false}
+                inline
+                label={<HiOutlineUserCircle size={30} />}
               >
-                Sign out
-              </Dropdown.Item>
-            </Dropdown>
+                <Dropdown.Header>
+                  <span className="block text-sm">{currentUser.email}</span>
+                </Dropdown.Header>
+                <Dropdown.Item
+                  onClick={() => {
+                    navigation("/user");
+                  }}
+                >
+                  Profile
+                </Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item
+                  onClick={() => {
+                    setCurrentUser(null);
+                    navigation("/");
+                    localStorage.removeItem("user");
+                    window.location.reload();
+                  }}
+                >
+                  Sign out
+                </Dropdown.Item>
+              </Dropdown>
+            </>
           )}
           <Navbar.Toggle />
         </div>
@@ -86,7 +163,6 @@ export default function Header({ removeMargin }) {
           <Button.Group>
             <Link to="/home">
               <Button color={pathname == "/home" ? "info" : "gray"}>
-                {" "}
                 <HiOutlineHome className="mr-2 h-5 w-5" />
                 Home
               </Button>
@@ -95,7 +171,6 @@ export default function Header({ removeMargin }) {
             {!currentEvent && (
               <Link to={"/about"}>
                 <Button color={pathname == "/about" ? "info" : "gray"}>
-                  {" "}
                   <HiOutlineMap className="mr-2 h-5 w-5" />
                   About Us
                 </Button>
@@ -105,7 +180,6 @@ export default function Header({ removeMargin }) {
             {!currentUser && (
               <Link to={"/login"}>
                 <Button color="gray">
-                  {" "}
                   <HiLogin className="mr-2 h-5 w-5" />
                   Login
                 </Button>
@@ -118,7 +192,6 @@ export default function Header({ removeMargin }) {
                     disabled={currentUser.status == undefined}
                     color={pathname == "/events" ? "info" : "gray"}
                   >
-                    {" "}
                     <HiOutlineRss className="mr-2 h-5 w-5" />
                     Events
                   </Button>
@@ -128,7 +201,6 @@ export default function Header({ removeMargin }) {
                     disabled={currentUser.status == undefined}
                     color={pathname == "/participants" ? "info" : "gray"}
                   >
-                    {" "}
                     <HiOutlineUserGroup className="mr-2 h-5 w-5" />
                     Participants
                   </Button>
@@ -138,7 +210,6 @@ export default function Header({ removeMargin }) {
                     disabled={currentUser.status == undefined}
                     color={pathname == "/tally" ? "info" : "gray"}
                   >
-                    {" "}
                     <HiViewBoards className="mr-2 h-5 w-5" />
                     Tally
                   </Button>
