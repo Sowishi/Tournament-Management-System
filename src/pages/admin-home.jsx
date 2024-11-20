@@ -108,15 +108,25 @@ const AdminHome = () => {
   };
 
   const handlUploadEvent = () => {
-    addEventName(eventName);
-    setAddEventModal(false);
-    toast.success("Successfully Added Event Name");
+    if (eventName.length >= 1) {
+      addEventName(eventName);
+      setAddEventModal(false);
+      toast.success("Successfully Added Event Name");
+      setEventName("  ");
+    } else {
+      toast.error("Please enter your event name.");
+    }
   };
 
   const handleUploadCollege = () => {
-    addCollegeName({ collegeName, selectedEventName });
-    setAddCollegeModal(false);
-    toast.success("Successfully Added College Name");
+    if (collegeName.length >= 1) {
+      addCollegeName({ collegeName, selectedEventName });
+      setAddCollegeModal(false);
+      toast.success("Successfully Added College Name");
+      setCollegeName("");
+    } else {
+      toast.error("Please enter your college name.");
+    }
   };
 
   const formatEventNames = eventNameData.map((item) => {
