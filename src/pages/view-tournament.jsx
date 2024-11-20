@@ -52,7 +52,7 @@ const ViewTournament = () => {
   };
 
   const handleAddParticpant = async () => {
-    const output = await addParticipant(selectedUsers, id);
+    const output = await addParticipant(selectedUsers, id, tournament?.name);
     if (!output.error) {
       toast.success(output.message);
       setAddModal(false);

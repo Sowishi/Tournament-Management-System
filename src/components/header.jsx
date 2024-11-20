@@ -35,7 +35,7 @@ export default function Header({ removeMargin }) {
   const { pathname } = useLocation();
 
   const filterNotif = notifications.filter((item) => {
-    if (item.ownerID == currentUser.id) {
+    if (item.ownerID == currentUser?.id) {
       return item;
     }
   });
@@ -91,7 +91,7 @@ export default function Header({ removeMargin }) {
                       <HiOutlineRss className="h-6 w-6 text-blue-500 flex-shrink-0" />
 
                       {/* Message and Date */}
-                      <div className="flex flex-col items-center justify-center">
+                      <div className="flex flex-col items-start justify-start">
                         <span
                           className={`text-sm ${
                             notification.unread
