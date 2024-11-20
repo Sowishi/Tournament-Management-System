@@ -276,53 +276,59 @@ const AdminHome = () => {
           </motion.div>
         </div>
         <Tabs aria-label="Default tabs" variant="default">
-          <Tabs.Item active title="Dashboard">
-            <motion.div
-              className="wrapper mx-10 mt-10"
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <div className="header w-full flex justify-between items-center">
-                <h1 className="text-white text-4xl font-bold">
-                  Home Page Carousel Pictures
-                </h1>
-                <Button onClick={() => setAddPicModal(true)}>
-                  Add Picture
-                </Button>
-              </div>
-              <div className="flex mt-5 flex-wrap">
-                {data?.map((pic) => {
-                  return (
-                    <motion.div
-                      key={pic.id}
-                      className="relative basis-3/12 my-3 flex items-center justify-center" // Set the parent div to relative
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.5, delay: 0.2 }}
-                    >
-                      <img
-                        className="rounded-md shadow-lg"
-                        style={{ width: 300, height: 250, objectFit: "cover" }}
-                        src={pic.url}
-                        alt=""
-                      />
-                      <Button
-                        className="absolute top-2 right-10" // Position the button absolutely
-                        color={"failure"}
-                        onClick={() => {
-                          setDeleteCarouselModal(true);
-                          setSelectedCarousel(pic.id);
-                        }}
+          {currentAdmin?.role == "Master Admin" && (
+            <Tabs.Item active title="Dashboard">
+              <motion.div
+                className="wrapper mx-10 mt-10"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <div className="header w-full flex justify-between items-center">
+                  <h1 className="text-white text-4xl font-bold">
+                    Home Page Carousel Pictures
+                  </h1>
+                  <Button onClick={() => setAddPicModal(true)}>
+                    Add Picture
+                  </Button>
+                </div>
+                <div className="flex mt-5 flex-wrap">
+                  {data?.map((pic) => {
+                    return (
+                      <motion.div
+                        key={pic.id}
+                        className="relative basis-3/12 my-3 flex items-center justify-center" // Set the parent div to relative
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.5, delay: 0.2 }}
                       >
-                        <HiOutlineTrash />
-                      </Button>
-                    </motion.div>
-                  );
-                })}
-              </div>
-            </motion.div>
-          </Tabs.Item>
+                        <img
+                          className="rounded-md shadow-lg"
+                          style={{
+                            width: 300,
+                            height: 250,
+                            objectFit: "cover",
+                          }}
+                          src={pic.url}
+                          alt=""
+                        />
+                        <Button
+                          className="absolute top-2 right-10" // Position the button absolutely
+                          color={"failure"}
+                          onClick={() => {
+                            setDeleteCarouselModal(true);
+                            setSelectedCarousel(pic.id);
+                          }}
+                        >
+                          <HiOutlineTrash />
+                        </Button>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              </motion.div>
+            </Tabs.Item>
+          )}
 
           <Tabs.Item title="Event Name">
             <motion.div
