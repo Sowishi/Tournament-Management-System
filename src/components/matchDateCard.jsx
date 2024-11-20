@@ -9,6 +9,9 @@ import useCrudMatches from "../hooks/useCrudMatches";
 import { motion } from "framer-motion";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import useGetUsers from "../hooks/useGetUsers";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { db } from "../../firebase";
 
 export default function MatchDateCard({ match, id, tournamentID }) {
   const { showParticipant } = useCrudParticipants();
@@ -20,6 +23,8 @@ export default function MatchDateCard({ match, id, tournamentID }) {
   const [endDate, setEndDate] = useState(null);
 
   const [matchData, setMatchData] = useState();
+
+  const { data: users } = useGetUsers();
 
   const getBadgeColor = (state) => {
     switch (state) {
@@ -52,6 +57,24 @@ export default function MatchDateCard({ match, id, tournamentID }) {
       toast.error("End date must be after the start date.");
       return;
     }
+
+    users.map((user) => {
+      if (!user.role) {
+        if (
+          user.collegeName == player1?.name ||
+          user.collegeName == player2?.name
+        ) {
+          const notifRef = collection(db, "notifications");
+          return addDoc(notifRef, {
+            message: `You have been scheduled for a match with ${
+              user.collegeName == player1.name ? player2.name : player1.name
+            }.`,
+            ownerID: user.id,
+            createdAt: serverTimestamp(),
+          });
+        }
+      }
+    });
 
     updateMatchDate(
       startDate,
