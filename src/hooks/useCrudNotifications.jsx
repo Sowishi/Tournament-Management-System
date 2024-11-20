@@ -4,6 +4,8 @@ import {
   deleteDoc,
   doc,
   onSnapshot,
+  orderBy,
+  query,
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../../firebase";
@@ -14,13 +16,15 @@ const useCrudNotifications = () => {
 
   const colRef = collection(db, "notifications");
 
+  const q = query(colRef, orderBy("createdAt"));
+
   useEffect(() => {
-    onSnapshot(colRef, (snapshot) => {
+    onSnapshot(q, (snapshot) => {
       const output = [];
       snapshot.docs.forEach((doc) => {
         output.push({ ...doc.data(), id: doc.id });
       });
-      setData(output);
+      setData(output.reverse());
     });
   }, []);
 
