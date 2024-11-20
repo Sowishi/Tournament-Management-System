@@ -329,7 +329,7 @@ export function UsersTable() {
                       </Dropdown.Item>
                     )}
                     {currentAdmin?.role == "Event Admin" ||
-                      (currentAdmin?.role == "Master Admin" && (
+                      (currentAdmin?.role == " Admin" && (
                         <>
                           <Dropdown.Item
                             disabled={user.status}

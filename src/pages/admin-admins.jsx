@@ -7,6 +7,7 @@ import TmsSelect from "../components/tmsSelect";
 import useCrudAdmin from "../hooks/useCrudAdmin";
 import { toast } from "react-toastify";
 import TmsModal from "../components/tmsModal";
+import useGetEventName from "../hooks/useGetEventName";
 
 const AdminAdmins = () => {
   const [createModal, setCreateModal] = useState(false);
@@ -14,28 +15,79 @@ const AdminAdmins = () => {
     fullName: "",
     email: "",
     password: "",
-    role: "Event Admin",
+    role: "",
+    sportsEvent: "",
   });
+  const [validationErrors, setValidationErrors] = useState({});
   const [currentRole, setCurrentRole] = useState("All");
   const [isUpdate, setIsUpdate] = useState(false);
 
   const { addAdmin, updateAdmin, data } = useCrudAdmin();
+  const { data: eventNames } = useGetEventName();
+
+  // Map event names from API response
+  const formatEventNames = eventNames.map((item) => item.eventName);
 
   const handleChange = (event) => {
     const { value, name } = event.target;
     setForms({ ...forms, [name]: value });
+
+    // Clear validation errors on change
+    setValidationErrors({ ...validationErrors, [name]: "" });
+  };
+
+  const validateForm = () => {
+    const errors = {};
+
+    if (!forms.fullName.trim()) {
+      errors.fullName = "Full Name is required.";
+    }
+
+    if (
+      !forms.email.trim() ||
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(forms.email)
+    ) {
+      errors.email = "A valid Email is required.";
+    }
+
+    if (!forms.password.trim() || forms.password.length < 8) {
+      errors.password =
+        "Password is required and must be at least 8 characters long.";
+    }
+
+    if (!forms.role || forms.role === "Please Select Admin") {
+      errors.role = "Please select a valid role.";
+    }
+
+    if (
+      !forms.sportsEvent ||
+      forms.sportsEvent === "Please Select Assigned Event"
+    ) {
+      errors.sportsEvent = "Please select a valid sports event.";
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
   const handleAddAdmin = () => {
-    addAdmin(forms);
-    toast.success("Successfully add admin");
-    setCreateModal(false);
+    if (validateForm()) {
+      addAdmin(forms);
+      toast.success("Successfully added admin.");
+      setCreateModal(false);
+    } else {
+      toast.error("Please fix the errors in the form.");
+    }
   };
 
   const handleUpdateAdmin = () => {
-    updateAdmin(forms);
-    toast.success("Successfully update admin");
-    setCreateModal(false);
+    if (validateForm()) {
+      updateAdmin(forms);
+      toast.success("Successfully updated admin.");
+      setCreateModal(false);
+    } else {
+      toast.error("Please fix the errors in the form.");
+    }
   };
 
   const handleUpdateForms = (forms) => {
@@ -44,17 +96,12 @@ const AdminAdmins = () => {
     setCreateModal(true);
   };
 
-  const filterData = data.filter((item) => {
-    if (item.role == currentRole) {
-      return item;
-    }
-  });
+  const filterData = data.filter((item) => item.role === currentRole);
 
-  const filterWithoutMasterAdmin = data.filter((item) => {
-    if (item.role !== "Master Admin" && item.userType == "admin") {
-      return item;
-    }
-  });
+  const filterWithoutMasterAdmin = data.filter(
+    (item) => item.role !== "Master Admin" && item.userType === "admin"
+  );
+
   return (
     <AdminLayout>
       <TmsModal
@@ -67,58 +114,71 @@ const AdminAdmins = () => {
           <TmsInput
             value={forms.fullName}
             onChange={handleChange}
-            name={"fullName"}
-            dark={true}
-            label={"Full Name"}
-            placeHolder={"Full Name"}
+            name="fullName"
+            dark
+            label="Full Name"
+            placeHolder="Full Name"
+            error={validationErrors.fullName}
           />
           <TmsInput
-            onChange={handleChange}
             value={forms.email}
-            name={"email"}
-            dark={true}
-            label={"Email"}
-            placeHolder={"Email"}
+            onChange={handleChange}
+            name="email"
+            dark
+            label="Email"
+            placeHolder="Email"
+            error={validationErrors.email}
           />
           <TmsInput
             value={forms.password}
             onChange={handleChange}
-            name={"password"}
-            dark={true}
-            label={"Password"}
-            placeHolder={"Password"}
+            name="password"
+            dark
+            label="Password"
+            placeHolder="Password"
+            error={validationErrors.password}
           />
           <TmsSelect
             value={forms.role}
             dark
-            label={"Role"}
+            label="Role"
             onChange={handleChange}
-            name={"role"}
-            data={["Event Admin", "Document Admin"]}
+            name="role"
+            data={["Please Select Admin", "Event Admin", "Document Admin"]}
+            error={validationErrors.role}
+          />
+          <TmsSelect
+            value={forms.sportsEvent}
+            dark
+            label="Sports Event"
+            onChange={handleChange}
+            name="sportsEvent"
+            data={["Please Select Assigned Event", ...formatEventNames]}
+            error={validationErrors.sportsEvent}
           />
         </div>
       </TmsModal>
       <div className="container mx-auto mt-10 pb-20">
         <h1 className="text-white text-4xl font-bold">All Admins</h1>
-        <div className="wrapper mt-10 flex justify-between items-center ">
+        <div className="wrapper mt-10 flex justify-between items-center">
           <div className="wrapper flex">
             <Button
               onClick={() => setCurrentRole("All")}
-              color={currentRole == "All" ? "info" : "light"}
+              color={currentRole === "All" ? "info" : "light"}
               className="mx-3"
             >
               All
             </Button>
             <Button
               onClick={() => setCurrentRole("Event Admin")}
-              color={currentRole == "Event Admin" ? "info" : "light"}
+              color={currentRole === "Event Admin" ? "info" : "light"}
               className="mx-3"
             >
               Event Admin
             </Button>
             <Button
               onClick={() => setCurrentRole("Document Admin")}
-              color={currentRole == "Document Admin" ? "info" : "light"}
+              color={currentRole === "Document Admin" ? "info" : "light"}
             >
               Document Admin
             </Button>
@@ -130,8 +190,10 @@ const AdminAdmins = () => {
                 fullName: "",
                 email: "",
                 password: "",
-                role: "Event Admin",
+                role: "",
+                sportsEvent: "",
               });
+              setValidationErrors({});
               setCreateModal(true);
             }}
           >
@@ -139,7 +201,7 @@ const AdminAdmins = () => {
           </Button>
         </div>
         <AdminTable
-          data={currentRole == "All" ? filterWithoutMasterAdmin : filterData}
+          data={currentRole === "All" ? filterWithoutMasterAdmin : filterData}
           handleUpdateForms={handleUpdateForms}
         />
       </div>
