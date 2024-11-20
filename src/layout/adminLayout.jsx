@@ -232,7 +232,7 @@ export default function AdminLayout({ children, client }) {
                           </div>
                         </Sidebar.Item>
                       </Link>
-                      x
+
                       <Sidebar.Item
                         onClick={() => setIsOpen(false)}
                         className="mt-20"
