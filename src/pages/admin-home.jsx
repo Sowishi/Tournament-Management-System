@@ -132,6 +132,12 @@ const AdminHome = () => {
     }
   });
 
+  const activeUsers = users.filter((user) => {
+    if (user.status == "Approve") {
+      return user;
+    }
+  });
+
   return (
     <AdminLayout>
       <TmsModal
@@ -233,7 +239,7 @@ const AdminHome = () => {
           >
             <div>
               <h4 className="text-2xl font-bold">Users</h4>
-              <p>{users?.length}</p>
+              <p>{activeUsers?.length}</p>
             </div>
             <Badge color="info" size={"lg"}>
               Active Users
