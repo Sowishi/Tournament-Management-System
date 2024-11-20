@@ -120,7 +120,7 @@ const AboutPage = () => {
               <h3 className="text-xl font-semibold text-gray-800">
                 Jenelyn E. Macarilay
               </h3>
-              <p className="text-gray-600">Front End Developer</p>
+              {/* <p className="text-gray-600">Front End Developer</p> */}
             </Card>
             <Card className="text-center">
               <img
@@ -131,7 +131,7 @@ const AboutPage = () => {
               <h3 className="text-xl font-semibold text-gray-800">
                 Arvin C. Abina
               </h3>
-              <p className="text-gray-600">Back End Developer</p>
+              {/* <p className="text-gray-600">Back End Developer</p> */}
             </Card>
             <Card className="text-center">
               <img
@@ -142,7 +142,7 @@ const AboutPage = () => {
               <h3 className="text-xl font-semibold text-gray-800">
                 Kurt Jostine L. Concepcion
               </h3>
-              <p className="text-gray-600">QA Tester</p>
+              {/* <p className="text-gray-600">QA Tester</p> */}
             </Card>
             {/* Duplicate the above block for each team member */}
           </div>

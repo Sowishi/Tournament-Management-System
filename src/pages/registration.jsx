@@ -1,4 +1,4 @@
-import { Button, Toast, Tooltip } from "flowbite-react";
+import { Button } from "flowbite-react";
 import Steps from "../components/steps";
 import TmsInput from "../components/tmsInput";
 import AuthLayout from "../layout/authLayout";
@@ -25,91 +25,89 @@ const Registration = () => {
     confirmPassword: "",
   });
 
+  const [errors, setErrors] = useState({});
   const { addUser } = useAddUser();
   const { data: eventNames } = useGetEventName();
   const { data: collegeNames } = useCrudCollegeName();
-
-  const [passwordValidation, setPasswordValidation] = useState("");
-  const [phoneValidation, setPhoneValidation] = useState("");
-  const [emailValidation, setEmailValidation] = useState("");
-
   const navigate = useNavigate();
 
-  const handleChange = (event) => {
-    const { value, name } = event.target;
-
-    // Phone validation
-    if (name === "contact") {
-      setPhoneValidation(
-        value.length !== 10 || value[0] !== "9"
+  const validateField = (name, value) => {
+    switch (name) {
+      case "contact":
+        return value.length !== 10 || value[0] !== "9"
           ? "Phone number must be 10 digits long and start with '9'"
-          : undefined
-      );
-    }
-
-    // Password validation
-    if (name === "password") {
-      setPasswordValidation(
-        value.length < 8
+          : null;
+      case "password":
+        return value.length < 8
           ? "Password must be at least 8 characters long"
-          : undefined
-      );
+          : null;
+      case "confirmPassword":
+        return value !== forms.password ? "Passwords do not match" : null;
+      case "email":
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+          ? null
+          : "Please enter a valid email format";
+      default:
+        return null;
     }
+  };
 
-    // Confirm password validation (only after typing starts)
-    if (name === "confirmPassword" && value) {
-      setPasswordValidation(
-        value !== forms.password ? "Passwords do not match" : undefined
-      );
-    }
-
-    // Email validation
-    if (name === "email") {
-      setEmailValidation(
-        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
-          ? undefined
-          : "Please enter a valid email format"
-      );
-    }
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    const errorMessage = validateField(name, value);
 
     setForms({ ...forms, [name]: value });
+    setErrors({ ...errors, [name]: errorMessage });
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    Object.keys(forms).forEach((key) => {
+      const error = validateField(key, forms[key]);
+      if (error) newErrors[key] = error;
+    });
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (!validateForm()) {
+      toast.error("Please fix the errors before submitting.");
+      return;
+    }
 
-    const colRef = collection(db, "users");
-    const q = query(colRef, where("collegeName", "==", forms.collegeName));
-    const querySnapshot = await getDocs(q);
-    let isDuplicate = false;
+    try {
+      const colRef = collection(db, "users");
+      const q = query(colRef, where("collegeName", "==", forms.collegeName));
+      const querySnapshot = await getDocs(q);
 
-    querySnapshot.docs.forEach((doc) => {
-      const data = doc.data();
-      if (data.collegeName === forms.collegeName && data.status === "Approve") {
+      const isDuplicate = querySnapshot.docs.some(
+        (doc) => doc.data().status === "Approve"
+      );
+
+      if (isDuplicate) {
         toast.error(
           "School/College already exists. Check your account status."
         );
-        isDuplicate = true;
+      } else {
+        await addUser(forms);
+        toast.success("Successfully Registered");
+        navigate("/login");
       }
-    });
-
-    if (!isDuplicate) {
-      addUser(forms);
-      toast.success("Successfully Registered");
-      navigate("/login");
+    } catch (error) {
+      toast.error("An error occurred. Please try again later.");
     }
   };
 
-  function areAllFieldsFilled() {
-    return Object.values(forms).every((field) => field.length > 0);
-  }
+  const areAllFieldsFilled = Object.values(forms).every((field) =>
+    field.trim()
+  );
 
   const formatEventNames = eventNames.map((item) => item.eventName);
-
   const filterCollegeNames = collegeNames.filter(
     (item) => item.event === forms.sportsEvent
   );
-
   const formatCollegeNames = filterCollegeNames.map((item) => item.collegeName);
 
   return (
@@ -119,7 +117,7 @@ const Registration = () => {
           <h1 className="text-white text-5xl font-bold mb-3 mr-5">
             Registration
           </h1>
-          <img src={logo} width={100} alt="" />
+          <img src={logo} width={100} alt="Logo" />
         </div>
         <form onSubmit={handleSubmit}>
           <h1 className="text-white font-bold text-3xl">SUCS details</h1>
@@ -129,29 +127,23 @@ const Registration = () => {
                 name="schoolRepresentative"
                 onChange={handleChange}
                 value={forms.schoolRepresentative}
-                placeHolder=""
                 label="SUCs Representative"
               />
-              <div className="flex flex-col">
-                <TmsInput
-                  placeHolder="Please enter a valid email address in the format: example@domain.com."
-                  onChange={handleChange}
-                  value={forms.email}
-                  name="email"
-                  type="email"
-                  label="SUCs Email"
-                  error={emailValidation}
-                />
-              </div>
-
+              <TmsInput
+                name="email"
+                type="email"
+                onChange={handleChange}
+                value={forms.email}
+                label="SUCs Email"
+                error={errors.email}
+              />
               <TmsInput
                 addOn="+63"
+                name="contact"
                 onChange={handleChange}
                 value={forms.contact}
-                name="contact"
-                placeHolder=""
                 label="SUCs Contact"
-                error={phoneValidation}
+                error={errors.contact}
               />
             </div>
           </div>
@@ -166,13 +158,12 @@ const Registration = () => {
               label="Sports Information"
               data={["Please select event name", ...formatEventNames]}
             />
-            {forms.sportsEvent.length >= 1 && (
+            {forms.sportsEvent && (
               <TmsSelect
                 name="collegeName"
                 onChange={handleChange}
                 label="College Name"
                 data={["Please select college name", ...formatCollegeNames]}
-                disabled={!forms.sportsEvent}
               />
             )}
           </div>
@@ -180,35 +171,29 @@ const Registration = () => {
           <h1 className="text-white font-bold text-3xl mt-10">
             Account Information
           </h1>
-          <div className="flex flex-wrap mx-3">
-            <div className="basis-full">
-              <TmsInput
-                onChange={handleChange}
-                value={forms.username}
-                name="username"
-                placeHolder=""
-                label="Username"
-              />
-            </div>
-            <div className="basis-6/12 pr-5">
-              <TmsInput
-                type="password"
-                name="password"
-                onChange={handleChange}
-                placeHolder=""
-                label="Password"
-                error={passwordValidation}
-              />
-            </div>
-            <div className="basis-6/12">
-              <TmsInput
-                type="password"
-                name="confirmPassword"
-                onChange={handleChange}
-                placeHolder=""
-                label="Confirm Password"
-              />
-            </div>
+          <div className="flex flex-col flex-wrap mx-3">
+            <TmsInput
+              name="username"
+              onChange={handleChange}
+              value={forms.username}
+              label="Username"
+            />
+            <TmsInput
+              name="password"
+              type="password"
+              onChange={handleChange}
+              value={forms.password}
+              label="Password"
+              error={errors.password}
+            />
+            <TmsInput
+              name="confirmPassword"
+              type="password"
+              onChange={handleChange}
+              value={forms.confirmPassword}
+              label="Confirm Password"
+              error={errors.confirmPassword}
+            />
           </div>
 
           <div className="flex justify-center items-center mt-10">
@@ -220,7 +205,7 @@ const Registration = () => {
 
             <Button
               className="w-full mx-3 py-4"
-              disabled={!areAllFieldsFilled()}
+              disabled={!areAllFieldsFilled}
               gradientMonochrome="info"
               type="submit"
             >
