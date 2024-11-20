@@ -84,6 +84,20 @@ export default function Header({ removeMargin }) {
                 {filterNotif.length > 0 ? (
                   filterNotif.map((notification) => (
                     <Dropdown.Item
+                      onClick={() => {
+                        if (
+                          notification.message
+                            .toLowerCase()
+                            .includes("scheduled")
+                        ) {
+                          navigation("/events");
+                        }
+                        if (
+                          notification.message.toLowerCase().includes("suc")
+                        ) {
+                          navigation("/user");
+                        }
+                      }}
                       key={notification.id}
                       className="flex items-center gap-3 py-3 px-4 bg-gray-100 hover:bg-gray-200 rounded-md transition-all"
                     >
