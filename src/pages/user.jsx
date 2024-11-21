@@ -22,6 +22,7 @@ import useCrudDocs from "../hooks/useCrudDocs";
 import { FaFolder } from "react-icons/fa"; // Example: Folder icon from react-icons
 import FolderItem from "../components/folderItem";
 import { Breadcrumb } from "flowbite-react";
+import moment from "moment";
 
 const User = () => {
   const { currentUser, setCurrentUser } = useStore();
@@ -32,6 +33,7 @@ const User = () => {
     documents,
     uploadLogo,
     addPlayersCoaches,
+    getPlayerCoaches,
   } = useUpdateUser();
 
   const {
@@ -78,7 +80,7 @@ const User = () => {
   const [users, setUsers] = useState([]); // Stores the list of users
   const [currentFolder, setCurrentFolder] = useState(null);
   const [currentFiles, setCurrentFiles] = useState([]);
-
+  const [playerCoaches, setPlayerCoaches] = useState([]);
   const handleChange = (event) => {
     const { value, name } = event.target;
 
@@ -219,8 +221,13 @@ const User = () => {
 
   const handleAddUser = () => {
     if (newUser.fullName && newUser.username && newUser.role) {
-      addPlayersCoaches(newUser);
+      addPlayersCoaches(newUser, currentUser.id);
       setNewUser({ fullName: "", username: "", role: "" });
+      toast.success(
+        newUser.role == "Player"
+          ? "Successfully added player"
+          : "Successfully added coach"
+      );
       setAddUserModal(false);
     } else {
       alert("Please fill in all fields before submitting.");
@@ -241,6 +248,7 @@ const User = () => {
 
   useEffect(() => {
     getFolders();
+    getPlayerCoaches(currentUser.id, setPlayerCoaches);
   }, []);
 
   useEffect(() => {
@@ -368,7 +376,7 @@ const User = () => {
             name="role"
             onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
             label="Role"
-            data={["Player", "Coach"]}
+            data={["Please select role", "Player", "Coach"]}
             dark
           />
         </div>
@@ -667,47 +675,38 @@ const User = () => {
                 </thead>
                 <tbody>
                   {/* Example Data */}
-                  {[
-                    {
-                      fullName: "John Doe",
-                      username: "johndoe",
-                      role: "Player",
-                      createdAt: "2024-11-20",
-                    },
-                    {
-                      fullName: "Jane Smith",
-                      username: "janesmith",
-                      role: "Coach",
-                      createdAt: "2024-11-19",
-                    },
-                  ].map((user, index) => (
-                    <tr
-                      key={index}
-                      className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
-                    >
-                      <td className="border border-gray-300 px-4 py-2">
-                        {user.fullName}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {user.username}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {user.role}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {user.createdAt}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        <Button
-                          size="xs"
-                          color="failure"
-                          onClick={() => handleDeleteUser(user.username)}
-                        >
-                          Remove
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
+                  {playerCoaches?.map((user, index) => {
+                    const date = moment(user.createdAt?.toDate()).format("LLL");
+
+                    return (
+                      <tr
+                        key={index}
+                        className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                      >
+                        <td className="border border-gray-300 px-4 py-2">
+                          {user.fullName}
+                        </td>
+                        <td className="border border-gray-300 px-4 py-2">
+                          {user.username}
+                        </td>
+                        <td className="border border-gray-300 px-4 py-2">
+                          {user.role}
+                        </td>
+                        <td className="border border-gray-300 px-4 py-2">
+                          {date}
+                        </td>
+                        <td className="border border-gray-300 px-4 py-2">
+                          <Button
+                            size="xs"
+                            color="failure"
+                            onClick={() => handleDeleteUser(user.username)}
+                          >
+                            Remove
+                          </Button>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

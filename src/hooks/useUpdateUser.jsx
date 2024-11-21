@@ -71,8 +71,21 @@ const useUpdateUser = () => {
     updateDoc(docRef, updated);
   };
 
-  const addPlayersCoaches = (user) => {
-    console.log(user);
+  const addPlayersCoaches = (user, id) => {
+    const colRef = collection(db, "users", id, "playersCoaches");
+    addDoc(colRef, { ...user, createdAt: serverTimestamp() });
+  };
+  const getPlayerCoaches = (id, setPlayerCoaches) => {
+    if (id) {
+      const colRef = collection(db, "users", id, "playersCoaches");
+      onSnapshot(colRef, (snapshot) => {
+        const output = [];
+        snapshot.docs.forEach((doc) => {
+          output.push({ ...doc.data(), id: doc.id });
+        });
+        setPlayerCoaches(output);
+      });
+    }
   };
 
   return {
@@ -84,6 +97,7 @@ const useUpdateUser = () => {
     deleteDocument,
     uploadLogo,
     addPlayersCoaches,
+    getPlayerCoaches,
     documents,
   };
 };
