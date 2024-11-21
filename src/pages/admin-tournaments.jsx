@@ -24,28 +24,37 @@ const AdminTournament = ({ client, currentEvent }) => {
   const [selectedEvent, setSelectedEvent] = useState("all");
   const { addCalendar } = useCrudCalendar();
   const { currentUser } = useStore();
-
   const { addLog } = useCrudLogs();
 
   const [forms, setForms] = useState({
     tournamentName: "",
-    tournamentEvent: "RSCUAA",
-    tournamentType: "single elimination",
-    // startAt: "",
+    tournamentEvent: "",
+    tournamentType: "",
   });
 
   const handleChange = (event) => {
     const { value, name } = event.target;
-    const output = { ...forms, [name]: value };
-    setForms(output);
+    setForms((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const validateForm = () => {
+    const { tournamentName, tournamentEvent, tournamentType } = forms;
+    if (!tournamentName || !tournamentEvent || !tournamentType) {
+      toast.error("Please fill in all required fields.");
+      return false;
+    }
+    return true;
   };
 
   const handleAddTournament = async () => {
+    if (!validateForm()) return;
+
     const res = await addTournament(forms);
     if (res.error) {
       toast.error(res.message);
       return;
     }
+
     const startDateMoment = moment().format("LLL"); // Today's date
     const endDateMoment = moment().add(7, "days").format("LLL"); // 7 days after today
     const output = {
@@ -54,6 +63,7 @@ const AdminTournament = ({ client, currentEvent }) => {
       ["start"]: startDateMoment,
       ["end"]: endDateMoment,
     };
+
     addCalendar(output);
     addLog(currentUser, `Created a tournament: ${forms.tournamentName}`);
 
@@ -64,24 +74,18 @@ const AdminTournament = ({ client, currentEvent }) => {
     }, 2000);
   };
 
-  const filterEvent = eventNames.map((item) => {
-    return item.eventName;
-  });
+  const filterEvent = eventNames.map((item) => item.eventName);
 
   const filterTournament = data.filter((item) => {
     if (client) {
-      if (currentEvent == item.tournament.description) {
+      if (currentEvent === item.tournament.description) {
         return item;
       }
     } else {
-      if (selectedEvent == "all") {
-        return item;
-      }
-
-      if (item.tournament.description == selectedEvent) {
-        return item;
-      }
+      if (selectedEvent === "all") return item;
+      if (item.tournament.description === selectedEvent) return item;
     }
+    return null;
   });
 
   return (
@@ -90,9 +94,7 @@ const AdminTournament = ({ client, currentEvent }) => {
         onSubmit={handleAddTournament}
         title={"Create Tournament"}
         openModal={createModal}
-        handleClose={() => {
-          setCreateModal(false);
-        }}
+        handleClose={() => setCreateModal(false)}
       >
         <form>
           <TmsInput
@@ -102,17 +104,11 @@ const AdminTournament = ({ client, currentEvent }) => {
             label={"Tournament Name"}
             dark={true}
           />
-          {/* <TmsInput
-            name={"startAt"}
-            type={"datetime-local"}
-            onChange={handleChange}
-            label={"Tournament Start"}
-            dark={true}
-          /> */}
           <TmsSelect
             name={"tournamentType"}
             onChange={handleChange}
             data={[
+              "Please select tourrnament type",
               "single elimination",
               "double elimination",
               "swiss",
@@ -125,7 +121,7 @@ const AdminTournament = ({ client, currentEvent }) => {
             dark
             label={"Tournament Event"}
             name={"tournamentEvent"}
-            data={filterEvent}
+            data={["Please select event", ...filterEvent]}
             onChange={handleChange}
           />
         </form>
@@ -144,24 +140,22 @@ const AdminTournament = ({ client, currentEvent }) => {
           <div className="container mx-auto mt-5">
             <div className="wrapper flex mb-3 py-3">
               <Button
-                color={selectedEvent == "all" ? "info" : "gray"}
+                color={selectedEvent === "all" ? "info" : "gray"}
                 onClick={() => setSelectedEvent("all")}
                 className="mx-3"
               >
                 All
               </Button>
-              {eventNames.map((event) => {
-                return (
-                  <Button
-                    key={event.id}
-                    color={selectedEvent == event.eventName ? "info" : "gray"}
-                    className="mx-3"
-                    onClick={() => setSelectedEvent(event.eventName)}
-                  >
-                    {event.eventName}
-                  </Button>
-                );
-              })}
+              {eventNames.map((event) => (
+                <Button
+                  key={event.id}
+                  color={selectedEvent === event.eventName ? "info" : "gray"}
+                  className="mx-3"
+                  onClick={() => setSelectedEvent(event.eventName)}
+                >
+                  {event.eventName}
+                </Button>
+              ))}
             </div>
           </div>
         )}
@@ -173,26 +167,24 @@ const AdminTournament = ({ client, currentEvent }) => {
             </div>
           )}
           {!loading &&
-            filterTournament.map((item) => {
-              return (
-                <motion.div
-                  key={item.id}
-                  className="basis-3/12 my-5 p-5"
-                  initial={{ opacity: 0, scale: 0.8 }} // Initial state
-                  animate={{ opacity: 1, scale: 1 }} // Animate to this state
-                  exit={{ opacity: 0, scale: 0.8 }} // Exit animation
-                  transition={{ duration: 0.3 }} // Transition properties
-                >
-                  <TournamentCard
-                    client={client}
-                    deleteTournament={deleteTournament}
-                    setShowModal={setShowModal}
-                    setSelectedTournament={setSelectedTournament}
-                    tournament={item}
-                  />
-                </motion.div>
-              );
-            })}
+            filterTournament.map((item) => (
+              <motion.div
+                key={item.id}
+                className="basis-3/12 my-5 p-5"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.3 }}
+              >
+                <TournamentCard
+                  client={client}
+                  deleteTournament={deleteTournament}
+                  setShowModal={setShowModal}
+                  setSelectedTournament={setSelectedTournament}
+                  tournament={item}
+                />
+              </motion.div>
+            ))}
         </div>
       </div>
     </AdminLayout>

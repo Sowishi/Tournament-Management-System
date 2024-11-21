@@ -16,10 +16,12 @@ export default function AddParticipantsTable({
   };
 
   const filterUsers = users.filter((user) => {
-    if (user.sportsEvent == event) {
+    if (user.sportsEvent === event && user?.userType !== "admin") {
       return user;
     }
   });
+
+  console.log(event);
   return (
     <div className="overflow-x-auto">
       <Table hoverable>
