@@ -87,6 +87,10 @@ const useUpdateUser = () => {
       });
     }
   };
+  const deletePlayerCoach = (userID, pcID) => {
+    const colRef = doc(db, "users", userID, "playersCoaches", pcID);
+    deleteDoc(colRef);
+  };
 
   return {
     approveUser,
@@ -98,6 +102,7 @@ const useUpdateUser = () => {
     uploadLogo,
     addPlayersCoaches,
     getPlayerCoaches,
+    deletePlayerCoach,
     documents,
   };
 };

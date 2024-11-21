@@ -34,6 +34,7 @@ const User = () => {
     uploadLogo,
     addPlayersCoaches,
     getPlayerCoaches,
+    deletePlayerCoach,
   } = useUpdateUser();
 
   const {
@@ -699,7 +700,9 @@ const User = () => {
                           <Button
                             size="xs"
                             color="failure"
-                            onClick={() => handleDeleteUser(user.username)}
+                            onClick={() =>
+                              deletePlayerCoach(currentUser.id, user.id)
+                            }
                           >
                             Remove
                           </Button>
