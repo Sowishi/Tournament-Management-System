@@ -1,14 +1,14 @@
 "use client";
 
-import { Badge, Button, Card } from "flowbite-react";
+import { Badge, Button, Card, Modal } from "flowbite-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import logo from "../assets/logo2.png";
-import { HiOutlineUsers } from "react-icons/hi";
-import { HiOutlineSpeakerphone } from "react-icons/hi";
+import { HiOutlineUsers, HiOutlineSpeakerphone } from "react-icons/hi";
 import moment from "moment";
 import useCrudLogs from "../hooks/useCrudLogs";
 import { useStore } from "../zustand/store";
+import { useState } from "react";
 
 export default function TournamentCard({
   tournament,
@@ -18,9 +18,11 @@ export default function TournamentCard({
   client,
 }) {
   const { tournament: data } = tournament;
-  const navigation = useNavigate();
+  const navigate = useNavigate();
   const { addLog } = useCrudLogs();
   const { currentUser } = useStore();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const getBadgeColor = (state) => {
     if (state === "pending") {
       return "bg-blue-500";
@@ -33,14 +35,30 @@ export default function TournamentCard({
     }
   };
 
+  const handleDelete = async () => {
+    addLog(currentUser, `Deleted a tournament: ${data.name}`);
+
+    const res = await deleteTournament(tournament);
+    if (res.error) {
+      toast.error(res.message);
+      setIsModalOpen(false);
+      return;
+    }
+
+    toast.success(res.message);
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
+  };
+
   return (
     <Card
-      className="max-w-sm min-h-[29rem] border flex flex-col justify-between" // Ensure the card uses flexbox
+      className="max-w-sm min-h-[29rem] border flex flex-col justify-between"
       style={{
         background: "rgb(2,6,23)",
         background:
           "linear-gradient(164deg, rgba(2,6,23,1) 59%, rgba(252,172,127,1) 91%)",
-        height: "350px", // Set a fixed height for uniformity
+        height: "350px",
       }}
     >
       <div className="container mx-auto flex flex-col h-full">
@@ -58,13 +76,8 @@ export default function TournamentCard({
               {data.state}
             </Badge>
           </div>
-          {/* <p className="text-white text-xs">
-            {moment(data.start_at).format("LL")}{" "}
-          </p> */}
         </div>
         <div className="content flex-grow">
-          {" "}
-          {/* Allows the content area to grow */}
           <h1 className="text-white font-bold text-3xl my-5">{data.name}</h1>
           <div className="badge flex flex-col items-start">
             <Badge size={"md"} className="mt-3">
@@ -87,9 +100,9 @@ export default function TournamentCard({
             setSelectedTournament(data);
             setShowModal(true);
             if (client) {
-              navigation(`/tournament/${data.url}?client=true`);
+              navigate(`/tournament/${data.url}?client=true`);
             } else {
-              navigation(`/tournament/${data.url}`);
+              navigate(`/tournament/${data.url}`);
             }
           }}
         >
@@ -111,25 +124,31 @@ export default function TournamentCard({
           <Button
             className="mt-3"
             color={"failure"}
-            onClick={async () => {
-              addLog(currentUser, `Deleted a tournament: ${data.name}`);
-
-              const res = await deleteTournament(tournament);
-              if (res.error) {
-                toast.error(res.message);
-                return;
-              }
-
-              toast.success(res.message);
-              setTimeout(() => {
-                window.location.reload();
-              }, 2000);
-            }}
+            onClick={() => setIsModalOpen(true)}
           >
             Delete
           </Button>
         )}
       </div>
+      {/* Confirmation Modal */}
+      <Modal show={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <Modal.Header>Confirm Deletion</Modal.Header>
+        <Modal.Body>
+          <p className="text-gray-700">
+            Are you sure you want to delete the tournament{" "}
+            <span className="font-bold">{data.name}</span>? This action cannot
+            be undone.
+          </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button color="failure" onClick={handleDelete}>
+            Yes, Delete
+          </Button>
+          <Button color="gray" onClick={() => setIsModalOpen(false)}>
+            Cancel
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Card>
   );
 }

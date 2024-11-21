@@ -23,7 +23,7 @@ const TmsModal = ({
               Submit
             </Button>
             <Button color="gray" onClick={handleClose}>
-              Decline
+              Cancel
             </Button>
           </Modal.Footer>
         )}
