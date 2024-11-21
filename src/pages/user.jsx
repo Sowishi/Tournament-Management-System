@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { db, storage } from "../../firebase";
 import TmsModal from "../components/tmsModal";
-import { HiDocument, HiLogin, HiUserCircle } from "react-icons/hi";
+import { HiDocument, HiLogin, HiUserCircle, HiUsers } from "react-icons/hi";
 import useGetEventName from "../hooks/useGetEventName";
 import useCrudCollegeName from "../hooks/useCrudCollegeName";
 import { Link } from "react-router-dom";
@@ -25,8 +25,14 @@ import { Breadcrumb } from "flowbite-react";
 
 const User = () => {
   const { currentUser, setCurrentUser } = useStore();
-  const { updateUser, addDocument, deleteDocument, documents, uploadLogo } =
-    useUpdateUser();
+  const {
+    updateUser,
+    addDocument,
+    deleteDocument,
+    documents,
+    uploadLogo,
+    addPlayersCoaches,
+  } = useUpdateUser();
 
   const {
     handleCreateFolder,
@@ -63,7 +69,13 @@ const User = () => {
   const [folderModal, setFolderModal] = useState(false);
   const [folderName, setFolerName] = useState("");
   const [folders, setFolders] = useState([]);
-
+  const [addUserModal, setAddUserModal] = useState(false); // Tracks if the modal is open or closed
+  const [newUser, setNewUser] = useState({
+    fullName: "",
+    username: "",
+    role: "",
+  }); // Tracks the new user's information
+  const [users, setUsers] = useState([]); // Stores the list of users
   const [currentFolder, setCurrentFolder] = useState(null);
   const [currentFiles, setCurrentFiles] = useState([]);
 
@@ -205,6 +217,16 @@ const User = () => {
     }
   };
 
+  const handleAddUser = () => {
+    if (newUser.fullName && newUser.username && newUser.role) {
+      addPlayersCoaches(newUser);
+      setNewUser({ fullName: "", username: "", role: "" });
+      setAddUserModal(false);
+    } else {
+      alert("Please fill in all fields before submitting.");
+    }
+  };
+
   const formatEventNames = eventNames.map((item) => {
     return item.eventName;
   });
@@ -316,6 +338,42 @@ const User = () => {
           />
         </div>
       </TmsModal>
+
+      <TmsModal
+        title={"Add Player/Coach"}
+        openModal={addUserModal}
+        handleClose={() => setAddUserModal(false)}
+        onSubmit={handleAddUser} // Calls the function when the form is submitted
+      >
+        <div className="container">
+          <TmsInput
+            dark={true}
+            name="fullName"
+            placeHolder="Full Name"
+            label="Full Name"
+            onChange={(e) =>
+              setNewUser({ ...newUser, fullName: e.target.value })
+            }
+          />
+          <TmsInput
+            dark={true}
+            name="username"
+            placeHolder="Username"
+            label="Username"
+            onChange={(e) =>
+              setNewUser({ ...newUser, username: e.target.value })
+            }
+          />
+          <TmsSelect
+            name="role"
+            onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
+            label="Role"
+            data={["Player", "Coach"]}
+            dark
+          />
+        </div>
+      </TmsModal>
+
       <div className="container mx-auto p-10 mb-20">
         <div className="shadow-2xl bg-white flex flex-col justify-center items-center p-10 rounded-2xl">
           <img
@@ -575,6 +633,83 @@ const User = () => {
                   <Button>Register to Challonge</Button>
                 </a>
               </div>
+            </div>
+          </Tabs.Item>
+          <Tabs.Item
+            disabled={!currentUser.status}
+            title="Players/Coaches"
+            icon={HiUsers}
+          >
+            <div className="wrapper my-10">
+              <div className="flex justify-end mb-5">
+                <Button onClick={() => setAddUserModal(true)}>
+                  Add Player/Coach
+                </Button>
+              </div>
+
+              <table className="table-auto w-full text-left border-collapse border border-gray-300">
+                <thead>
+                  <tr className="bg-gray-100">
+                    <th className="border border-gray-300 px-4 py-2">
+                      Full Name
+                    </th>
+                    <th className="border border-gray-300 px-4 py-2">
+                      Username
+                    </th>
+                    <th className="border border-gray-300 px-4 py-2">Role</th>
+                    <th className="border border-gray-300 px-4 py-2">
+                      Created At
+                    </th>
+                    <th className="border border-gray-300 px-4 py-2">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {/* Example Data */}
+                  {[
+                    {
+                      fullName: "John Doe",
+                      username: "johndoe",
+                      role: "Player",
+                      createdAt: "2024-11-20",
+                    },
+                    {
+                      fullName: "Jane Smith",
+                      username: "janesmith",
+                      role: "Coach",
+                      createdAt: "2024-11-19",
+                    },
+                  ].map((user, index) => (
+                    <tr
+                      key={index}
+                      className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                    >
+                      <td className="border border-gray-300 px-4 py-2">
+                        {user.fullName}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {user.username}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {user.role}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {user.createdAt}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        <Button
+                          size="xs"
+                          color="failure"
+                          onClick={() => handleDeleteUser(user.username)}
+                        >
+                          Remove
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </Tabs.Item>
         </Tabs>

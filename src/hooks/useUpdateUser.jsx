@@ -71,6 +71,10 @@ const useUpdateUser = () => {
     updateDoc(docRef, updated);
   };
 
+  const addPlayersCoaches = (user) => {
+    console.log(user);
+  };
+
   return {
     approveUser,
     rejectUser,
@@ -79,6 +83,7 @@ const useUpdateUser = () => {
     addDocument,
     deleteDocument,
     uploadLogo,
+    addPlayersCoaches,
     documents,
   };
 };
