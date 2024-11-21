@@ -3,17 +3,20 @@ import Title from "../components/title";
 import { ListGroup, Modal, Button } from "flowbite-react";
 import useGetUsers from "../hooks/useGetUsers";
 import { useStore } from "../zustand/store";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import logo from "../assets/logo2.png";
+import useUpdateUser from "../hooks/useUpdateUser";
+import moment from "moment";
 
 const Participants = () => {
   const { data } = useGetUsers();
-  const { currentEvent } = useStore();
+  const { currentEvent, currentUser } = useStore();
+  const [playerCoaches, setPlayerCoaches] = useState([]);
 
   const [isOpen, setIsOpen] = useState(false);
   const [isPlayersModalOpen, setIsPlayersModalOpen] = useState(false); // State for the second modal
   const [selectedParticipant, setSelectedParticipant] = useState(null);
-
+  const { getPlayerCoaches } = useUpdateUser();
   const filterData = data.filter((user) => {
     return user.status === "Approve" && user.sportsEvent === currentEvent;
   });
@@ -39,6 +42,10 @@ const Participants = () => {
   const handleClosePlayersModal = () => {
     setIsPlayersModalOpen(false);
   };
+
+  useEffect(() => {
+    getPlayerCoaches(selectedParticipant?.id, setPlayerCoaches);
+  }, [selectedParticipant]);
 
   return (
     <DefaultLayout>
@@ -138,39 +145,40 @@ const Participants = () => {
       >
         <Modal.Header>Participants/Players List</Modal.Header>
         <Modal.Body>
-          {/* Assuming you have a list of players for the selected participant */}
-          {selectedParticipant && selectedParticipant.players && (
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead>
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Player Name
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Position
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {selectedParticipant.players.map((player, index) => (
-                  <tr key={index}>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {player.name}
+          <table className="table-auto w-full text-left border-collapse border border-gray-300">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border border-gray-300 px-4 py-2">Full Name</th>
+                <th className="border border-gray-300 px-4 py-2">Username</th>
+                <th className="border border-gray-300 px-4 py-2">Role</th>
+                <th className="border border-gray-300 px-4 py-2">Created At</th>
+              </tr>
+            </thead>
+            <tbody>
+              {/* Example Data */}
+              {playerCoaches?.map((user, index) => {
+                const date = moment(user.createdAt?.toDate()).format("LLL");
+
+                return (
+                  <tr
+                    key={index}
+                    className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                  >
+                    <td className="border border-gray-300 px-4 py-2">
+                      {user.fullName}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {player.position}
+                    <td className="border border-gray-300 px-4 py-2">
+                      {user.username}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {player.status}
+                    <td className="border border-gray-300 px-4 py-2">
+                      {user.role}
                     </td>
+                    <td className="border border-gray-300 px-4 py-2">{date}</td>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+                );
+              })}
+            </tbody>
+          </table>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={handleClosePlayersModal}>Close</Button>
