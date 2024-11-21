@@ -145,40 +145,54 @@ const Participants = () => {
       >
         <Modal.Header>Participants/Players List</Modal.Header>
         <Modal.Body>
-          <table className="table-auto w-full text-left border-collapse border border-gray-300">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="border border-gray-300 px-4 py-2">Full Name</th>
-                <th className="border border-gray-300 px-4 py-2">Username</th>
-                <th className="border border-gray-300 px-4 py-2">Role</th>
-                <th className="border border-gray-300 px-4 py-2">Created At</th>
-              </tr>
-            </thead>
-            <tbody>
-              {/* Example Data */}
-              {playerCoaches?.map((user, index) => {
-                const date = moment(user.createdAt?.toDate()).format("LLL");
+          {playerCoaches.length >= 1 && (
+            <table className="table-auto w-full text-left border-collapse border border-gray-300">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="border border-gray-300 px-4 py-2">
+                    Full Name
+                  </th>
+                  <th className="border border-gray-300 px-4 py-2">Username</th>
+                  <th className="border border-gray-300 px-4 py-2">Role</th>
+                  <th className="border border-gray-300 px-4 py-2">
+                    Created At
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {/* Example Data */}
+                {playerCoaches?.map((user, index) => {
+                  const date = moment(user.createdAt?.toDate()).format("LLL");
 
-                return (
-                  <tr
-                    key={index}
-                    className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
-                  >
-                    <td className="border border-gray-300 px-4 py-2">
-                      {user.fullName}
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2">
-                      {user.username}
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2">
-                      {user.role}
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2">{date}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                  return (
+                    <tr
+                      key={index}
+                      className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                    >
+                      <td className="border border-gray-300 px-4 py-2">
+                        {user.fullName}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {user.username}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {user.role}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {date}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          )}
+
+          {playerCoaches.length <= 0 && (
+            <h1 className="text-center my-5 font-bold text-2xl">
+              There's no player and coaches yet.
+            </h1>
+          )}
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={handleClosePlayersModal}>Close</Button>
