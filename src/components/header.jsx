@@ -53,8 +53,10 @@ export default function Header({ removeMargin }) {
             className="mr-3 h-6 sm:h-9"
             alt="Flowbite React Logo"
           />
-          <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white flex items-center justify-start">
-            Sports Event:{" "}
+          <span className="self-center whitespace-nowrap text-sm md:text-xl font-semibold dark:text-white flex items-center justify-start">
+            <div className="hidden md:flex">
+              <>Sports Event: </>
+            </div>
             <Badge size={"md"} color={"warning"} className="ml-5 px-5 py-2">
               {currentEvent ? currentEvent : "No Event Selected"}
             </Badge>
@@ -174,7 +176,7 @@ export default function Header({ removeMargin }) {
           <Navbar.Toggle />
         </div>
         <Navbar.Collapse>
-          <Button.Group>
+          <Button.Group className="flex flex-col md:flex-row">
             <Link to="/home">
               <Button color={pathname == "/home" ? "info" : "gray"}>
                 <HiOutlineHome className="mr-2 h-5 w-5" />
