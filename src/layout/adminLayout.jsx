@@ -63,15 +63,6 @@ export default function AdminLayout({ children, client }) {
           >
             <div className="flex h-full flex-col justify-between py-2">
               <div>
-                <form className="pb-3 md:hidden">
-                  <TextInput
-                    icon={HiSearch}
-                    type="search"
-                    placeholder="Search"
-                    required
-                    size={32}
-                  />
-                </form>
                 <Sidebar.Items>
                   {isMasterAdmin && (
                     <Sidebar.ItemGroup>
@@ -256,7 +247,7 @@ export default function AdminLayout({ children, client }) {
           <div
             className={`header ${getHeaderBackground(
               currentAdmin?.role
-            )} py-3 flex justify-between items-center px-10`}
+            )} py-5 flex justify-between items-center px-10`}
           >
             <HiMenu
               className="cursor-pointer"
@@ -266,8 +257,10 @@ export default function AdminLayout({ children, client }) {
             />
             <div className="wrapper mx-10 flex items-center justify-start">
               <div className="flex flex-col">
-                <h1 className="text-white text-2xl">Admin Dashboard</h1>
-                <p className="text-blue-500">
+                <h1 className="text-white textt-sm md:text-2xl">
+                  Admin Dashboard
+                </h1>
+                <p className="text-blue-500 text-xs">
                   Logged in as: {getAdminRole(currentAdmin?.role)}
                 </p>
               </div>

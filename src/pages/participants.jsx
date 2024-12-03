@@ -60,7 +60,7 @@ const Participants = () => {
                 className="cursor-pointer"
               >
                 <div className="wrapper flex justify-between items-center w-full">
-                  <h1 className="text-3xl">{item.collegeName}</h1>
+                  <h1 className="text-lg md:text-3xl">{item.collegeName}</h1>
                   {item.collegeLogoURL ? (
                     <img
                       src={item.collegeLogoURL}

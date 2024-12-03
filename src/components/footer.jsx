@@ -9,7 +9,7 @@ export function TmsFooter() {
         <div className="w-full justify-between sm:flex sm:items-center sm:justify-between">
           <div className="wrapper flex items-center justify-start">
             <img style={{ width: "60px" }} src={logo} alt="" />
-            <h1 className={"text-2xl font-bold ml-5"}>
+            <h1 className={"text-sm md:text-2xl font-bold ml-5"}>
               Tournament Management System
             </h1>
           </div>

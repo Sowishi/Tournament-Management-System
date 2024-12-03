@@ -46,6 +46,7 @@ const ViewTournament = () => {
   const [tournament, setTournament] = useState();
   const [page, setPage] = useState("tournament");
   const [matchDates, setMatchDates] = useState([]);
+  const [openMenu, setOpenMenu] = useState(false);
   const handleGetParticipants = async () => {
     const output = await getParticipants(id);
     setParticipants(output.data);
@@ -114,74 +115,93 @@ const ViewTournament = () => {
     return (
       <DefaultLayout client={true}>
         <div className="flex">
-          <div className="basis-1/12 flex justify-start items-center flex-col py-20  bg-slate-800">
-            <div
-              onClick={() => setPage("tournament")}
-              className={`flex flex-col justify-center items-center my-5 p-3 rounded-lg cursor-pointer ${
-                page == "tournament" ? "bg-slate-500" : ""
-              }`}
+          {openMenu && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="basis-1/12 flex justify-start items-center flex-col py-20  bg-slate-950"
             >
-              <FaTrophy color="white" size={35} />
-              <h1 className="text-white">Tournament</h1>
-            </div>
-            <div
-              onClick={() => setPage("ranking")}
-              className={`flex flex-col justify-center items-center my-5 p-3 rounded-lg cursor-pointer ${
-                page == "ranking" ? "bg-slate-500" : ""
-              }`}
-            >
-              <GiStairs color="white" size={35} />
-              <h1 className="text-white">Ranking</h1>
-            </div>
-            <div
-              onClick={() => setPage("participants")}
-              className={`flex flex-col justify-center items-center my-5 p-3 rounded-lg cursor-pointer ${
-                page == "participants" ? "bg-slate-500" : ""
-              }`}
-            >
-              <BsFillPeopleFill color="white" size={35} />
-              <h1 className="text-white">Participants</h1>
-            </div>
-            <div
-              onClick={() => setPage("matches")}
-              className={`flex flex-col justify-center items-center my-5 p-3 rounded-lg cursor-pointer ${
-                page == "matches" ? "bg-slate-500" : ""
-              }`}
-            >
-              <TbTournament color="white" size={35} />
-              <h1 className="text-white">Matches</h1>
-            </div>
-            <div
-              onClick={() => setPage("schedule")}
-              className={`flex flex-col justify-center items-center my-5 p-3 rounded-lg cursor-pointer ${
-                page == "schedule" ? "bg-slate-500" : ""
-              }`}
-            >
-              <HiCalendar color="white" size={35} />
-              <h1 className="text-white">Schedule</h1>
-            </div>
-          </div>
-          <div className="basis-11/12 p-10">
+              <div
+                onClick={() => setPage("tournament")}
+                className={`flex flex-col justify-center items-center my-5 p-3 rounded-lg cursor-pointer ${
+                  page == "tournament" ? "bg-slate-500" : ""
+                }`}
+              >
+                <FaTrophy color="white" size={35} />
+                <h1 className="text-white">Tournament</h1>
+              </div>
+              <div
+                onClick={() => setPage("ranking")}
+                className={`flex flex-col justify-center items-center my-5 p-3 rounded-lg cursor-pointer ${
+                  page == "ranking" ? "bg-slate-500" : ""
+                }`}
+              >
+                <GiStairs color="white" size={35} />
+                <h1 className="text-white">Ranking</h1>
+              </div>
+              <div
+                onClick={() => setPage("participants")}
+                className={`flex flex-col justify-center items-center my-5 p-3 rounded-lg cursor-pointer ${
+                  page == "participants" ? "bg-slate-500" : ""
+                }`}
+              >
+                <BsFillPeopleFill color="white" size={35} />
+                <h1 className="text-white">Participants</h1>
+              </div>
+              <div
+                onClick={() => setPage("matches")}
+                className={`flex flex-col justify-center items-center my-5 p-3 rounded-lg cursor-pointer ${
+                  page == "matches" ? "bg-slate-500" : ""
+                }`}
+              >
+                <TbTournament color="white" size={35} />
+                <h1 className="text-white">Matches</h1>
+              </div>
+              <div
+                onClick={() => setPage("schedule")}
+                className={`flex flex-col justify-center items-center my-5 p-3 rounded-lg cursor-pointer ${
+                  page == "schedule" ? "bg-slate-500" : ""
+                }`}
+              >
+                <HiCalendar color="white" size={35} />
+                <h1 className="text-white">Schedule</h1>
+              </div>
+            </motion.div>
+          )}
+          <div className="basis-full p-10">
             <div className="container mx-auto mt-10 pb-20">
               <div className="wrapper flex items-center justify-between mb-5">
-                <div className="wrapper flex items-center">
+                {/* Header */}
+                <div className="wrapper mb-5 flex items-center justify-center ">
+                  <Button
+                    color={"light"}
+                    onClick={() => setOpenMenu(!openMenu)}
+                    className="mr-5"
+                  >
+                    Menu
+                  </Button>
                   <Button
                     onClick={() => navigation("/events")}
                     className="mr-5"
                   >
                     Back
                   </Button>
-                  <h1 className="text-white text-3xl font-bold ">
-                    {tournament?.name}
-                  </h1>
-                  <Badge size={"lg"} className="ml-5">
-                    {tournament?.tournament_type}
-                  </Badge>
+                  <div className="flex justify-center items-center">
+                    <h1 className="text-white text-sm md:text-3xl font-bold ">
+                      {tournament?.name}
+                    </h1>
+                    <Badge size={"lg"} className="ml-5 text-center">
+                      <span className="text-xs md:text-lg text-center">
+                        {" "}
+                        {tournament?.tournament_type}
+                      </span>
+                    </Badge>
+                  </div>
                 </div>
               </div>
               {page == "tournament" && (
                 <>
-                  <div className="mb-5">
+                  <div className="mb-5 hidden md:block  ">
                     <Table hoverable>
                       <Table.Head>
                         <Table.HeadCell className="text-center bg-slate-900 text-white font-bold border">
@@ -247,7 +267,7 @@ const ViewTournament = () => {
 
                           return (
                             <div
-                              className="basis-4/12 flex justify-center items-center"
+                              className="basis-full md:basis-4/12 flex justify-center items-center"
                               key={index}
                             >
                               <motion.div
@@ -339,7 +359,7 @@ const ViewTournament = () => {
                     className="mx-5 bg-white rounded p-6"
                     startAccessor="start"
                     endAccessor="end"
-                    style={{ height: 500 }}
+                    style={{ height: 500, width: "100%" }}
                   />
                 </>
               )}
@@ -365,110 +385,155 @@ const ViewTournament = () => {
           users={users}
         />
       </TmsModal>
-      <div className="flex">
-        <div className="basis-1/12 flex justify-start items-center flex-col py-20  bg-slate-800">
-          <div
-            onClick={() => setPage("tournament")}
-            className={`flex flex-col justify-center items-center my-5 p-3 rounded-lg cursor-pointer ${
-              page == "tournament" ? "bg-slate-500" : ""
-            }`}
+      <div className="flex items-start justify-start ">
+        {/* View Tournament Sidebar */}
+        {openMenu && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="basis-1/12 flex justify-start items-center flex-col py-20  bg-slate-800"
           >
-            <FaTrophy color="white" size={35} />
-            <h1 className="text-white">Tournament</h1>
-          </div>
-          <div
-            onClick={() => setPage("ranking")}
-            className={`flex flex-col justify-center items-center my-5 p-3 rounded-lg cursor-pointer ${
-              page == "ranking" ? "bg-slate-500" : ""
-            }`}
-          >
-            <GiStairs color="white" size={35} />
-            <h1 className="text-white">Ranking</h1>
-          </div>
-          <div
-            onClick={() => setPage("participants")}
-            className={`flex flex-col justify-center items-center my-5 p-3 rounded-lg cursor-pointer ${
-              page == "participants" ? "bg-slate-500" : ""
-            }`}
-          >
-            <BsFillPeopleFill color="white" size={35} />
-            <h1 className="text-white">Participants</h1>
-          </div>
-          <div
-            onClick={() => setPage("matches")}
-            className={`flex flex-col justify-center items-center my-5 p-3 rounded-lg cursor-pointer ${
-              page == "matches" ? "bg-slate-500" : ""
-            }`}
-          >
-            <TbTournament color="white" size={35} />
-            <h1 className="text-white">Matches</h1>
-          </div>
-          <div
-            onClick={() => setPage("schedule")}
-            className={`flex flex-col justify-center items-center my-5 p-3 rounded-lg cursor-pointer ${
-              page == "schedule" ? "bg-slate-500" : ""
-            }`}
-          >
-            <HiCalendar color="white" size={35} />
-            <h1 className="text-white">Schedule</h1>
-          </div>
-        </div>
-        <div className="basis-11/12 p-10">
-          <div className="container mx-auto mt-10 pb-20">
-            <div className="wrapper flex items-center justify-between mb-5">
-              <div className="wrapper flex items-center">
+            <div
+              onClick={() => setPage("tournament")}
+              className={`flex flex-col justify-center items-center my-5 p-3 rounded-lg cursor-pointer ${
+                page == "tournament" ? "bg-slate-500" : ""
+              }`}
+            >
+              <FaTrophy color="white" size={35} />
+              <h1 className="text-white">Tournament</h1>
+            </div>
+            <div
+              onClick={() => setPage("ranking")}
+              className={`flex flex-col justify-center items-center my-5 p-3 rounded-lg cursor-pointer ${
+                page == "ranking" ? "bg-slate-500" : ""
+              }`}
+            >
+              <GiStairs color="white" size={35} />
+              <h1 className="text-white">Ranking</h1>
+            </div>
+            <div
+              onClick={() => setPage("participants")}
+              className={`flex flex-col justify-center items-center my-5 p-3 rounded-lg cursor-pointer ${
+                page == "participants" ? "bg-slate-500" : ""
+              }`}
+            >
+              <BsFillPeopleFill color="white" size={35} />
+              <h1 className="text-white">Participants</h1>
+            </div>
+            <div
+              onClick={() => setPage("matches")}
+              className={`flex flex-col justify-center items-center my-5 p-3 rounded-lg cursor-pointer ${
+                page == "matches" ? "bg-slate-500" : ""
+              }`}
+            >
+              <TbTournament color="white" size={35} />
+              <h1 className="text-white">Matches</h1>
+            </div>
+            <div
+              onClick={() => setPage("schedule")}
+              className={`flex flex-col justify-center items-center my-5 p-3 rounded-lg cursor-pointer ${
+                page == "schedule" ? "bg-slate-500" : ""
+              }`}
+            >
+              <HiCalendar color="white" size={35} />
+              <h1 className="text-white">Schedule</h1>
+            </div>
+          </motion.div>
+        )}
+        <div className="basis-full p-10">
+          <div className="container mx-auto mt-10">
+            <div className="wrapper flex flex-col md:flex-row items-center justify-between mb-5">
+              {/* Header */}
+              <div className="wrapper mb-5 flex items-center justify-center ">
+                <Button
+                  color={"dark"}
+                  onClick={() => setOpenMenu(!openMenu)}
+                  className="mr-5"
+                >
+                  Menu
+                </Button>
                 <Button
                   onClick={() => navigation("/admin/tournament")}
                   className="mr-5"
                 >
                   Back
                 </Button>
-                <h1 className="text-white text-3xl font-bold ">
-                  {tournament?.name}
-                </h1>
-                <Badge size={"lg"} className="ml-5">
-                  {tournament?.tournament_type}
-                </Badge>
+                <div className="flex justify-center items-center">
+                  <h1 className="text-white text-sm md:text-3xl font-bold ">
+                    {tournament?.name}
+                  </h1>
+                  <Badge size={"lg"} className="ml-5 text-center">
+                    <span className="text-xs md:text-lg text-center">
+                      {" "}
+                      {tournament?.tournament_type}
+                    </span>
+                  </Badge>
+                </div>
               </div>
               <div className="wrapper flex items-center justify-center">
                 {tournament?.state == "pending" && (
-                  <Tooltip content="Add Participants in the tournament">
-                    <Button
-                      disabled={tournament?.state == "underway"}
-                      onClick={() => {
-                        setAddModal(true);
-                      }}
-                    >
-                      Add Participants
-                    </Button>
-                  </Tooltip>
+                  <>
+                    <Tooltip content="Add Participants in the tournament">
+                      <Button
+                        className="hidden md:block"
+                        disabled={tournament?.state == "underway"}
+                        onClick={() => {
+                          setAddModal(true);
+                        }}
+                      >
+                        Add Participants
+                      </Button>
+                    </Tooltip>
+                    <Tooltip content="Add Participants in the tournament">
+                      <Button
+                        className="block md:hidden"
+                        disabled={tournament?.state == "underway"}
+                        onClick={() => {
+                          setAddModal(true);
+                        }}
+                      >
+                        Add
+                      </Button>
+                    </Tooltip>
+                  </>
                 )}
 
                 {tournament?.state == "pending" && (
-                  <Tooltip content="Start the tournament">
-                    <Button
-                      color={"success"}
-                      className="ml-5"
-                      onClick={handleStartTournament}
-                    >
-                      Start Tournament
-                    </Button>
-                  </Tooltip>
+                  <>
+                    <Tooltip content="Start the tournament">
+                      <Button
+                        color={"success"}
+                        className="ml-5 hidden md:block"
+                        onClick={handleStartTournament}
+                      >
+                        Start Tournament
+                      </Button>
+                    </Tooltip>
+                    <Tooltip content="Start the tournament">
+                      <Button
+                        color={"success"}
+                        className="ml-5 block md:hidden"
+                        onClick={handleStartTournament}
+                      >
+                        Start
+                      </Button>
+                    </Tooltip>
+                  </>
                 )}
               </div>
             </div>
             {page == "tournament" && (
               <>
-                <div className="mb-5">
+                <div className="mb-5 hidden md:block">
                   <Table hoverable>
                     <Table.Head>
-                      <Table.HeadCell className="text-center bg-slate-900 text-white font-bold border">
+                      <Table.HeadCell className="text-center text-xs bg-slate-900 text-white font-bold border">
                         Tournament State
                       </Table.HeadCell>
-                      <Table.HeadCell className="text-center bg-slate-900 text-white font-bold border">
+                      <Table.HeadCell className="text-center text-xs bg-slate-900 text-white font-bold border">
                         Registered Event
                       </Table.HeadCell>
-                      <Table.HeadCell className="text-center bg-slate-900 text-white font-bold border">
+                      <Table.HeadCell className="text-center text-xs bg-slate-900 text-white font-bold border">
                         Tournament Start Date
                       </Table.HeadCell>
                     </Table.Head>
@@ -496,7 +561,7 @@ const ViewTournament = () => {
 
                 <iframe
                   src={`https://challonge.com/${id}/module`}
-                  width="100%"
+                  width={"100%"}
                   height="500"
                   frameborder="0"
                   scrolling="auto"
@@ -521,7 +586,7 @@ const ViewTournament = () => {
 
                         return (
                           <div
-                            className="basis-4/12 flex justify-center items-center"
+                            className="basis-full md:basis-4/12 flex justify-center items-center"
                             key={index}
                           >
                             <motion.div
@@ -607,7 +672,7 @@ const ViewTournament = () => {
                   className="mx-5 bg-white rounded p-6"
                   startAccessor="start"
                   endAccessor="end"
-                  style={{ height: 500 }}
+                  style={{ height: 500, width: "100%" }}
                 />
                 <>
                   {matches.length >= 1 && (

@@ -158,29 +158,30 @@ const AdminAdmins = () => {
           />
         </div>
       </TmsModal>
-      <div className="container mx-auto mt-10 pb-20">
+      <div className="container mx-auto mt-10 px-5 pb-20">
         <h1 className="text-white text-4xl font-bold">All Admins</h1>
         <div className="wrapper mt-10 flex justify-between items-center">
           <div className="wrapper flex">
             <Button
+              className="mx-1"
               onClick={() => setCurrentRole("All")}
               color={currentRole === "All" ? "info" : "light"}
-              className="mx-3"
             >
-              All
+              <h1 className="text-xs ">All</h1>
             </Button>
             <Button
+              className="mx-1"
               onClick={() => setCurrentRole("Event Admin")}
               color={currentRole === "Event Admin" ? "info" : "light"}
-              className="mx-3"
             >
-              Event Admin
+              <h1 className="text-xs ">Event </h1>
             </Button>
             <Button
+              className="mx-1"
               onClick={() => setCurrentRole("Document Admin")}
               color={currentRole === "Document Admin" ? "info" : "light"}
             >
-              Document Admin
+              <h1 className="text-xs ">Document </h1>
             </Button>
           </div>
           <Button

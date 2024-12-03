@@ -236,13 +236,13 @@ const AdminHome = () => {
       </TmsModal>
 
       <div className="container mx-auto mt-10">
-        <div className="grid grid-cols-3 gap-4 mb-6">
+        <div className="flex flex-wrap mb-6">
           {/* Users Card */}
           <motion.div
             onClick={() => {
               navigation("/admin/users");
             }}
-            className="bg-gray-800 text-white p-4 rounded-lg shadow-md flex items-center justify-between cursor-pointer"
+            className="bg-gray-800 mx-3 basis-full my-3 md:basis-3/12 px-3 text-white p-4 rounded-lg shadow-md flex items-center justify-between cursor-pointer"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
@@ -261,7 +261,7 @@ const AdminHome = () => {
             onClick={() => {
               navigation("/admin/tournament");
             }}
-            className="bg-gray-800 text-white p-4 rounded-lg shadow-md flex items-center justify-between cursor-pointer"
+            className="bg-gray-800 mx-3 basis-full my-3 md:basis-3/12 px-3 text-white p-4 rounded-lg shadow-md flex items-center justify-between cursor-pointer"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -277,7 +277,7 @@ const AdminHome = () => {
 
           {/* Events Card */}
           <motion.div
-            className="bg-gray-800 text-white p-4 rounded-lg shadow-md flex items-center justify-between"
+            className="bg-gray-800 mx-3 basis-full my-3 md:basis-3/12 px-3 text-white p-4 rounded-lg shadow-md flex items-center justify-between"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
@@ -291,7 +291,7 @@ const AdminHome = () => {
             </Badge>
           </motion.div>
         </div>
-        <Tabs aria-label="Default tabs" variant="default">
+        <Tabs className="mx-3" aria-label="Default tabs" variant="default">
           {currentAdmin?.role == "Master Admin" && (
             <Tabs.Item active title="Dashboard">
               <motion.div
@@ -301,7 +301,7 @@ const AdminHome = () => {
                 transition={{ duration: 0.5 }}
               >
                 <div className="header w-full flex justify-between items-center">
-                  <h1 className="text-white text-4xl font-bold">
+                  <h1 className="text-white text-lg  md:text-4xl font-bold">
                     Home Page Carousel Pictures
                   </h1>
                   <Button onClick={() => setAddPicModal(true)}>
@@ -313,7 +313,7 @@ const AdminHome = () => {
                     return (
                       <motion.div
                         key={pic.id}
-                        className="relative basis-3/12 my-3 flex items-center justify-center" // Set the parent div to relative
+                        className="relative basis-full md:basis-3/12 my-3 flex items-center justify-center" // Set the parent div to relative
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.5, delay: 0.2 }}

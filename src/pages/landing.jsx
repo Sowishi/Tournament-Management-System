@@ -35,7 +35,7 @@ const Landing = () => {
           <div className="relative w-full h-screen flex items-start justify-start overflow-hidden">
             <TMSCarousel />
             <motion.div
-              className="absolute bottom-40 right-10 transform -translate-y-1/2 bg-white bg-opacity-80 p-8 rounded-lg max-w-md shadow-lg backdrop-blur-lg"
+              className="absolute hidden md:block bottom-40 right-10 transform -translate-y-1/2 bg-white bg-opacity-80 p-8 rounded-lg max-w-md shadow-lg backdrop-blur-lg"
               variants={infoBoxVariants}
               initial="hidden"
               animate="visible"

@@ -175,9 +175,9 @@ export default function Header({ removeMargin }) {
           )}
           <Navbar.Toggle />
         </div>
-        <Navbar.Collapse>
+        <Navbar.Collapse className="bg-white mt-10 md:mt-0 px-5">
           <Button.Group className="flex flex-col md:flex-row">
-            <Link to="/home">
+            <Link className="my-3 md:my-0" to="/home">
               <Button color={pathname == "/home" ? "info" : "gray"}>
                 <HiOutlineHome className="mr-2 h-5 w-5" />
                 Home
@@ -185,7 +185,7 @@ export default function Header({ removeMargin }) {
             </Link>
 
             {!currentEvent && (
-              <Link to={"/about"}>
+              <Link className="my-3 md:my-0" to={"/about"}>
                 <Button color={pathname == "/about" ? "info" : "gray"}>
                   <HiOutlineMap className="mr-2 h-5 w-5" />
                   About Us
@@ -194,7 +194,7 @@ export default function Header({ removeMargin }) {
             )}
 
             {!currentUser && (
-              <Link to={"/login"}>
+              <Link className="my-3 md:my-0" to={"/login"}>
                 <Button color="gray">
                   <HiLogin className="mr-2 h-5 w-5" />
                   Login
@@ -203,7 +203,7 @@ export default function Header({ removeMargin }) {
             )}
             {currentEvent && (
               <>
-                <Link to={"/events"}>
+                <Link className="my-3 md:my-0" to={"/events"}>
                   <Button
                     disabled={currentUser.status == undefined}
                     color={pathname == "/events" ? "info" : "gray"}
@@ -212,7 +212,7 @@ export default function Header({ removeMargin }) {
                     Events
                   </Button>
                 </Link>
-                <Link to={"/participants"}>
+                <Link className="my-3 md:my-0" to={"/participants"}>
                   <Button
                     disabled={currentUser.status == undefined}
                     color={pathname == "/participants" ? "info" : "gray"}
@@ -221,7 +221,7 @@ export default function Header({ removeMargin }) {
                     Participants
                   </Button>
                 </Link>
-                <Link to={"/tally"}>
+                <Link className="my-3 md:my-0" to={"/tally"}>
                   <Button
                     disabled={currentUser.status == undefined}
                     color={pathname == "/tally" ? "info" : "gray"}

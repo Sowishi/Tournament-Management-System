@@ -65,7 +65,7 @@ const Login = () => {
 
   return (
     <AuthLayout>
-      <div className="flex mx-20 justify-center items-center">
+      <div className="flex  justify-center items-center">
         <div className="basis-10/12 flex justify-center items-center ">
           <div
             className="container rounded-lg p-14 mx-10"
@@ -75,11 +75,10 @@ const Login = () => {
               border: "1px solid rgba(255, 255, 255, 0.18)",
               borderRadius: "10px",
               backdropFilter: "blur(2px)",
-              margin: 100,
             }}
           >
-            <div className="flex justify-center items-center">
-              <h1 className="text-white font-bold text-2xl text-left uppercase">
+            <div className="flex justify-center items-center flex-col md:flex-row">
+              <h1 className="text-white font-bold text-sm md:text-2xl text-center uppercase">
                 Login to your web-based tournament management system
               </h1>
               <img src={logo} width={100} alt="" />
@@ -108,7 +107,7 @@ const Login = () => {
                 className="w-8/12 mt-5 py-2"
                 gradientMonochrome="success"
               >
-                View as Guest
+                Guest
               </Button>
               <Button
                 onClick={handleLogin}
@@ -122,7 +121,7 @@ const Login = () => {
             <div className="flex justify-between items-center mt-5">
               <div className="wrapper flex items-center "></div>
               <div className="wrapper flex items-center ">
-                <p className="text-white">Dont' have an account?</p>
+                <p className="text-white text-sm">Dont' have an account?</p>
 
                 <Button size={"xs"} className="ml-2">
                   <Link to={"/registration"}> Create an account</Link>

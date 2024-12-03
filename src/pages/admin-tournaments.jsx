@@ -127,10 +127,10 @@ const AdminTournament = ({ client, currentEvent }) => {
         </form>
       </TmsModal>
 
-      <div className="container mx-auto my-10">
+      <div className="container mx-auto px-5 my-10">
         {!client && (
-          <div className="wrapper flex justify-between items-center">
-            <h1 className="text-white text-4xl font-bold mb-5">Tournament</h1>
+          <div className="wrapper flex justify-between items-center mb-5">
+            <h1 className="text-white text-4xl font-bold ">Tournament</h1>
             <Button onClick={() => setCreateModal(true)}>
               Create Tournament
             </Button>
@@ -170,7 +170,7 @@ const AdminTournament = ({ client, currentEvent }) => {
             filterTournament.map((item) => (
               <motion.div
                 key={item.id}
-                className="basis-3/12 my-5 p-5"
+                className="basis-full md:basis-3/12 my-5 p-5"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
