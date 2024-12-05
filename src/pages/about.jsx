@@ -19,16 +19,54 @@ const AboutPage = () => {
           </p>
         </section>
 
-        {/* Mission Section */}
+        {/* FAQs Section */}
         <section className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4">Our Mission</h2>
-          <p className="text-lg text-gray-600">
-            Our mission is to empower the sports community within the Bicol
-            region by providing an innovative, user-friendly, and reliable
-            system for organizing and managing athletic events. We aim to
-            promote sportsmanship, unity, and healthy competition across state
-            colleges and universities.
-          </p>
+          <h2 className="text-3xl font-bold text-gray-800 mb-4">FAQs</h2>
+          <div className="space-y-4">
+            <Card className="p-6">
+              <h3 className="text-xl font-semibold text-gray-800">
+                What is the Tournament Management System?
+              </h3>
+              <p className="text-gray-600">
+                The Tournament Management System (TMS) is a digital platform
+                designed to streamline the organization and management of
+                athletic events, specifically for SCUAA in the Bicol region. TMS
+                handles event registration, scheduling, match results, player
+                data, and more, offering real-time updates and insights.
+              </p>
+            </Card>
+            <Card className="p-6">
+              <h3 className="text-xl font-semibold text-gray-800">
+                How can teams register for events?
+              </h3>
+              <p className="text-gray-600">
+                Teams can register through the platform by submitting their
+                details, including team lineups, coach information, and
+                preferred events. The system also supports online payment for
+                registration fees.
+              </p>
+            </Card>
+            <Card className="p-6">
+              <h3 className="text-xl font-semibold text-gray-800">
+                Does the system provide live updates?
+              </h3>
+              <p className="text-gray-600">
+                Yes, TMS offers real-time updates on match schedules, scores,
+                and event notifications, ensuring participants and spectators
+                stay informed throughout the tournament.
+              </p>
+            </Card>
+            <Card className="p-6">
+              <h3 className="text-xl font-semibold text-gray-800">
+                Can I access historical data and analytics?
+              </h3>
+              <p className="text-gray-600">
+                Absolutely! The system maintains a comprehensive database of
+                past events, player statistics, and performance analytics to
+                help in decision-making and future event planning.
+              </p>
+            </Card>
+          </div>
         </section>
 
         {/* What We Offer Section */}
@@ -110,41 +148,37 @@ const AboutPage = () => {
             Meet The Team
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Example Team Member */}
+            {/* Team Member Cards */}
             <Card className="text-center">
               <img
                 src={jen}
-                alt="Team Member"
+                alt="Jenelyn E. Macarilay"
                 className="w-24 h-24 mx-auto rounded-full mb-4"
               />
               <h3 className="text-xl font-semibold text-gray-800">
                 Jenelyn E. Macarilay
               </h3>
-              {/* <p className="text-gray-600">Front End Developer</p> */}
             </Card>
             <Card className="text-center">
               <img
                 src={arvin}
-                alt="Team Member"
+                alt="Arvin C. Abina"
                 className="w-24 h-24 mx-auto rounded-full mb-4"
               />
               <h3 className="text-xl font-semibold text-gray-800">
                 Arvin C. Abina
               </h3>
-              {/* <p className="text-gray-600">Back End Developer</p> */}
             </Card>
             <Card className="text-center">
               <img
                 src={kurt}
-                alt="Team Member"
+                alt="Kurt Jostine L. Concepcion"
                 className="w-24 h-24 mx-auto rounded-full mb-4"
               />
               <h3 className="text-xl font-semibold text-gray-800">
                 Kurt Jostine L. Concepcion
               </h3>
-              {/* <p className="text-gray-600">QA Tester</p> */}
             </Card>
-            {/* Duplicate the above block for each team member */}
           </div>
         </section>
       </div>
