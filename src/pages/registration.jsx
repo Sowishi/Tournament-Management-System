@@ -1,4 +1,5 @@
 import { Button } from "flowbite-react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Steps from "../components/steps";
 import TmsInput from "../components/tmsInput";
 import AuthLayout from "../layout/authLayout";
@@ -26,10 +27,22 @@ const Registration = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState({
+    password: false,
+    confirmPassword: false,
+  });
+
   const { addUser } = useAddUser();
   const { data: eventNames } = useGetEventName();
   const { data: collegeNames } = useCrudCollegeName();
   const navigate = useNavigate();
+
+  const togglePasswordVisibility = (field) => {
+    setShowPassword((prev) => ({
+      ...prev,
+      [field]: !prev[field],
+    }));
+  };
 
   const validateField = (name, value) => {
     switch (name) {
@@ -112,107 +125,140 @@ const Registration = () => {
 
   return (
     <AuthLayout hideHeader={true}>
-      <div className="wrapper p-14 m-20 w-full rounded-lg">
-        <div className="text-center flex justify-center items-center">
-          <h1 className="text-white text-5xl font-bold mb-3 mr-5">
-            Registration
-          </h1>
-          <img src={logo} width={100} alt="Logo" />
+      <div className="wrapper w-full rounded-lg py-10">
+        <div className="text-center flex flex-col md:flex-row justify-center items-center">
+          <div className="flex flex-col items-center justify-center  mb-10">
+            <h1 className="text-white text-4xl md:text-5xl font-bold">
+              Registration
+            </h1>
+            <p className="text-white text-2xl mt-2">
+              Registration to Tournament Management System
+            </p>
+          </div>
         </div>
-        <form onSubmit={handleSubmit}>
-          <h1 className="text-white font-bold text-3xl">SUCS details</h1>
-          <div className="flex">
-            <div className="basis-full mx-3">
-              <TmsInput
-                name="schoolRepresentative"
-                onChange={handleChange}
-                value={forms.schoolRepresentative}
-                label="SUCs Representative"
-              />
-              <TmsInput
-                name="email"
-                type="email"
-                onChange={handleChange}
-                value={forms.email}
-                label="SUCs Email"
-                error={errors.email}
-              />
-              <TmsInput
-                addOn="+63"
-                name="contact"
-                onChange={handleChange}
-                value={forms.contact}
-                label="SUCs Contact"
-                error={errors.contact}
-              />
+        <div className="container mx-auto p-4">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <h1 className="text-white font-bold text-2xl md:text-3xl">
+                  SUCs Details
+                </h1>
+                <TmsInput
+                  name="schoolRepresentative"
+                  onChange={handleChange}
+                  value={forms.schoolRepresentative}
+                  label="SUCs Representative"
+                />
+                <TmsInput
+                  name="email"
+                  type="email"
+                  onChange={handleChange}
+                  value={forms.email}
+                  label="SUCs Email"
+                  error={errors.email}
+                />
+                <TmsInput
+                  addOn="+63"
+                  name="contact"
+                  onChange={handleChange}
+                  value={forms.contact}
+                  label="SUCs Contact"
+                  error={errors.contact}
+                />
+              </div>
+
+              <div>
+                <h1 className="text-white font-bold text-2xl md:text-3xl">
+                  Account Information
+                </h1>
+                <TmsInput
+                  name="username"
+                  onChange={handleChange}
+                  value={forms.username}
+                  label="Username"
+                />
+                <div className="relative">
+                  <TmsInput
+                    name="password"
+                    type={showPassword.password ? "text" : "password"}
+                    onChange={handleChange}
+                    value={forms.password}
+                    label="Password"
+                    error={errors.password}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => togglePasswordVisibility("password")}
+                    className="absolute inset-y-0 right-2 top-8 flex items-center"
+                  >
+                    {showPassword.password ? (
+                      <FaEyeSlash className="w-5" />
+                    ) : (
+                      <FaEye className="w-5" />
+                    )}
+                  </button>
+                </div>
+                <div className="relative">
+                  <TmsInput
+                    name="confirmPassword"
+                    type={showPassword.confirmPassword ? "text" : "password"}
+                    onChange={handleChange}
+                    value={forms.confirmPassword}
+                    label="Confirm Password"
+                    error={errors.confirmPassword}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => togglePasswordVisibility("confirmPassword")}
+                    className="absolute inset-y-0 right-2 top-8 flex items-center"
+                  >
+                    {showPassword.confirmPassword ? (
+                      <FaEyeSlash className="w-5" />
+                    ) : (
+                      <FaEye className="w-5" />
+                    )}
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
 
-          <h1 className="text-white font-bold text-3xl mt-10">
-            Sports Information
-          </h1>
-          <div className="flex mx-3 flex-col">
-            <TmsSelect
-              name="sportsEvent"
-              onChange={handleChange}
-              label="Sports Information"
-              data={["Please select event name", ...formatEventNames]}
-            />
-            {forms.sportsEvent && (
+            <div className="space-y-4">
+              <h1 className="text-white font-bold text-2xl md:text-3xl">
+                Sports Information
+              </h1>
               <TmsSelect
-                name="collegeName"
+                name="sportsEvent"
                 onChange={handleChange}
-                label="College Name"
-                data={["Please select college name", ...formatCollegeNames]}
+                label="Sports Information"
+                data={["Please select event name", ...formatEventNames]}
               />
-            )}
-          </div>
+              {forms.sportsEvent && (
+                <TmsSelect
+                  name="collegeName"
+                  onChange={handleChange}
+                  label="College Name"
+                  data={["Please select college name", ...formatCollegeNames]}
+                />
+              )}
+            </div>
 
-          <h1 className="text-white font-bold text-3xl mt-10">
-            Account Information
-          </h1>
-          <div className="flex flex-col flex-wrap mx-3">
-            <TmsInput
-              name="username"
-              onChange={handleChange}
-              value={forms.username}
-              label="Username"
-            />
-            <TmsInput
-              name="password"
-              type="password"
-              onChange={handleChange}
-              value={forms.password}
-              label="Password"
-              error={errors.password}
-            />
-            <TmsInput
-              name="confirmPassword"
-              type="password"
-              onChange={handleChange}
-              value={forms.confirmPassword}
-              label="Confirm Password"
-              error={errors.confirmPassword}
-            />
-          </div>
-
-          <div className="flex justify-center items-center mt-10">
-            <Link to="/login" className="w-full mx-3 py-4">
-              <Button className="w-full py-4" gradientMonochrome="success">
-                Back to Login
+            <div className="flex flex-col md:flex-row justify-center items-center gap-4 mt-10">
+              <Link to="/login" className="w-full md:w-1/2">
+                <Button className="w-full py-4" gradientMonochrome="success">
+                  <h1 className="text-lg font-bold">Back to Login</h1>
+                </Button>
+              </Link>
+              <Button
+                className="w-full md:w-1/2 py-4"
+                disabled={!areAllFieldsFilled}
+                gradientMonochrome="info"
+                type="submit"
+              >
+                <h1 className="text-lg font-bold">Log In</h1>
               </Button>
-            </Link>
-
-            <Button
-              className="w-full mx-3 py-4"
-              disabled={!areAllFieldsFilled}
-              gradientMonochrome="info"
-              type="submit"
-            >
-              Register
-            </Button>
-          </div>
-        </form>
+            </div>
+          </form>
+        </div>
       </div>
     </AuthLayout>
   );

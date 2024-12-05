@@ -16,7 +16,7 @@ const TmsInput = ({
 }) => {
   return (
     <div>
-      <div className="mb-2 block my-3">
+      <div className="mb-2 block my-5">
         <Label
           className={dark ? "text-slate-950" : "text-white"}
           color={"white"}
@@ -35,7 +35,7 @@ const TmsInput = ({
         required={required}
         color={error ? "failure" : ""}
         helperText={
-          <>{error && <span className="font-medium">{error}</span>}</>
+          <>{error && <span className="font-sm absolute">{error}</span>}</>
         }
         rightIcon={rightIcon}
       />
