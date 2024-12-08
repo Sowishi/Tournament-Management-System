@@ -29,6 +29,7 @@ const useCrudParticipants = () => {
           message: `You have been successfully added as a participant in the tournament: ${tournamentName}.`,
           ownerID: user.id,
           createdAt: serverTimestamp(),
+          read: false,
         });
       });
 

@@ -31,6 +31,7 @@ const useUpdateUser = () => {
       message: "Your SUC account is approved!",
       ownerID: id,
       createdAt: serverTimestamp(),
+      read: false,
     });
     updateDoc(docRef, { status: "Approve" });
   };

@@ -71,6 +71,7 @@ export default function MatchDateCard({ match, id, tournamentID }) {
             }.`,
             ownerID: user.id,
             createdAt: serverTimestamp(),
+            read: false,
           });
         }
       }

@@ -28,7 +28,13 @@ const useCrudNotifications = () => {
     });
   }, []);
 
-  return { data };
+  const markNotificationsAsRead = async (notifs) => {
+    notifs.map((notif) => {
+      updateDoc(doc(db, "notifications", notif.id), { read: true });
+    });
+  };
+
+  return { data, markNotificationsAsRead };
 };
 
 export default useCrudNotifications;

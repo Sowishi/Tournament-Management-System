@@ -24,7 +24,8 @@ export default function Header({ removeMargin }) {
     useStore();
   const { data: eventNameData } = useGetEventName();
 
-  const { data: notifications } = useCrudNotifications();
+  const { data: notifications, markNotificationsAsRead } =
+    useCrudNotifications();
 
   useEffect(() => {
     setCurrentEvent(currentUser?.sportsEvent);
@@ -39,6 +40,16 @@ export default function Header({ removeMargin }) {
       return item;
     }
   });
+
+  const unreadNotif = notifications.filter((item) => {
+    if (item.ownerID == currentUser?.id && !item.read) {
+      return item;
+    }
+  });
+
+  const handleBellClick = () => {
+    markNotificationsAsRead(filterNotif);
+  };
 
   return (
     <>
@@ -70,14 +81,14 @@ export default function Header({ removeMargin }) {
                 arrowIcon={false}
                 inline
                 label={
-                  <div className="relative">
+                  <div className="relative" onClick={handleBellClick}>
                     <HiOutlineBell size={30} />
                     {filterNotif.length > 0 && (
                       <Badge
                         color="failure"
                         className="absolute -top-1 -right-2 rounded-full"
                       >
-                        {filterNotif.length}
+                        {unreadNotif.length}
                       </Badge>
                     )}
                   </div>
