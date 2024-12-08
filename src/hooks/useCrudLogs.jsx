@@ -22,7 +22,7 @@ const useCrudLogs = () => {
         ...doc.data(),
         id: doc.id,
       }));
-      setData(output);
+      setData(output.reverse());
     });
 
     // Clean up the listener on component unmount

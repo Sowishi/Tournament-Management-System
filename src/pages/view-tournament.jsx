@@ -595,7 +595,11 @@ const ViewTournament = () => {
                               animate={{ opacity: 1, y: 0 }}
                               transition={{ delay: index * 0.1 }}
                             >
-                              <MatchCard id={id} match={match} />
+                              <MatchCard
+                                id={id}
+                                match={match}
+                                tournament={tournament}
+                              />
                             </motion.div>
                           </div>
                         );

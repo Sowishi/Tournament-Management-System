@@ -4,8 +4,10 @@ import { Badge, Button, Card, Tooltip, Modal } from "flowbite-react";
 import { useEffect, useState } from "react";
 import useCrudParticipants from "../hooks/useCrudParticipants";
 import useCrudMatches from "../hooks/useCrudMatches";
+import useCrudLogs from "../hooks/useCrudLogs";
+import { useStore } from "../zustand/store";
 
-export default function MatchCard({ match, id, client }) {
+export default function MatchCard({ match, id, client, tournament }) {
   const { showParticipant } = useCrudParticipants();
   const { updateMatchWinner, getMatchDate } = useCrudMatches();
   const [player1, setPlayer1] = useState(null);
@@ -14,6 +16,8 @@ export default function MatchCard({ match, id, client }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedWinner, setSelectedWinner] = useState(null);
 
+  const { addLog } = useCrudLogs();
+  const { currentUser } = useStore();
   const getBadgeColor = (state) => {
     switch (state) {
       case "pending":
@@ -47,7 +51,13 @@ export default function MatchCard({ match, id, client }) {
   };
 
   const confirmWinner = () => {
-    updateMatchWinner(id, match.id, selectedWinner);
+    const winnerName =
+      selectedWinner === player1?.id ? player1?.name : player2?.name;
+
+    updateMatchWinner(id, match.id, selectedWinner, winnerName);
+    const logsLabel = `${winnerName} won in round ${match.round} of the tournament ${tournament.name}.`;
+    addLog(currentUser, logsLabel);
+
     setTimeout(() => {
       window.location.reload();
     }, 2000);
