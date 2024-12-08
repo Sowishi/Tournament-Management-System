@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@g-loot/react-tournament-brackets": "^1.0.31-rc",
+    "@react-pdf/renderer": "^4.1.5",
     "firebase": "^10.13.0",
     "flowbite-react": "^0.10.1",
     "framer-motion": "^11.3.28",

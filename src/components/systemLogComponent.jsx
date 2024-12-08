@@ -3,6 +3,14 @@ import { Badge } from "flowbite-react";
 import { motion } from "framer-motion";
 import useCrudLogs from "../hooks/useCrudLogs";
 import moment from "moment";
+import {
+  PDFDownloadLink,
+  Page,
+  Text,
+  View,
+  Document,
+  StyleSheet,
+} from "@react-pdf/renderer";
 
 const SystemLogsComponent = () => {
   const { data: logs } = useCrudLogs();
@@ -28,6 +36,31 @@ const SystemLogsComponent = () => {
     setSortedLogs(logs);
   }, [logs]);
 
+  // Define PDF document structure
+  const LogsPDFDocument = () => (
+    <Document>
+      <Page style={styles.page}>
+        <Text style={styles.title}>System Logs Report</Text>
+        <View style={styles.table}>
+          <View style={styles.tableRow}>
+            <Text style={[styles.tableCol, styles.header]}>Date</Text>
+            <Text style={[styles.tableCol, styles.header]}>Action</Text>
+            <Text style={[styles.tableCol, styles.header]}>User</Text>
+          </View>
+          {sortedLogs.map((log, index) => (
+            <View key={index} style={styles.tableRow}>
+              <Text style={styles.tableCol}>
+                {moment(log.createdAt.toDate()).format("LLL")}
+              </Text>
+              <Text style={styles.tableCol}>{log.label}</Text>
+              <Text style={styles.tableCol}>{log.user.fullName}</Text>
+            </View>
+          ))}
+        </View>
+      </Page>
+    </Document>
+  );
+
   return (
     <motion.div
       className="container mx-auto mt-10"
@@ -38,13 +71,22 @@ const SystemLogsComponent = () => {
       <div className="bg-gray-800 text-white p-6 rounded-lg shadow-md">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-3xl font-bold">System Logs</h3>
-          <button
-            onClick={handleSort}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
-          >
-            Sort by Date (
-            {sortOrder === "asc" ? "Oldest First" : "Newest First"})
-          </button>
+          <div className="flex space-x-4">
+            <button
+              onClick={handleSort}
+              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
+            >
+              Sort by Date (
+              {sortOrder === "asc" ? "Oldest First" : "Newest First"})
+            </button>
+            <PDFDownloadLink
+              document={<LogsPDFDocument />}
+              fileName="system_logs_report.pdf"
+              className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded"
+            >
+              {({ loading }) => (loading ? "Preparing PDF..." : "Export PDF")}
+            </PDFDownloadLink>
+          </div>
         </div>
 
         <div className="overflow-x-auto">
@@ -81,3 +123,34 @@ const SystemLogsComponent = () => {
 };
 
 export default SystemLogsComponent;
+
+// PDF Styles
+const styles = StyleSheet.create({
+  page: {
+    padding: 30,
+    fontSize: 12,
+  },
+  title: {
+    fontSize: 20,
+    marginBottom: 20,
+    textAlign: "center",
+    fontWeight: "bold",
+  },
+  table: {
+    width: "100%",
+    marginVertical: 10,
+  },
+  tableRow: {
+    flexDirection: "row",
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+    paddingVertical: 5,
+  },
+  tableCol: {
+    flex: 1,
+    paddingHorizontal: 5,
+  },
+  header: {
+    fontWeight: "bold",
+  },
+});
