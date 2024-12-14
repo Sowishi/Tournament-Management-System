@@ -171,6 +171,17 @@ export default function AdminLayout({ children, client }) {
                           </div>
                         </Sidebar.Item>
                       </Link>
+                      <Link to="/admin/tournament-manager">
+                        <Sidebar.Item
+                          onClick={() => setIsOpen(false)}
+                          className="bg-blue-950 text-white hover:text-white hover:bg-red-500 my-3"
+                        >
+                          <div className="flex items-center">
+                            Tournament Managers
+                            <HiUsers className="ml-3" />
+                          </div>
+                        </Sidebar.Item>
+                      </Link>
                       <Link to="/admin/tournament">
                         <Sidebar.Item
                           onClick={() => setIsOpen(false)}
