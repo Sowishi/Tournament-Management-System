@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import useCrudAdmin from "../hooks/useCrudAdmin";
 import useGetEventName from "../hooks/useGetEventName";
 import { TournamentManagerTable } from "../components/tournamentManagerTable";
+import useCrudTournament from "../hooks/useCrudTournament";
 
 const AdminTournamentManager = () => {
   const [createModal, setCreateModal] = useState(false);
@@ -17,14 +18,13 @@ const AdminTournamentManager = () => {
     email: "",
     password: "",
     role: "Tournament Manager",
-    sportsEvent: "",
+    assignTournament: "", // Ensure this field is included
   });
   const [validationErrors, setValidationErrors] = useState({});
 
   const { addAdmin, updateAdmin, data } = useCrudAdmin();
+  const { data: tournaments } = useCrudTournament();
   const { data: eventNames } = useGetEventName();
-
-  const formatEventNames = eventNames.map((item) => item.eventName);
 
   const handleChange = ({ target: { name, value } }) => {
     setForms({ ...forms, [name]: value });
@@ -44,11 +44,8 @@ const AdminTournamentManager = () => {
     if (!forms.password.trim() || forms.password.length < 8) {
       errors.password = "Password must be at least 8 characters long.";
     }
-    if (
-      !forms.sportsEvent ||
-      forms.sportsEvent === "Please Select Assigned Event"
-    ) {
-      errors.sportsEvent = "Please select a valid sports event.";
+    if (!forms.assignTournament.trim()) {
+      errors.assignTournament = "Assigning a tournament is required.";
     }
 
     setValidationErrors(errors);
@@ -61,8 +58,9 @@ const AdminTournamentManager = () => {
         updateAdmin(forms);
         toast.success("Successfully updated admin.");
       } else {
-        addAdmin(forms);
-        toast.success("Successfully added admin.");
+        console.log(forms);
+        // addAdmin(forms);
+        // toast.success("Successfully added admin.");
       }
       setCreateModal(false);
     } else {
@@ -70,8 +68,8 @@ const AdminTournamentManager = () => {
     }
   };
 
-  const handleUpdateForms = (forms) => {
-    setForms(forms);
+  const handleUpdateForms = (formData) => {
+    setForms(formData);
     setIsUpdate(true);
     setCreateModal(true);
   };
@@ -82,7 +80,7 @@ const AdminTournamentManager = () => {
       email: "",
       password: "",
       role: "Tournament Manager",
-      sportsEvent: "",
+      assignTournament: "",
     });
     setValidationErrors({});
     setIsUpdate(false);
@@ -90,10 +88,11 @@ const AdminTournamentManager = () => {
   };
 
   const tournamentManagers = data.filter(
-    (user) => user.role == "Tournament Manager"
+    (user) => user.role === "Tournament Manager"
   );
 
   console.log(tournamentManagers);
+
   return (
     <AdminLayout>
       <TmsModal
@@ -130,15 +129,19 @@ const AdminTournamentManager = () => {
             placeHolder="Password"
             error={validationErrors.password}
           />
-          <TmsSelect
-            value={forms.sportsEvent}
-            dark
-            label="Sports Event"
-            onChange={handleChange}
-            name="sportsEvent"
-            data={["Please Select Assigned Event", ...formatEventNames]}
-            error={validationErrors.sportsEvent}
-          />
+          <select onChange={handleChange} name="assignTournament">
+            {tournaments.map((tournamentObj) => (
+              <option
+                key={tournamentObj.tournament.id}
+                value={{
+                  name: tournamentObj.tournament.name,
+                  id: tournamentObj.tournament.id,
+                }}
+              >
+                {tournamentObj.tournament.name}
+              </option>
+            ))}
+          </select>
         </div>
       </TmsModal>
       <div className="container mx-auto mt-10 px-5 pb-20">
