@@ -1,65 +1,49 @@
-import { Button } from "flowbite-react";
-import { AdminTable } from "../components/adminTable";
-import AdminLayout from "../layout/adminLayout";
 import { useState } from "react";
+import { Button } from "flowbite-react";
+import AdminLayout from "../layout/adminLayout";
 import TmsInput from "../components/tmsInput";
 import TmsSelect from "../components/tmsSelect";
-import useCrudAdmin from "../hooks/useCrudAdmin";
-import { toast } from "react-toastify";
 import TmsModal from "../components/tmsModal";
+import { toast } from "react-toastify";
+import useCrudAdmin from "../hooks/useCrudAdmin";
 import useGetEventName from "../hooks/useGetEventName";
 import { TournamentManagerTable } from "../components/tournamentManagerTable";
 
-const AdminTournamenManager = () => {
+const AdminTournamentManager = () => {
   const [createModal, setCreateModal] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
   const [forms, setForms] = useState({
     fullName: "",
     email: "",
     password: "",
-    role: "",
+    role: "Tournament Manager",
     sportsEvent: "",
   });
   const [validationErrors, setValidationErrors] = useState({});
-  const [currentRole, setCurrentRole] = useState("All");
-  const [isUpdate, setIsUpdate] = useState(false);
 
   const { addAdmin, updateAdmin, data } = useCrudAdmin();
   const { data: eventNames } = useGetEventName();
 
-  // Map event names from API response
   const formatEventNames = eventNames.map((item) => item.eventName);
 
-  const handleChange = (event) => {
-    const { value, name } = event.target;
+  const handleChange = ({ target: { name, value } }) => {
     setForms({ ...forms, [name]: value });
-
-    // Clear validation errors on change
     setValidationErrors({ ...validationErrors, [name]: "" });
   };
 
   const validateForm = () => {
     const errors = {};
 
-    if (!forms.fullName.trim()) {
-      errors.fullName = "Full Name is required.";
-    }
-
+    if (!forms.fullName.trim()) errors.fullName = "Full Name is required.";
     if (
       !forms.email.trim() ||
       !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(forms.email)
     ) {
       errors.email = "A valid Email is required.";
     }
-
     if (!forms.password.trim() || forms.password.length < 8) {
-      errors.password =
-        "Password is required and must be at least 8 characters long.";
+      errors.password = "Password must be at least 8 characters long.";
     }
-
-    if (!forms.role || forms.role === "Please Select Admin") {
-      errors.role = "Please select a valid role.";
-    }
-
     if (
       !forms.sportsEvent ||
       forms.sportsEvent === "Please Select Assigned Event"
@@ -71,20 +55,16 @@ const AdminTournamenManager = () => {
     return Object.keys(errors).length === 0;
   };
 
-  const handleAddAdmin = () => {
+  const handleSubmit = () => {
     if (validateForm()) {
-      addAdmin(forms);
-      toast.success("Successfully added admin.");
-      setCreateModal(false);
-    } else {
-      toast.error("Please fix the errors in the form.");
-    }
-  };
-
-  const handleUpdateAdmin = () => {
-    if (validateForm()) {
-      updateAdmin(forms);
-      toast.success("Successfully updated admin.");
+      if (isUpdate) {
+        updateAdmin(forms);
+        toast.success("Successfully updated admin.");
+      } else {
+        console.log(forms);
+        // addAdmin(forms);
+        // toast.success("Successfully added admin.");
+      }
       setCreateModal(false);
     } else {
       toast.error("Please fix the errors in the form.");
@@ -97,16 +77,23 @@ const AdminTournamenManager = () => {
     setCreateModal(true);
   };
 
-  const filterData = data.filter((item) => item.role === currentRole);
-
-  const filterWithoutMasterAdmin = data.filter(
-    (item) => item.role !== "Master Admin" && item.userType === "admin"
-  );
+  const resetForm = () => {
+    setForms({
+      fullName: "",
+      email: "",
+      password: "",
+      role: "Tournament Manager",
+      sportsEvent: "",
+    });
+    setValidationErrors({});
+    setIsUpdate(false);
+    setCreateModal(true);
+  };
 
   return (
     <AdminLayout>
       <TmsModal
-        onSubmit={isUpdate ? handleUpdateAdmin : handleAddAdmin}
+        onSubmit={handleSubmit}
         title={isUpdate ? "Update Admin" : "Create Admin"}
         openModal={createModal}
         handleClose={() => setCreateModal(false)}
@@ -140,15 +127,6 @@ const AdminTournamenManager = () => {
             error={validationErrors.password}
           />
           <TmsSelect
-            value={forms.role}
-            dark
-            label="Role"
-            onChange={handleChange}
-            name="role"
-            data={["Please Select Admin", "Event Admin", "Document Admin"]}
-            error={validationErrors.role}
-          />
-          <TmsSelect
             value={forms.sportsEvent}
             dark
             label="Sports Event"
@@ -162,22 +140,7 @@ const AdminTournamenManager = () => {
       <div className="container mx-auto mt-10 px-5 pb-20">
         <h1 className="text-white text-4xl font-bold">Tournament Managers</h1>
         <div className="wrapper mt-10 flex justify-end items-center">
-          <Button
-            onClick={() => {
-              setIsUpdate(false);
-              setForms({
-                fullName: "",
-                email: "",
-                password: "",
-                role: "",
-                sportsEvent: "",
-              });
-              setValidationErrors({});
-              setCreateModal(true);
-            }}
-          >
-            Create Admin
-          </Button>
+          <Button onClick={resetForm}>Create Admin</Button>
         </div>
         <TournamentManagerTable
           data={[]}
@@ -188,4 +151,4 @@ const AdminTournamenManager = () => {
   );
 };
 
-export default AdminTournamenManager;
+export default AdminTournamentManager;
