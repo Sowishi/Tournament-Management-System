@@ -53,7 +53,8 @@ export default function RankingTable({
       addTally({
         name: participantName,
         rank: participantRank, // Assuming the rank is a number or string
-        event: tournament.description, // Ensure tournament description is correct
+        event: tournament.description,
+        tournamentName: tournament.name, // Ensure tournament description is correct
       });
     });
 

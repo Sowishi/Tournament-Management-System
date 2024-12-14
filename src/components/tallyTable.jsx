@@ -12,6 +12,7 @@ export function TallyTable() {
   const { data } = useCrudTally();
   const { currentEvent } = useStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedInstitution, setSelectedInstitution] = useState(null);
 
   // Filter data for the current event
   const filteredData = data.filter((item) => item.event === currentEvent);
@@ -22,12 +23,30 @@ export function TallyTable() {
     const rank = item.rank; // Rank field (1 = Gold, 2 = Silver, 3 = Bronze)
 
     if (!acc[institution]) {
-      acc[institution] = { Gold: 0, Silver: 0, Bronze: 0 };
+      acc[institution] = { Gold: 0, Silver: 0, Bronze: 0, tournaments: [] };
     }
 
-    if (rank === 1) acc[institution].Gold += 1;
-    if (rank === 2) acc[institution].Silver += 1;
-    if (rank === 3) acc[institution].Bronze += 1;
+    if (rank === 1) {
+      acc[institution].Gold += 1;
+      acc[institution].tournaments.push({
+        tournamentName: item.tournamentName,
+        medal: "Gold",
+      });
+    }
+    if (rank === 2) {
+      acc[institution].Silver += 1;
+      acc[institution].tournaments.push({
+        tournamentName: item.tournamentName,
+        medal: "Silver",
+      });
+    }
+    if (rank === 3) {
+      acc[institution].Bronze += 1;
+      acc[institution].tournaments.push({
+        tournamentName: item.tournamentName,
+        medal: "Bronze",
+      });
+    }
 
     return acc;
   }, {});
@@ -46,7 +65,11 @@ export function TallyTable() {
     visible: { opacity: 1, y: 0 },
   };
 
-  const handleOpenModal = () => setIsModalOpen(true);
+  const handleOpenModal = (institution) => {
+    setSelectedInstitution(institution);
+    setIsModalOpen(true);
+  };
+
   const handleCloseModal = () => setIsModalOpen(false);
 
   if (filteredData.length <= 0) {
@@ -113,7 +136,8 @@ export function TallyTable() {
                 initial="hidden"
                 animate="visible"
                 transition={{ delay: index * 0.1 }}
-                className={`text-white ${rankStyle} transition-all hover:bg-gray-600`}
+                className={`text-white ${rankStyle} transition-all hover:bg-gray-600 cursor-pointer`}
+                onClick={() => handleOpenModal(item)}
               >
                 <Table.Cell className="p-4 text-lg font-medium">
                   <div className="flex items-center justify-center">
@@ -147,21 +171,51 @@ export function TallyTable() {
         </Table.Body>
       </Table>
 
-      {/* Modal for future actions if needed */}
-      <Modal show={isModalOpen} onClose={handleCloseModal} size="md">
-        <Modal.Header>Example Modal</Modal.Header>
-        <Modal.Body>
-          <p className="text-center">Modal content here.</p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            onClick={handleCloseModal}
-            className="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-lg"
-          >
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      {/* Modal for institution details */}
+      {selectedInstitution && (
+        <Modal show={isModalOpen} onClose={handleCloseModal} size="lg">
+          <Modal.Header>
+            Medals for {selectedInstitution.institution}
+          </Modal.Header>
+          <Modal.Body>
+            <Table className="min-w-full text-center">
+              <Table.Head>
+                <Table.HeadCell>Tournament</Table.HeadCell>
+                <Table.HeadCell>Medal</Table.HeadCell>
+              </Table.Head>
+              <Table.Body>
+                {selectedInstitution.tournaments.map((tournament, idx) => (
+                  <Table.Row key={idx} className="text-gray-700">
+                    <Table.Cell>{tournament.tournamentName}</Table.Cell>
+                    <Table.Cell>
+                      <div className="flex items-center justify-center">
+                        {tournament.medal === "Gold" && (
+                          <FaCrown className="text-yellow-500 text-xl mr-2" />
+                        )}
+                        {tournament.medal === "Silver" && (
+                          <FaMedal className="text-gray-400 text-xl mr-2" />
+                        )}
+                        {tournament.medal === "Bronze" && (
+                          <FaMedal className="text-orange-500 text-xl mr-2" />
+                        )}
+                        {tournament.medal}
+                      </div>
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              onClick={handleCloseModal}
+              className="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-lg"
+            >
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      )}
     </div>
   );
 }
