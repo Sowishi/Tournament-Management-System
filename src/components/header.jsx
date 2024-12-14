@@ -74,6 +74,7 @@ export default function Header({ removeMargin }) {
           </span>
         </Navbar.Brand>
         <div className="flex md:order-2 mr-5 items-center space-x-4">
+          <h1 className="font-bold">{currentUser?.username}</h1>
           {currentUser && (
             <>
               {/* Notification Icon */}
