@@ -27,7 +27,11 @@ const Login = () => {
           localStorage.setItem("user", JSON.stringify(user));
           setCurrentAdmin(user);
           userFound = true;
-          navigate("/admin/home");
+          if (user.role == "Tournament Manager") {
+            navigate("/admin/tournament");
+          } else {
+            navigate("/admin/home");
+          }
         }
         return;
       }

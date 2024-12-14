@@ -24,6 +24,8 @@ export default function AdminLayout({ children, client }) {
   const isMasterAdmin = currentAdmin?.role == "Master Admin";
   const isEventAdmin = currentAdmin?.role == "Event Admin";
   const isDocumentAdmin = currentAdmin?.role == "Document Admin";
+  const isTournamentManager = currentAdmin?.role == "Tournament Manager";
+
   const navigation = useNavigate();
 
   const getAdminRole = (role) => {
@@ -36,6 +38,9 @@ export default function AdminLayout({ children, client }) {
 
     if (role == "Document Admin") {
       return "Document Admin";
+    }
+    if (role == "Tournament Manager") {
+      return "Tournament Manager";
     }
   };
 
@@ -243,6 +248,28 @@ export default function AdminLayout({ children, client }) {
                       </Sidebar.Item>
                     </Sidebar.ItemGroup>
                   )}
+                  {isTournamentManager && (
+                    <Sidebar.ItemGroup>
+                      <Link to="/admin/tournament">
+                        <Sidebar.Item
+                          onClick={() => setIsOpen(false)}
+                          className="bg-blue-950 text-white hover:text-white hover:bg-red-500 my-3"
+                        >
+                          <div className="flex items-center">
+                            Tournament
+                            <HiOutlineChartSquareBar className="ml-3" />
+                          </div>
+                        </Sidebar.Item>
+                      </Link>
+
+                      <Sidebar.Item
+                        onClick={() => setIsOpen(false)}
+                        className="mt-20"
+                      >
+                        <img src={logo} />
+                      </Sidebar.Item>
+                    </Sidebar.ItemGroup>
+                  )}
                 </Sidebar.Items>
               </div>
             </div>
@@ -269,9 +296,9 @@ export default function AdminLayout({ children, client }) {
             <div className="wrapper mx-10 flex items-center justify-start">
               <div className="flex flex-col">
                 <h1 className="text-white textt-sm md:text-2xl">
-                  Admin Dashboard
+                  {currentAdmin.fullName}
                 </h1>
-                <p className="text-blue-500 text-xs">
+                <p className="text-blue-500 text-lg">
                   Logged in as: {getAdminRole(currentAdmin?.role)}
                 </p>
               </div>

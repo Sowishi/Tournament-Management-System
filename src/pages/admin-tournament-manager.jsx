@@ -61,9 +61,8 @@ const AdminTournamentManager = () => {
         updateAdmin(forms);
         toast.success("Successfully updated admin.");
       } else {
-        console.log(forms);
-        // addAdmin(forms);
-        // toast.success("Successfully added admin.");
+        addAdmin(forms);
+        toast.success("Successfully added admin.");
       }
       setCreateModal(false);
     } else {
@@ -90,6 +89,11 @@ const AdminTournamentManager = () => {
     setCreateModal(true);
   };
 
+  const tournamentManagers = data.filter(
+    (user) => user.role == "Tournament Manager"
+  );
+
+  console.log(tournamentManagers);
   return (
     <AdminLayout>
       <TmsModal
@@ -143,7 +147,7 @@ const AdminTournamentManager = () => {
           <Button onClick={resetForm}>Create Admin</Button>
         </div>
         <TournamentManagerTable
-          data={[]}
+          data={tournamentManagers}
           handleUpdateForms={handleUpdateForms}
         />
       </div>

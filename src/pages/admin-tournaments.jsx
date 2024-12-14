@@ -21,9 +21,9 @@ const AdminTournament = ({ client, currentEvent }) => {
   const { addTournament, data, deleteTournament, loading } =
     useCrudTournament();
   const { data: eventNames } = useGetEventName();
-  const [selectedEvent, setSelectedEvent] = useState("all");
+
   const { addCalendar } = useCrudCalendar();
-  const { currentUser } = useStore();
+  const { currentUser, currentAdmin } = useStore();
   const { addLog } = useCrudLogs();
 
   const [forms, setForms] = useState({
@@ -31,6 +31,14 @@ const AdminTournament = ({ client, currentEvent }) => {
     tournamentEvent: "",
     tournamentType: "",
   });
+
+  const [selectedEvent, setSelectedEvent] = useState(
+    currentAdmin?.role == "Tournament Manager"
+      ? currentAdmin.sportsEvent
+      : "all"
+  );
+
+  console.log(selectedEvent);
 
   const handleChange = (event) => {
     const { value, name } = event.target;
@@ -128,7 +136,7 @@ const AdminTournament = ({ client, currentEvent }) => {
       </TmsModal>
 
       <div className="container mx-auto px-5 my-10">
-        {!client && (
+        {!client && currentAdmin.role !== "Tournament Manager" && (
           <div className="wrapper flex justify-between items-center mb-5">
             <h1 className="text-white text-4xl font-bold ">Tournament</h1>
             <Button onClick={() => setCreateModal(true)}>
@@ -136,7 +144,7 @@ const AdminTournament = ({ client, currentEvent }) => {
             </Button>
           </div>
         )}
-        {!client && (
+        {!client && !currentAdmin.role == "Tournament Manager" && (
           <div className="container mx-auto mt-5">
             <div className="wrapper flex mb-3 py-3">
               <Button
