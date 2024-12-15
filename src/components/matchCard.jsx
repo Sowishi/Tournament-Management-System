@@ -70,6 +70,8 @@ export default function MatchCard({ match, id, client, tournament }) {
     updateMatchWinner(id, match.id, "tie");
   };
 
+  console.log(match);
+
   return (
     <Card
       className="max-w-sm md:w-96 sm:w-80 w-full my-5 p-5 border shadow-lg rounded-lg dark:bg-gray-800 dark:border-gray-700"
