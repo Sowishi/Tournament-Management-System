@@ -62,7 +62,7 @@ const AdminTournamentManager = () => {
       if (isUpdate) {
         updateAdmin(forms);
       } else {
-        addAdmin({ ...forms, tournamentID: selectedTournament.tournament.id });
+        addAdmin({ ...forms, tournamentID: selectedTournament.tournament.url });
         toast.success("Successfully created admin.");
       }
       setCreateModal(false);

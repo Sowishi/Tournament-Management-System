@@ -250,7 +250,7 @@ export default function AdminLayout({ children, client }) {
                   )}
                   {isTournamentManager && (
                     <Sidebar.ItemGroup>
-                      <Link to="/admin/tournament">
+                      {/* <Link to="/admin/tournament">
                         <Sidebar.Item
                           onClick={() => setIsOpen(false)}
                           className="bg-blue-950 text-white hover:text-white hover:bg-red-500 my-3"
@@ -260,7 +260,7 @@ export default function AdminLayout({ children, client }) {
                             <HiOutlineChartSquareBar className="ml-3" />
                           </div>
                         </Sidebar.Item>
-                      </Link>
+                      </Link> */}
 
                       <Sidebar.Item
                         onClick={() => setIsOpen(false)}

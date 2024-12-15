@@ -28,7 +28,7 @@ const Login = () => {
           setCurrentAdmin(user);
           userFound = true;
           if (user.role == "Tournament Manager") {
-            navigate("/admin/tournament");
+            navigate(`/tournament/${user.tournamentID}`);
           } else {
             navigate("/admin/home");
           }
