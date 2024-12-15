@@ -236,8 +236,8 @@ const Registration = () => {
                 <TmsSelect
                   name="collegeName"
                   onChange={handleChange}
-                  label="College Name"
-                  data={["Please select college name", ...formatCollegeNames]}
+                  label="Delegation"
+                  data={["Please select Delegation", ...formatCollegeNames]}
                 />
               )}
             </div>

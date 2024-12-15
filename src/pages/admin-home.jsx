@@ -399,7 +399,7 @@ const AdminHome = () => {
             </motion.div>
           </Tabs.Item>
 
-          <Tabs.Item title="College Names">
+          <Tabs.Item title="Delegates">
             <motion.div
               className="wrapper mx-10 mt-10"
               initial={{ opacity: 0, y: -20 }}
@@ -407,12 +407,12 @@ const AdminHome = () => {
               transition={{ duration: 0.5 }}
             >
               <div className="header w-full flex justify-between items-center mb-5">
-                <h1 className="text-white text-4xl font-bold">College Names</h1>
+                <h1 className="text-white text-4xl font-bold">Delegates</h1>
                 <Button
                   onClick={() => setAddCollegeModal(true)}
                   color={"success"}
                 >
-                  Add College
+                  Add Delegates
                 </Button>
               </div>
               <TmsSelect
@@ -424,7 +424,7 @@ const AdminHome = () => {
               <table className="min-w-full bg-gray-800 rounded-md shadow-md mt-5">
                 <thead>
                   <tr className="text-white">
-                    <th className="py-3 px-4 text-left">College Name</th>
+                    <th className="py-3 px-4 text-left">Delegates</th>
                     <th className="py-3 px-4 text-center">Actions</th>
                   </tr>
                 </thead>
