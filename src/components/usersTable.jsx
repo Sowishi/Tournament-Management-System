@@ -38,7 +38,7 @@ export function UsersTable() {
   const getBadgeColor = (status) => {
     if (status === "Pending") {
       return "info";
-    } else if (status === "Approve") {
+    } else if (status === "Approved") {
       return "success";
     } else {
       return "failure";
@@ -118,7 +118,7 @@ export function UsersTable() {
                   setSelectedDocument(null);
                 }}
               >
-                Approve
+                Approved{" "}
               </Button>
             </div>
           </div>

@@ -33,7 +33,7 @@ const useUpdateUser = () => {
       createdAt: serverTimestamp(),
       read: false,
     });
-    updateDoc(docRef, { status: "Approve" });
+    updateDoc(docRef, { status: "Approved" });
   };
   const rejectUser = (id) => {
     const docRef = doc(db, "users", id);
