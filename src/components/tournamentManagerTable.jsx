@@ -59,7 +59,7 @@ export function TournamentManagerTable({ handleUpdateForms, data }) {
                 <Table.Cell className="font-bold">{user.password}</Table.Cell>
                 <Table.Cell className="font-bold">{user.role}</Table.Cell>
                 <Table.Cell className="font-bold">
-                  {user.assignTournament.name}
+                  {user.assignTournament}
                 </Table.Cell>
 
                 <Table.Cell className="font-bold">

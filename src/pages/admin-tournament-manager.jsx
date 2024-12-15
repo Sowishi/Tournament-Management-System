@@ -54,13 +54,16 @@ const AdminTournamentManager = () => {
 
   const handleSubmit = () => {
     if (validateForm()) {
+      const selectedTournament = tournaments.find(
+        (tournamentObj) =>
+          tournamentObj.tournament.name === forms.assignTournament
+      );
+
       if (isUpdate) {
         updateAdmin(forms);
-        toast.success("Successfully updated admin.");
       } else {
-        console.log(forms);
-        // addAdmin(forms);
-        // toast.success("Successfully added admin.");
+        addAdmin({ ...forms, tournamentID: selectedTournament.tournament.id });
+        toast.success("Successfully created admin.");
       }
       setCreateModal(false);
     } else {
@@ -133,10 +136,7 @@ const AdminTournamentManager = () => {
             {tournaments.map((tournamentObj) => (
               <option
                 key={tournamentObj.tournament.id}
-                value={{
-                  name: tournamentObj.tournament.name,
-                  id: tournamentObj.tournament.id,
-                }}
+                value={tournamentObj.tournament.name}
               >
                 {tournamentObj.tournament.name}
               </option>
