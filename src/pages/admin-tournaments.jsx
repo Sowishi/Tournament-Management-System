@@ -144,7 +144,7 @@ const AdminTournament = ({ client, currentEvent }) => {
             </Button>
           </div>
         )}
-        {!client && !currentAdmin.role == "Tournament Manager" && (
+        {!client && currentAdmin.role != "Tournament Manager" && (
           <div className="container mx-auto mt-5">
             <div className="wrapper flex mb-3 py-3">
               <Button

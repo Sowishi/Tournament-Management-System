@@ -68,9 +68,11 @@ export default function MatchCard({ match, id, client, tournament }) {
 
   const handleDraw = () => {
     updateMatchWinner(id, match.id, "tie");
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
+    setIsModalOpen(false);
   };
-
-  console.log(match);
 
   return (
     <Card
@@ -170,15 +172,6 @@ export default function MatchCard({ match, id, client, tournament }) {
                 className="w-32 hover:bg-pink-700"
               >
                 Player 2
-              </Button>
-            </Tooltip>
-            <Tooltip content={player2?.name || "Player 2"}>
-              <Button
-                onClick={handleDraw}
-                color="pink"
-                className="w-32 hover:bg-pink-700"
-              >
-                Draw
               </Button>
             </Tooltip>
           </div>

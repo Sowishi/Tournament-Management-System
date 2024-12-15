@@ -54,6 +54,8 @@ export default function RankingTable({
     toast.success("Successfully added to tally");
   };
 
+  console.log(participants);
+
   return (
     <div className="overflow-x-auto">
       <div className="wrapper">
