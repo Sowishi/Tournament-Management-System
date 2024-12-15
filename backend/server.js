@@ -435,7 +435,8 @@ app.put("/update-match-winner", async (req, res) => {
   const data = {
     api_key: "UeuI5bUZKaMwWFf1TEsnJTj1VhQ2EWdvQ5KZ8g5M",
     match: {
-      scores_csv: winnerPlayer == "player1" ? "1-0" : "0-1",
+      scores_csv:
+        winnerID == "tie" ? "1-1" : winnerPlayer == "player1" ? "1-0" : "0-1",
       winner_id: winnerID,
     },
   };

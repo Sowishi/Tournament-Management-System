@@ -66,6 +66,10 @@ export default function MatchCard({ match, id, client, tournament }) {
     setIsModalOpen(false);
   };
 
+  const handleDraw = () => {
+    updateMatchWinner(id, match.id, "tie");
+  };
+
   return (
     <Card
       className="max-w-sm md:w-96 sm:w-80 w-full my-5 p-5 border shadow-lg rounded-lg dark:bg-gray-800 dark:border-gray-700"
@@ -164,6 +168,15 @@ export default function MatchCard({ match, id, client, tournament }) {
                 className="w-32 hover:bg-pink-700"
               >
                 Player 2
+              </Button>
+            </Tooltip>
+            <Tooltip content={player2?.name || "Player 2"}>
+              <Button
+                onClick={handleDraw}
+                color="pink"
+                className="w-32 hover:bg-pink-700"
+              >
+                Draw
               </Button>
             </Tooltip>
           </div>
