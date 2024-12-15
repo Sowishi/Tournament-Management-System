@@ -48,6 +48,25 @@ const useCrudMatches = () => {
     }
   };
 
+  const updateMatchDraw = async (tourID, matchID) => {
+    try {
+      const res = await fetch(
+        `https://tournament-management-system-2.onrender.com/update-match-winner?matchID=${matchID}&tourID=${tourID}&winnerID=tie`,
+        {
+          method: "PUT",
+        }
+      );
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      const output = await res.json();
+      return output;
+    } catch (error) {
+      toast.error(`Error updating match as draw: ${error.message}`);
+      console.error("Error updating match as draw:", error);
+    }
+  };
+
   const updateMatchDate = async (start, end, tournamentID, label, matchID) => {
     const colRef = collection(db, "matches-calendar");
     const startDateMoment = moment(start).format("LLL");
@@ -171,6 +190,7 @@ const useCrudMatches = () => {
     getMatchDates,
     getMatchDate,
     deleteMatchData,
+    updateMatchDraw,
   };
 };
 
