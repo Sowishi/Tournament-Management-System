@@ -99,7 +99,10 @@ const AdminAdmins = () => {
   const filterData = data.filter((item) => item.role === currentRole);
 
   const filterWithoutMasterAdmin = data.filter(
-    (item) => item.role !== "Master Admin" && item.userType === "admin"
+    (item) =>
+      item.role !== "Master Admin" &&
+      item.userType === "admin" &&
+      item.role !== "Tournament Manager"
   );
 
   return (

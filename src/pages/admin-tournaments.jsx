@@ -10,7 +10,7 @@ import TournamentCard from "../components/tournamentCard";
 import useGetEventName from "../hooks/useGetEventName";
 import useCrudCalendar from "../hooks/useCrudCalendar";
 import moment from "moment";
-import { motion } from "framer-motion"; // Import Framer Motion
+import { motion } from "framer-motion";
 import useCrudLogs from "../hooks/useCrudLogs";
 import { useStore } from "../zustand/store";
 
@@ -28,21 +28,29 @@ const AdminTournament = ({ client, currentEvent }) => {
 
   const [forms, setForms] = useState({
     tournamentName: "",
-    tournamentEvent: "",
+    tournamentEvent: currentAdmin.sportsEvent,
     tournamentType: "",
   });
 
-  const [selectedEvent, setSelectedEvent] = useState(
-    currentAdmin?.role == "Tournament Manager"
-      ? currentAdmin.sportsEvent
-      : "all"
-  );
+  const [selectedEvent, setSelectedEvent] = useState(currentAdmin.sportsEvent);
 
   console.log(selectedEvent);
 
   const handleChange = (event) => {
     const { value, name } = event.target;
-    setForms((prev) => ({ ...prev, [name]: value }));
+
+    // Map the display values to the saved values
+    const valueMappings = {
+      "Single-Elimination": "single elimination",
+      "Double-Elimination": "double elimination",
+      Swiss: "swiss",
+      "Round-Robin": "round robin",
+    };
+
+    setForms((prev) => ({
+      ...prev,
+      [name]: valueMappings[value] || value, // Save the mapped value if it exists
+    }));
   };
 
   const validateForm = () => {
@@ -116,11 +124,11 @@ const AdminTournament = ({ client, currentEvent }) => {
             name={"tournamentType"}
             onChange={handleChange}
             data={[
-              "Please select tourrnament type",
-              "single elimination",
-              "double elimination",
-              "swiss",
-              "round robin",
+              "Please select tournament type",
+              "Single-Elimination",
+              "Double-Elimination",
+              "Swiss",
+              "Round-Robin",
             ]}
             label={"Tournament Type"}
             dark={true}
@@ -129,7 +137,7 @@ const AdminTournament = ({ client, currentEvent }) => {
             dark
             label={"Tournament Event"}
             name={"tournamentEvent"}
-            data={["Please select event", ...filterEvent]}
+            data={[currentAdmin?.sportsEvent]}
             onChange={handleChange}
           />
         </form>
@@ -144,30 +152,6 @@ const AdminTournament = ({ client, currentEvent }) => {
             </Button>
           </div>
         )}
-        {!client && currentAdmin.role != "Tournament Manager" && (
-          <div className="container mx-auto mt-5">
-            <div className="wrapper flex mb-3 py-3">
-              <Button
-                color={selectedEvent === "all" ? "info" : "gray"}
-                onClick={() => setSelectedEvent("all")}
-                className="mx-3"
-              >
-                All
-              </Button>
-              {eventNames.map((event) => (
-                <Button
-                  key={event.id}
-                  color={selectedEvent === event.eventName ? "info" : "gray"}
-                  className="mx-3"
-                  onClick={() => setSelectedEvent(event.eventName)}
-                >
-                  {event.eventName}
-                </Button>
-              ))}
-            </div>
-          </div>
-        )}
-
         <div className="flex flex-wrap">
           {loading && (
             <div className="flex justify-center items-center w-full p-20">

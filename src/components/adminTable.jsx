@@ -41,6 +41,9 @@ export function AdminTable({ handleUpdateForms, data }) {
             Role
           </Table.HeadCell>
           <Table.HeadCell className="bg-slate-800 text-white">
+            Assign Event
+          </Table.HeadCell>
+          <Table.HeadCell className="bg-slate-800 text-white">
             Action
           </Table.HeadCell>
         </Table.Head>
@@ -55,6 +58,10 @@ export function AdminTable({ handleUpdateForms, data }) {
                 <Table.Cell className="font-bold">{user.email}</Table.Cell>
                 <Table.Cell className="font-bold">{user.password}</Table.Cell>
                 <Table.Cell className="font-bold">{user.role}</Table.Cell>
+                <Table.Cell className="font-bold">
+                  {user.sportsEvent}
+                </Table.Cell>
+
                 <Table.Cell className="font-bold">
                   <div className="wrappe flex">
                     <Button onClick={() => handleUpdateForms(user)}>
