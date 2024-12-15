@@ -5,11 +5,12 @@ import { FaCrown, FaMedal } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import useCrudTally from "../hooks/useCrudTally";
+import { toast } from "react-toastify";
 
 export default function RankingTable({
   participants,
   handleDeleteParticipant,
-  handleSubmitResults, // Function triggered on confirmation
+  handleSubmitResults,
   tournament,
   tournamentState,
   handleFinalizeTournament,
@@ -17,55 +18,46 @@ export default function RankingTable({
   client,
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [tallyModal, setTallyModal] = useState(false);
+  const [tallyButtonVisible, setTallyButtonVisible] = useState(true);
   const { addTally } = useCrudTally();
-  // Sort participants by ascending rank
+
   const sortedParticipants = [...participants].sort((a, b) => {
     const rankA = a.participant.final_rank || Infinity;
     const rankB = b.participant.final_rank || Infinity;
     return rankA - rankB;
   });
 
-  // Animation variants for table rows
   const rowVariants = {
     hidden: { opacity: 0, y: 10 },
     visible: { opacity: 1, y: 0 },
   };
 
-  // Open modal and animate the button click
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
+  const handleFinalize = async () => {
+    await handleFinalizeTournament();
+    window.location.reload();
+    setIsModalOpen(false);
   };
 
-  // Close modal and handle submit confirmation
-  const handleConfirmSubmit = async () => {
-    // Finalize the tournament (make sure this function works correctly)
-    await handleFinalizeTournament();
-
-    // Get updated participants after finalization
+  const handleAddTally = async () => {
     const output = await handleGetParticipants();
-
-    // Add each participant to the tally with their name, rank, and event
     output.data.forEach((item) => {
-      const participantName = item.participant.name;
-      const participantRank = item.participant.final_rank || "Unranked"; // If no rank, set as "Unranked"
-
       addTally({
-        name: participantName,
-        rank: participantRank, // Assuming the rank is a number or string
+        name: item.participant.name,
+        rank: item.participant.final_rank || "Unranked",
         event: tournament.description,
-        tournamentName: tournament.name, // Ensure tournament description is correct
+        tournamentName: tournament.name,
       });
     });
-
-    setIsModalOpen(false);
+    setTallyButtonVisible(false);
+    setTallyModal(false);
+    toast.success("Successfully added to tally");
   };
 
   return (
     <div className="overflow-x-auto">
       <div className="wrapper">
-        {/* Submit Results Button */}
-        {tournamentState == "awaiting_review" && !client && (
+        {tournamentState === "awaiting_review" && !client && (
           <motion.div
             className="flex justify-end items-center my-5"
             initial={{ opacity: 0, y: 10 }}
@@ -73,15 +65,29 @@ export default function RankingTable({
             transition={{ delay: 0.3 }}
           >
             <Button
-              onClick={handleOpenModal}
+              onClick={() => setIsModalOpen(true)}
               className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 font-semibold rounded-lg"
             >
               Submit Results
             </Button>
           </motion.div>
         )}
+        {tournamentState === "complete" && !client && tallyButtonVisible && (
+          <motion.div
+            className="flex justify-end items-center my-5"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <Button
+              onClick={() => setTallyModal(true)}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 font-semibold rounded-lg"
+            >
+              Add to Tally
+            </Button>
+          </motion.div>
+        )}
       </div>
-
       <Table className="min-w-full text-center text-gray-100">
         <Table.Head>
           <Table.HeadCell className="text-gray-300 p-5 bg-slate-800">
@@ -92,12 +98,11 @@ export default function RankingTable({
           </Table.HeadCell>
         </Table.Head>
         <Table.Body className="divide-y divide-gray-700">
-          {sortedParticipants?.map((item, index) => {
+          {sortedParticipants.map((item, index) => {
             const { participant } = item;
             let rankIcon = null;
             let rankStyle = "";
 
-            // Apply special styles for the top 3 ranks
             if (participant.final_rank === 1) {
               rankIcon = <FaCrown className="text-yellow-500 text-3xl" />;
               rankStyle = "bg-yellow-300 bg-opacity-50";
@@ -148,13 +153,42 @@ export default function RankingTable({
         </Modal.Body>
         <Modal.Footer>
           <Button
-            onClick={handleConfirmSubmit}
+            onClick={handleFinalize}
             className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg"
           >
             Confirm
           </Button>
           <Button
             onClick={() => setIsModalOpen(false)}
+            className="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-lg"
+          >
+            Cancel
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Tally Modal */}
+      <Modal
+        show={tallyModal}
+        onClose={() => setTallyModal(false)}
+        size="md"
+        className="text-gray-700"
+      >
+        <Modal.Header>Confirm Submit to Tally</Modal.Header>
+        <Modal.Body>
+          <p className="text-center">
+            Are you sure you want to tally the results?
+          </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            onClick={handleAddTally}
+            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg"
+          >
+            Confirm
+          </Button>
+          <Button
+            onClick={() => setTallyModal(false)}
             className="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-lg"
           >
             Cancel

@@ -5,7 +5,7 @@ const Participants = ({ participants }) => {
     <div className="participants my-20">
       <div className="wrapper flex items-center my-5">
         <h1 className="text-white text-3xl font-bold">
-          Tournament Participants
+          Tournament Participants sss
         </h1>
         <Badge className="ml-3">{participants.length}</Badge>
       </div>

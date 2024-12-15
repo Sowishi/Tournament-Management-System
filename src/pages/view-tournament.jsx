@@ -22,7 +22,6 @@ import { HiCalendar } from "react-icons/hi";
 import { motion } from "framer-motion";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import MatchDateCard from "../components/matchDateCard";
-import Participants from "../components/participants";
 
 const ViewTournament = () => {
   const localizer = momentLocalizer(moment);
@@ -293,7 +292,30 @@ const ViewTournament = () => {
               )}
 
               {page == "participants" && (
-                <Participants participants={participants} />
+                <>
+                  <div className="participants my-20">
+                    <div className="wrapper flex items-center my-5">
+                      <h1 className="text-white text-3xl font-bold">
+                        Tournament Participants
+                      </h1>
+                      <Badge className="ml-3">{participants.length}</Badge>
+                    </div>
+                    {participants.length <= 0 && (
+                      <h1 className="text-white text-center text-3xl">
+                        No Participants yet.
+                      </h1>
+                    )}
+                    {participants.length >= 1 && (
+                      <ParticipantsTables
+                        client={true}
+                        removeRanking={true}
+                        tournament={tournament}
+                        handleDeleteParticipant={handleDeleteParticipant}
+                        participants={participants}
+                      />
+                    )}
+                  </div>
+                </>
               )}
               {page == "ranking" && (
                 <>
@@ -618,7 +640,7 @@ const ViewTournament = () => {
                 <div className="participants my-20">
                   <div className="wrapper flex items-center my-5">
                     <h1 className="text-white text-3xl font-bold">
-                      Tournament Ranking
+                      Tournament Ranking ss
                     </h1>
                     <Badge className="ml-3">{participants.length}</Badge>
                   </div>
