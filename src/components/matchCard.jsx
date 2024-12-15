@@ -54,8 +54,9 @@ export default function MatchCard({ match, id, client, tournament }) {
     const winnerName =
       selectedWinner === player1?.id ? player1?.name : player2?.name;
     const winnerPlayer = selectedWinner === player1?.id ? "player1" : "player2";
+    console.log(winnerPlayer);
 
-    updateMatchWinner(id, match.id, selectedWinner, winnerName, winnerPlayer);
+    updateMatchWinner(id, match.id, selectedWinner, winnerPlayer);
     const logsLabel = `${winnerName} won in round ${match.round} of the tournament ${tournament.name}.`;
     addLog(currentUser, logsLabel);
 
