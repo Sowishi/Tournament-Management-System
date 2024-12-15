@@ -240,7 +240,7 @@ app.post("/create-tournament", async (req, res) => {
             tournament_type: tournamentType,
             description: tournamentEvent,
             show_rounds: true,
-            review_before_finalizing: false,
+            review_before_finalizing: true,
             ranked_by: "points scored",
             accept_attachments: true, // Allow users to attach match data
             start_at: startAt,
