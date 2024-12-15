@@ -28,13 +28,13 @@ const AdminTournament = ({ client, currentEvent }) => {
 
   const [forms, setForms] = useState({
     tournamentName: "",
-    tournamentEvent: currentAdmin.sportsEvent,
+    tournamentEvent: currentAdmin ? currentAdmin?.sportsEvent : "",
     tournamentType: "",
   });
 
-  const [selectedEvent, setSelectedEvent] = useState(currentAdmin.sportsEvent);
-
-  console.log(selectedEvent);
+  const [selectedEvent, setSelectedEvent] = useState(
+    currentAdmin ? currentAdmin?.sportsEvent : ""
+  );
 
   const handleChange = (event) => {
     const { value, name } = event.target;
