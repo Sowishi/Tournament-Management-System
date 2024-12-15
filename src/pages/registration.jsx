@@ -141,20 +141,20 @@ const Registration = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h1 className="text-white font-bold text-2xl md:text-3xl">
-                  SUCs Details
+                  Delegate Details
                 </h1>
                 <TmsInput
                   name="schoolRepresentative"
                   onChange={handleChange}
                   value={forms.schoolRepresentative}
-                  label="SUCs Representative"
+                  label="Delegate Representative"
                 />
                 <TmsInput
                   name="email"
                   type="email"
                   onChange={handleChange}
                   value={forms.email}
-                  label="SUCs Email"
+                  label="Delegate Email"
                   error={errors.email}
                 />
                 <TmsInput
@@ -162,7 +162,7 @@ const Registration = () => {
                   name="contact"
                   onChange={handleChange}
                   value={forms.contact}
-                  label="SUCs Contact"
+                  label="Delegate Contact"
                   error={errors.contact}
                 />
               </div>
@@ -224,7 +224,7 @@ const Registration = () => {
 
             <div className="space-y-4">
               <h1 className="text-white font-bold text-2xl md:text-3xl">
-                Sports Information
+                Events Information
               </h1>
               <TmsSelect
                 name="sportsEvent"
