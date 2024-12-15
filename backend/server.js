@@ -430,11 +430,12 @@ app.get("/get-matches", async (req, res) => {
 });
 
 app.put("/update-match-winner", async (req, res) => {
-  const { tourID, winnerID, matchID } = req.query;
+  const { tourID, winnerID, matchID, winnerPlayer } = req.query;
 
   const data = {
     api_key: "UeuI5bUZKaMwWFf1TEsnJTj1VhQ2EWdvQ5KZ8g5M",
     match: {
+      scores_csv: winnerPlayer == "player1" ? "1-0" : "0-1",
       winner_id: winnerID,
     },
   };

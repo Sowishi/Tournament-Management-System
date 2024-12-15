@@ -29,10 +29,10 @@ const useCrudMatches = () => {
     }
   };
 
-  const updateMatchWinner = async (tourID, matchID, winnerID) => {
+  const updateMatchWinner = async (tourID, matchID, winnerID, winnerPlayer) => {
     try {
       const res = await fetch(
-        `https://tournament-management-system-2.onrender.com/update-match-winner?matchID=${matchID}&tourID=${tourID}&winnerID=${winnerID}`,
+        `https://tournament-management-system-2.onrender.com/update-match-winner?matchID=${matchID}&tourID=${tourID}&winnerID=${winnerID}&winnerPlayer=${winnerPlayer}`,
         {
           method: "PUT",
         }
