@@ -41,8 +41,8 @@ export default function Header({ removeMargin }) {
     }
   });
 
-  const unreadNotif = notifications.filter((item) => {
-    if (item.ownerID == currentUser?.id && !item.read) {
+  const unreadNotif = filterNotif.filter((item) => {
+    if (!item.read) {
       return item;
     }
   });
@@ -85,12 +85,16 @@ export default function Header({ removeMargin }) {
                   <div className="relative" onClick={handleBellClick}>
                     <HiOutlineBell size={30} />
                     {filterNotif.length > 0 && (
-                      <Badge
-                        color="failure"
-                        className="absolute -top-1 -right-2 rounded-full"
-                      >
-                        {unreadNotif.length}
-                      </Badge>
+                      <>
+                        {unreadNotif.length >= 1 && (
+                          <Badge
+                            color="failure"
+                            className="absolute -top-1 -right-2 rounded-full"
+                          >
+                            {unreadNotif.length}
+                          </Badge>
+                        )}
+                      </>
                     )}
                   </div>
                 }
