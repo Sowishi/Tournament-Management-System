@@ -311,8 +311,8 @@ const User = () => {
             dark={true}
             name="label"
             onChange={(e) => setFileLabel(e.target.value)}
-            placeHolder={"Label"}
-            label={"Label"}
+            placeHolder={"Participant/Player Name."}
+            label={"Participant/Player Name."}
           />
           <TmsInput
             dark={true}
@@ -342,8 +342,8 @@ const User = () => {
           <TmsInput
             dark={true}
             onChange={(e) => setFolerName(e.target.value)}
-            placeHolder={"Folder Name"}
-            label={"Folder Name"}
+            placeHolder={"Sport/Tournament"}
+            label={"Sport/Tournament"}
           />
         </div>
       </TmsModal>
