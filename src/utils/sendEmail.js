@@ -1,15 +1,16 @@
 import emailjs from "emailjs-com";
 
 const sendEmail = (forms) => {
+  emailjs;
   emailjs
     .send(
-      "service_sagjt39", // Replace with your EmailJS Service ID
-      "template_1welm0q", // Replace with your EmailJS Template ID
+      "service_sagjt39",
+      "template_1welm0q",
       {
         user_email: forms.email,
-        passwword: forms.passwword,
+        password: forms.password,
       },
-      "mtUY6IFoQSil0kN-Q" // Replace with your EmailJS User ID
+      "mtUY6IFoQSil0kN-Q"
     )
     .then(
       (result) => {
