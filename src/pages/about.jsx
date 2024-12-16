@@ -49,10 +49,11 @@ const AboutPage = () => {
                 How can teams register for events?
               </h3>
               <p className="text-gray-600">
-                Teams can register through the platform by submitting their
-                details, including team lineups, coach information, and
-                preferred events. The system also supports online payment for
-                registration fees.
+                The system registration is designed to be simple and
+                user-friendly. Delegates can create accounts, log in to the
+                platform, and fill out the required details. Once submitted,
+                organizers can review and approve the registration to confirm
+                participation in the event.
               </p>
             </Card>
             <Card className="p-6">
@@ -60,19 +61,30 @@ const AboutPage = () => {
                 Does the system provide live updates?
               </h3>
               <p className="text-gray-600">
-                Yes, TMS offers real-time updates on match schedules, scores,
-                and event notifications, ensuring participants and spectators
-                stay informed throughout the tournament.
+                Yes, TMS offers real-time updates on match schedules, and event
+                notifications, ensuring participants stay informed throughout
+                the tournament.
               </p>
             </Card>
             <Card className="p-6">
               <h3 className="text-xl font-semibold text-gray-800">
-                Can I access historical data and analytics?
+                What sports disciplines does the TMS support?
               </h3>
               <p className="text-gray-600">
-                Absolutely! The system maintains a comprehensive database of
-                past events, player statistics, and performance analytics to
-                help in decision-making and future event planning.
+                The Tournament Management System supports a wide range of sports
+                disciplines, specially sports featured in SCUAA events, ensuring
+                efficient management and coordination for each sport, from
+                basketball and volleyball to athletics and swimming.
+              </p>
+            </Card>
+            <Card className="p-6">
+              <h3 className="text-xl font-semibold text-gray-800">
+                Can the TMS handle multiple tournaments simultaneously?{" "}
+              </h3>
+              <p className="text-gray-600">
+                Yes, the TMS is designed to manage multiple tournaments at once,
+                allowing organizers to oversee various events and schedules
+                across different sports disciplines efficiently.
               </p>
             </Card>
           </div>
