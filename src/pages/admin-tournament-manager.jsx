@@ -60,7 +60,10 @@ const AdminTournamentManager = () => {
       );
 
       if (isUpdate) {
-        updateAdmin(forms);
+        updateAdmin({
+          ...forms,
+          tournamentID: selectedTournament.tournament.url,
+        });
       } else {
         addAdmin({ ...forms, tournamentID: selectedTournament.tournament.url });
         toast.success("Successfully created admin.");

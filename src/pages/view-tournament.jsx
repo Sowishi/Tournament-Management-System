@@ -22,9 +22,11 @@ import { HiCalendar } from "react-icons/hi";
 import { motion } from "framer-motion";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import MatchDateCard from "../components/matchDateCard";
+import { useStore } from "../zustand/store";
 
 const ViewTournament = () => {
   const localizer = momentLocalizer(moment);
+  const { currentAdmin } = useStore();
 
   const { id } = useParams();
   const navigation = useNavigate();
@@ -184,12 +186,7 @@ const ViewTournament = () => {
                   >
                     Menu
                   </Button>
-                  <Button
-                    onClick={() => navigation("/events")}
-                    className="mr-5"
-                  >
-                    Back
-                  </Button>
+                  {}
                   <div className="flex justify-center items-center">
                     <h1 className="text-white text-sm md:text-3xl font-bold ">
                       {tournament?.name}
@@ -476,12 +473,14 @@ const ViewTournament = () => {
                 >
                   Menu
                 </Button>
-                <Button
-                  onClick={() => navigation("/admin/tournament")}
-                  className="mr-5"
-                >
-                  Back
-                </Button>
+                {currentAdmin.role !== "Tournament Manager" && (
+                  <Button
+                    onClick={() => navigation("/admin/tournament")}
+                    className="mr-5"
+                  >
+                    Back
+                  </Button>
+                )}
                 <div className="flex justify-center items-center">
                   <h1 className="text-white text-sm md:text-3xl font-bold ">
                     {tournament?.name}
