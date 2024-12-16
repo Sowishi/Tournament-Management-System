@@ -50,6 +50,21 @@ const ViewTournament = () => {
   const [page, setPage] = useState("tournament");
   const [matchDates, setMatchDates] = useState([]);
   const [openMenu, setOpenMenu] = useState(false);
+  const [tournaInfo, setTournaInfo] = useState(null);
+
+  useEffect(() => {
+    if (tournament?.description) {
+      try {
+        // Attempt to parse the description as JSON
+        const parsedData = JSON.parse(tournament?.description);
+        setTournaInfo(parsedData);
+      } catch (error) {
+        // If parsing fails, set the description as is
+        setTournaInfo(tournament?.description);
+      }
+    }
+  }, [tournament]);
+
   const handleGetParticipants = async () => {
     const output = await getParticipants(id);
     setParticipants(output.data);
@@ -202,16 +217,19 @@ const ViewTournament = () => {
               </div>
               {page == "tournament" && (
                 <>
-                  <div className="mb-5 hidden md:block  ">
+                  <div className="mb-5 hidden md:block">
                     <Table hoverable>
                       <Table.Head>
-                        <Table.HeadCell className="text-center bg-slate-900 text-white font-bold border">
+                        <Table.HeadCell className="text-center text-xs bg-slate-900 text-white font-bold border">
                           Tournament State
                         </Table.HeadCell>
-                        <Table.HeadCell className="text-center bg-slate-900 text-white font-bold border">
+                        <Table.HeadCell className="text-center text-xs bg-slate-900 text-white font-bold border">
                           Registered Event
                         </Table.HeadCell>
-                        <Table.HeadCell className="text-center bg-slate-900 text-white font-bold border">
+                        <Table.HeadCell className="text-center text-xs bg-slate-900 text-white font-bold border">
+                          Category
+                        </Table.HeadCell>
+                        <Table.HeadCell className="text-center text-xs bg-slate-900 text-white font-bold border">
                           Tournament Start Date
                         </Table.HeadCell>
                       </Table.Head>
@@ -227,14 +245,26 @@ const ViewTournament = () => {
                         </Table.Cell>
                         <Table.Cell className="text-center">
                           <h1 className="text-lg text-white">
-                            {tournament?.description}
+                            {tournaInfo?.eventName}
                           </h1>
+                        </Table.Cell>
+                        <Table.Cell className="text-center">
+                          <div className="flex flex-col">
+                            <h1 className="text-lg text-white">
+                              {tournaInfo?.selectedSport}{" "}
+                              {tournaInfo?.selectedCategory ? " | " : ""}
+                              {tournaInfo?.selectedCategory}
+                            </h1>
+                            <h1 className="text-lg text-white">
+                              {tournaInfo?.selectedGender}
+                            </h1>{" "}
+                          </div>
                         </Table.Cell>
                         <Table.Cell className="text-center">
                           <h1 className="text-lg text-white">
                             {tournament?.started_at
                               ? moment(tournament?.started_at).format("LLL")
-                              : "Waiting to start"}{" "}
+                              : "Waiting to start"}
                           </h1>
                         </Table.Cell>
                       </Table.Body>
@@ -557,6 +587,9 @@ const ViewTournament = () => {
                         Registered Event
                       </Table.HeadCell>
                       <Table.HeadCell className="text-center text-xs bg-slate-900 text-white font-bold border">
+                        Category
+                      </Table.HeadCell>
+                      <Table.HeadCell className="text-center text-xs bg-slate-900 text-white font-bold border">
                         Tournament Start Date
                       </Table.HeadCell>
                     </Table.Head>
@@ -568,8 +601,20 @@ const ViewTournament = () => {
                       </Table.Cell>
                       <Table.Cell className="text-center">
                         <h1 className="text-lg text-white">
-                          {tournament?.description}
+                          {tournaInfo?.eventName}
                         </h1>
+                      </Table.Cell>
+                      <Table.Cell className="text-center">
+                        <div className="flex flex-col">
+                          <h1 className="text-lg text-white">
+                            {tournaInfo?.selectedSport}{" "}
+                            {tournaInfo?.selectedCategory ? " | " : ""}
+                            {tournaInfo?.selectedCategory}
+                          </h1>
+                          <h1 className="text-lg text-white">
+                            {tournaInfo?.selectedGender}
+                          </h1>{" "}
+                        </div>
                       </Table.Cell>
                       <Table.Cell className="text-center">
                         <h1 className="text-lg text-white">
