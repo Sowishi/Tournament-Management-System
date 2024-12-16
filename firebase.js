@@ -7,12 +7,12 @@ import { getStorage } from "firebase/storage";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCJIjKLYg1ymKcLWiEEhqAoxYE8nAyoM9g",
-  authDomain: "tournament-772d1.firebaseapp.com",
-  projectId: "tournament-772d1",
-  storageBucket: "tournament-772d1.appspot.com",
-  messagingSenderId: "179981673732",
-  appId: "1:179981673732:web:e82419abcb7562208d9c51",
+  apiKey: "AIzaSyDL2cM4K7G1rPqJ3VL61hTE6ZnOaVsW4S8",
+  authDomain: "tournamentv2-2ab3a.firebaseapp.com",
+  projectId: "tournamentv2-2ab3a",
+  storageBucket: "tournamentv2-2ab3a.firebasestorage.app",
+  messagingSenderId: "419248394140",
+  appId: "1:419248394140:web:24649e384bf0425c3a0259",
 };
 
 // Initialize Firebase

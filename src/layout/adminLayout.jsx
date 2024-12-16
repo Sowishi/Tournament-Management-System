@@ -319,7 +319,7 @@ export default function AdminLayout({ children, client }) {
                 <h1 className="text-white textt-sm md:text-2xl">
                   {currentAdmin?.role !== "Master Admin" && (
                     <>
-                      {currentAdmin.fullName} | {currentAdmin?.sportsEvent}
+                      {currentAdmin?.fullName} | {currentAdmin?.sportsEvent}
                     </>
                   )}
                 </h1>
