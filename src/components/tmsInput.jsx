@@ -13,6 +13,7 @@ const TmsInput = ({
   required,
   error,
   rightIcon,
+  disable,
 }) => {
   return (
     <div>
@@ -25,6 +26,7 @@ const TmsInput = ({
         />
       </div>
       <TextInput
+        disabled={disable}
         addon={addOn}
         name={name}
         onChange={onChange}

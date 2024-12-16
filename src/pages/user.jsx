@@ -24,6 +24,7 @@ import FolderItem from "../components/folderItem";
 import { Breadcrumb } from "flowbite-react";
 import moment from "moment";
 import PlayerCoachComponent from "../components/playerCoachComponent";
+import SportsSelection from "../components/sportSelection";
 
 const User = () => {
   const { currentUser, setCurrentUser } = useStore();
@@ -71,7 +72,7 @@ const User = () => {
   const { data: eventNames } = useGetEventName();
   const { data: collegeNames } = useCrudCollegeName();
   const [folderModal, setFolderModal] = useState(false);
-  const [folderName, setFolerName] = useState("");
+
   const [folders, setFolders] = useState([]);
   const [addUserModal, setAddUserModal] = useState(false); // Tracks if the modal is open or closed
   const [newUser, setNewUser] = useState({
@@ -83,6 +84,15 @@ const User = () => {
   const [currentFolder, setCurrentFolder] = useState(null);
   const [currentFiles, setCurrentFiles] = useState([]);
   const [playerCoaches, setPlayerCoaches] = useState([]);
+
+  const [selectedSport, setSelectedSport] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedGender, setSelectedGender] = useState("");
+
+  const [folderName, setFolerName] = useState(
+    selectedSport + " " + selectedCategory + " " + selectedGender
+  );
+
   const handleChange = (event) => {
     const { value, name } = event.target;
 
@@ -330,7 +340,10 @@ const User = () => {
       {/* Folder Modal */}
       <TmsModal
         onSubmit={() => {
-          handleCreateFolder(folderName, currentUser.id);
+          handleCreateFolder(
+            selectedSport + " | " + selectedCategory + " | " + selectedGender,
+            currentUser.id
+          );
           setFolderModal(false);
           setCurrentFolder(null);
         }}
@@ -339,9 +352,20 @@ const User = () => {
         handleClose={() => setFolderModal(false)}
       >
         <div className="container">
+          <SportsSelection
+            setSelectedCategory={setSelectedCategory}
+            setSelectedSport={setSelectedSport}
+            setSelectedGender={setSelectedGender}
+            selectedCategory={selectedCategory}
+            selectedGender={selectedGender}
+            selectedSport={selectedSport}
+          />
           <TmsInput
+            disable
             dark={true}
-            onChange={(e) => setFolerName(e.target.value)}
+            value={
+              selectedSport + " " + selectedCategory + " " + selectedGender
+            }
             placeHolder={"Sport/Tournament"}
             label={"Sport/Tournament"}
           />
