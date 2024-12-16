@@ -3,7 +3,7 @@
 import { Table, Button, Modal } from "flowbite-react";
 import { FaCrown, FaMedal } from "react-icons/fa";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import logo from "../assets/logo2.png";
 import useCrudTally from "../hooks/useCrudTally";
 import { useStore } from "../zustand/store";
@@ -14,8 +14,17 @@ export function TallyTable() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedInstitution, setSelectedInstitution] = useState(null);
 
+  const parseEvent = async (event) => {
+    return await JSON.parse(event);
+  };
+
   // Filter data for the current event
-  const filteredData = data.filter((item) => item.event === currentEvent);
+  const filteredData = data.filter(async (item) => {
+    const info = await parseEvent(item.event);
+    if (info.eventName === currentEvent) {
+      return item;
+    }
+  });
 
   // Group and count medals for each institution
   const rankCounts = filteredData.reduce((acc, item) => {
