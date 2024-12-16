@@ -1,6 +1,6 @@
 import { Label, Select } from "flowbite-react";
 
-const TmsSelect = ({ data, label, onChange, name, dark, value }) => {
+const TmsSelect = ({ data, label, onChange, name, dark, value, disable }) => {
   return (
     <div>
       <div className="mb-2 block my-3">
@@ -11,7 +11,7 @@ const TmsSelect = ({ data, label, onChange, name, dark, value }) => {
           value={label}
         />
       </div>
-      <Select value={value} name={name} onChange={onChange}>
+      <Select disabled={disable} value={value} name={name} onChange={onChange}>
         {data?.map((item) => {
           return <option value={item}>{item}</option>;
         })}

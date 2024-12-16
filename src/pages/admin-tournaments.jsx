@@ -134,6 +134,7 @@ const AdminTournament = ({ client, currentEvent }) => {
             dark={true}
           />
           <TmsSelect
+            disable={true}
             dark
             label={"Tournament Event"}
             name={"tournamentEvent"}
