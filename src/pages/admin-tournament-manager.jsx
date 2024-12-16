@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button } from "flowbite-react";
+import { Button, Label } from "flowbite-react";
 import AdminLayout from "../layout/adminLayout";
 import TmsInput from "../components/tmsInput";
 import TmsSelect from "../components/tmsSelect";
@@ -135,16 +135,27 @@ const AdminTournamentManager = () => {
             placeHolder="Password"
             error={validationErrors.password}
           />
-          <select onChange={handleChange} name="assignTournament">
-            {tournaments.map((tournamentObj) => (
-              <option
-                key={tournamentObj.tournament.id}
-                value={tournamentObj.tournament.name}
-              >
-                {tournamentObj.tournament.name}
-              </option>
-            ))}
-          </select>
+          <div className="div flex flex-col my-3">
+            <Label value="Assign Tournament" color={"white"} htmlFor="email1" />
+            <select onChange={handleChange} name="assignTournament">
+              {[
+                {
+                  tournament: {
+                    id: "1",
+                    name: "Please select a tournament",
+                  },
+                },
+                ...tournaments,
+              ].map((tournamentObj) => (
+                <option
+                  key={tournamentObj.tournament.id}
+                  value={tournamentObj.tournament.name}
+                >
+                  {tournamentObj.tournament.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       </TmsModal>
       <div className="container mx-auto mt-10 px-5 pb-20">
