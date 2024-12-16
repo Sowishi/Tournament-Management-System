@@ -24,6 +24,7 @@ import AdminTournament from "./pages/admin-tournaments";
 import ViewTournament from "./pages/view-tournament";
 import SystemLog from "./pages/system-log";
 import AdminTournamentManger from "./pages/admin-tournament-manager";
+import Overwrite from "./pages/overwrite";
 
 const App = () => {
   const { currentUser, guest, currentAdmin } = useStore();
@@ -92,6 +93,10 @@ const App = () => {
         <Route
           path="/admin/system-log"
           element={currentAdmin ? <SystemLog /> : <Login />}
+        />
+        <Route
+          path="/admin/overwrite"
+          element={currentAdmin ? <Overwrite /> : <Login />}
         />
         <Route
           path="/tournament/:id"

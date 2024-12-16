@@ -113,6 +113,17 @@ export default function AdminLayout({ children, client }) {
                           </div>{" "}
                         </Sidebar.Item>
                       </Link>{" "}
+                      <Link to="/admin/overwrite">
+                        <Sidebar.Item
+                          onClick={() => setIsOpen(false)}
+                          className="bg-blue-950 text-white hover:text-white hover:bg-red-500 my-3"
+                        >
+                          <div className="flex items-center">
+                            System Overwrite{" "}
+                            <HiOutlineUserCircle className="ml-3" />
+                          </div>{" "}
+                        </Sidebar.Item>
+                      </Link>{" "}
                       {/* <Link to="/admin/calendar">
                         <Sidebar.Item
                           onClick={() => setIsOpen(false)}
