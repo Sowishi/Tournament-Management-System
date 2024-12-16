@@ -1,12 +1,28 @@
 "use client";
 
 import { Checkbox, Table } from "flowbite-react";
+import { useEffect, useState } from "react";
 
 export default function AddParticipantsTable({
   users,
   setSelectedUsers,
   event,
 }) {
+  const [tournaInfo, setTournaInfo] = useState(null);
+
+  useEffect(() => {
+    if (event) {
+      try {
+        // Attempt to parse the description as JSON
+        const parsedData = JSON.parse(event);
+        setTournaInfo(parsedData);
+      } catch (error) {
+        // If parsing fails, set the description as is
+        setTournaInfo(event);
+      }
+    }
+  }, [event]);
+
   const handleCheckboxChange = (user, isChecked) => {
     if (isChecked) {
       setSelectedUsers((prev) => [...prev, user]); // Add user if checked
@@ -16,7 +32,10 @@ export default function AddParticipantsTable({
   };
 
   const filterUsers = users.filter((user) => {
-    if (user.sportsEvent === event && user?.userType !== "admin") {
+    if (
+      user.sportsEvent === tournaInfo.eventName &&
+      user?.userType !== "admin"
+    ) {
       return user;
     }
   });
@@ -47,7 +66,7 @@ export default function AddParticipantsTable({
                 <Table.Cell>{item.collegeName}</Table.Cell>
                 <Table.Cell>{item.email}</Table.Cell>
 
-                <Table.Cell>{item.sportsInfo}</Table.Cell>
+                <Table.Cell>{tournaInfo?.eventName}</Table.Cell>
               </Table.Row>
             );
           })}
