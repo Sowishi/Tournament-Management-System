@@ -268,6 +268,7 @@ const User = () => {
     }
   }, [currentFolder]);
 
+  const playerCoachesNames = playerCoaches.map((user) => user.fullName);
   return (
     <DefaultLayout>
       <Title title={"User Account"} />
@@ -317,13 +318,24 @@ const User = () => {
           <p className="my-5 text-center italic">
             The participant's requirement must be compiled in a single file
           </p>
-          <TmsInput
-            dark={true}
-            name="label"
-            onChange={(e) => setFileLabel(e.target.value)}
-            placeHolder={"Participant/Player Name."}
-            label={"Participant/Player Name."}
-          />
+
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2">
+              Coach / Player Name
+            </label>
+            <select
+              className="border border-gray-300 rounded px-3 py-2 w-full"
+              onChange={(e) => setFileLabel(e.target.value)}
+            >
+              <option value="">Select a Player or Coach</option>
+              {playerCoachesNames.map((user, index) => (
+                <option key={index} value={user}>
+                  {user}
+                </option>
+              ))}
+            </select>
+          </div>
+
           <TmsInput
             dark={true}
             name="Document"
