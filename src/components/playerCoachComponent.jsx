@@ -200,7 +200,8 @@ const PlayerCoachComponent = ({
                   <div className="flex gap-2">
                     <Button
                       size="xs"
-                      color="primary"
+                      color="warning"
+                      className="px-3"
                       onClick={() => openEditModal(user)}
                     >
                       Edit
