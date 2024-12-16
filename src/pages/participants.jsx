@@ -152,15 +152,13 @@ const Participants = () => {
                   <th className="border border-gray-300 px-4 py-2">
                     Full Name
                   </th>
-                  <th className="border border-gray-300 px-4 py-2">Username</th>
                   <th className="border border-gray-300 px-4 py-2">Role</th>
-                  <th className="border border-gray-300 px-4 py-2">
-                    Created At
-                  </th>
+                  <th className="border border-gray-300 px-4 py-2">Email</th>
+                  <th className="border border-gray-300 px-4 py-2">Sports</th>
+                  <th className="border border-gray-300 px-4 py-2">Category</th>
                 </tr>
               </thead>
               <tbody>
-                {/* Example Data */}
                 {playerCoaches?.map((user, index) => {
                   const date = moment(user.createdAt?.toDate()).format("LLL");
 
@@ -173,13 +171,17 @@ const Participants = () => {
                         {user.fullName}
                       </td>
                       <td className="border border-gray-300 px-4 py-2">
-                        {user.username}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
                         {user.role}
                       </td>
                       <td className="border border-gray-300 px-4 py-2">
-                        {date}
+                        {user.email || "N/A"}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {user.selectedSport + " " + user.selectedCategory ||
+                          "N/A"}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {user.selectedGender || "N/A"}
                       </td>
                     </tr>
                   );
