@@ -4,6 +4,7 @@ import { useState } from "react";
 import TmsModal from "./tmsModal";
 import TmsInput from "./tmsInput";
 import TmsSelect from "./tmsSelect";
+import SportsSelection from "./sportSelection";
 
 const PlayerCoachComponent = ({
   playerCoaches,
@@ -14,7 +15,11 @@ const PlayerCoachComponent = ({
   currentUser,
 }) => {
   const [addUserModal, setAddUserModal] = useState(false); // Tracks if the modal is open or closed
+  const [selectedSport, setSelectedSport] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedGender, setSelectedGender] = useState("");
 
+  console.log(playerCoaches);
   return (
     <div className="wrapper my-10">
       <TmsModal
@@ -22,7 +27,12 @@ const PlayerCoachComponent = ({
         openModal={addUserModal}
         handleClose={() => setAddUserModal(false)}
         onSubmit={() => {
-          handleAddUser(newUser);
+          handleAddUser({
+            ...newUser,
+            selectedSport,
+            selectedGender,
+            selectedCategory,
+          });
           setAddUserModal(false);
         }} // Calls the function when the form is submitted
       >
@@ -54,6 +64,15 @@ const PlayerCoachComponent = ({
               setNewUser({ ...newUser, fullName: e.target.value })
             }
           />
+
+          <SportsSelection
+            setSelectedCategory={setSelectedCategory}
+            setSelectedSport={setSelectedSport}
+            setSelectedGender={setSelectedGender}
+            selectedCategory={selectedCategory}
+            selectedGender={selectedGender}
+            selectedSport={selectedSport}
+          />
         </div>
       </TmsModal>
 
@@ -66,9 +85,10 @@ const PlayerCoachComponent = ({
           <tr className="bg-gray-100">
             <th className="border border-gray-300 px-4 py-2">Full Name</th>
             <th className="border border-gray-300 px-4 py-2">Role</th>
-            {playerCoaches.some((user) => user.role === "Coach") && (
-              <th className="border border-gray-300 px-4 py-2">Email</th>
-            )}
+            <th className="border border-gray-300 px-4 py-2">Email</th>
+            <th className="border border-gray-300 px-4 py-2">Sports</th>
+            <th className="border border-gray-300 px-4 py-2">Category</th>
+
             <th className="border border-gray-300 px-4 py-2">Created At</th>
             <th className="border border-gray-300 px-4 py-2">Actions</th>
           </tr>
@@ -90,6 +110,12 @@ const PlayerCoachComponent = ({
                 </td>
                 <td className="border border-gray-300 px-4 py-2">
                   {user.email || "N/A"}
+                </td>
+                <td className="border border-gray-300 px-4 py-2">
+                  {user.selectedSport + " " + user.selectedCategory || "N/A"}
+                </td>
+                <td className="border border-gray-300 px-4 py-2">
+                  {user.selectedGender || "N/A"}
                 </td>
                 <td className="border border-gray-300 px-4 py-2">{date}</td>
                 <td className="border border-gray-300 px-4 py-2">

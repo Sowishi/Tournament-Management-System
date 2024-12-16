@@ -221,7 +221,7 @@ const User = () => {
     }
   };
 
-  const handleAddUser = () => {
+  const handleAddUser = (newUser) => {
     if (newUser.fullName && newUser.role) {
       addPlayersCoaches(newUser, currentUser.id);
       setNewUser({ fullName: "", username: "", role: "" });
