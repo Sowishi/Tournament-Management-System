@@ -23,6 +23,7 @@ import { FaFolder } from "react-icons/fa"; // Example: Folder icon from react-ic
 import FolderItem from "../components/folderItem";
 import { Breadcrumb } from "flowbite-react";
 import moment from "moment";
+import PlayerCoachComponent from "../components/playerCoachComponent";
 
 const User = () => {
   const { currentUser, setCurrentUser } = useStore();
@@ -75,7 +76,7 @@ const User = () => {
   const [addUserModal, setAddUserModal] = useState(false); // Tracks if the modal is open or closed
   const [newUser, setNewUser] = useState({
     fullName: "",
-    username: "",
+    email: "",
     role: "",
   }); // Tracks the new user's information
   const [users, setUsers] = useState([]); // Stores the list of users
@@ -213,7 +214,7 @@ const User = () => {
   const getStatusColor = (status) => {
     if (status == "Pending") {
       return "info";
-    } else if (status == "Approve") {
+    } else if (status == "Approved") {
       return "success";
     } else {
       return "failure";
@@ -221,7 +222,7 @@ const User = () => {
   };
 
   const handleAddUser = () => {
-    if (newUser.fullName && newUser.username && newUser.role) {
+    if (newUser.fullName && newUser.role) {
       addPlayersCoaches(newUser, currentUser.id);
       setNewUser({ fullName: "", username: "", role: "" });
       toast.success(
@@ -229,7 +230,6 @@ const User = () => {
           ? "Successfully added player"
           : "Successfully added coach"
       );
-      setAddUserModal(false);
     } else {
       alert("Please fill in all fields before submitting.");
     }
@@ -344,41 +344,6 @@ const User = () => {
             onChange={(e) => setFolerName(e.target.value)}
             placeHolder={"Sport/Tournament"}
             label={"Sport/Tournament"}
-          />
-        </div>
-      </TmsModal>
-
-      <TmsModal
-        title={"Add Player/Coach"}
-        openModal={addUserModal}
-        handleClose={() => setAddUserModal(false)}
-        onSubmit={handleAddUser} // Calls the function when the form is submitted
-      >
-        <div className="container">
-          <TmsInput
-            dark={true}
-            name="fullName"
-            placeHolder="Full Name"
-            label="Full Name"
-            onChange={(e) =>
-              setNewUser({ ...newUser, fullName: e.target.value })
-            }
-          />
-          <TmsInput
-            dark={true}
-            name="username"
-            placeHolder="Username"
-            label="Username"
-            onChange={(e) =>
-              setNewUser({ ...newUser, username: e.target.value })
-            }
-          />
-          <TmsSelect
-            name="role"
-            onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
-            label="Role"
-            data={["Please select role", "Player", "Coach"]}
-            dark
           />
         </div>
       </TmsModal>
@@ -649,70 +614,14 @@ const User = () => {
             title="Players/Coaches"
             icon={HiUsers}
           >
-            <div className="wrapper my-10">
-              <div className="flex justify-end mb-5">
-                <Button onClick={() => setAddUserModal(true)}>
-                  Add Player/Coach
-                </Button>
-              </div>
-
-              <table className="table-auto w-full text-left border-collapse border border-gray-300">
-                <thead>
-                  <tr className="bg-gray-100">
-                    <th className="border border-gray-300 px-4 py-2">
-                      Full Name
-                    </th>
-                    <th className="border border-gray-300 px-4 py-2">
-                      Username
-                    </th>
-                    <th className="border border-gray-300 px-4 py-2">Role</th>
-                    <th className="border border-gray-300 px-4 py-2">
-                      Created At
-                    </th>
-                    <th className="border border-gray-300 px-4 py-2">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {/* Example Data */}
-                  {playerCoaches?.map((user, index) => {
-                    const date = moment(user.createdAt?.toDate()).format("LLL");
-
-                    return (
-                      <tr
-                        key={index}
-                        className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
-                      >
-                        <td className="border border-gray-300 px-4 py-2">
-                          {user.fullName}
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2">
-                          {user.username}
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2">
-                          {user.role}
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2">
-                          {date}
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2">
-                          <Button
-                            size="xs"
-                            color="failure"
-                            onClick={() =>
-                              deletePlayerCoach(currentUser.id, user.id)
-                            }
-                          >
-                            Remove
-                          </Button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+            <PlayerCoachComponent
+              handleAddUser={handleAddUser}
+              playerCoaches={playerCoaches}
+              setNewUser={setNewUser}
+              newUser={newUser}
+              deletePlayerCoach={deletePlayerCoach}
+              currentUser={currentUser}
+            />
           </Tabs.Item>
         </Tabs>
       </div>
