@@ -15,7 +15,6 @@ const useCrudParticipants = () => {
       const output = await res.json();
       return output;
     } catch (error) {
-      toast.error(`Error fetching data: ${error.message}`);
       console.error("Error fetching data:", error);
     }
   };

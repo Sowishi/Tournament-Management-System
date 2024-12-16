@@ -41,6 +41,7 @@ const ViewTournament = () => {
   const { data: users } = useGetUsers();
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [participants, setParticipants] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [matches, setMatches] = useState([]);
   const [addModal, setAddModal] = useState(false);
   const [tournament, setTournament] = useState();
@@ -70,7 +71,10 @@ const ViewTournament = () => {
   };
 
   const handleShowTournament = async () => {
+    setLoading(true);
     const output = await showTournament(id);
+    setLoading(false);
+
     const { tournament } = output.data;
     setTournament(tournament);
   };
@@ -370,6 +374,26 @@ const ViewTournament = () => {
     );
   }
 
+  if (loading) {
+    return (
+      <AdminLayout>
+        <div className="container p-20 flex justify-center items-center mx-auto">
+          <h1 className="text-white text-4xl">Loading....</h1>
+        </div>
+      </AdminLayout>
+    );
+  }
+  if (!tournament) {
+    return (
+      <AdminLayout>
+        <div className="container p-20 flex justify-center items-center mx-auto">
+          <h1 className="text-white text-4xl">
+            Sorry, the tournament has either expired or deleted
+          </h1>
+        </div>
+      </AdminLayout>
+    );
+  }
   return (
     <AdminLayout>
       <TmsModal

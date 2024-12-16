@@ -10,12 +10,21 @@ const AboutPage = () => {
     <DefaultLayout>
       <div className="container mx-auto p-8 py-20">
         {/* Header */}
-        <section className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">About Us</h1>
+        <section className="text-left mb-12">
+          <h1 className="text-4xl text-center font-bold text-gray-800 mb-4">
+            About Us
+          </h1>
           <p className="text-lg text-gray-600">
-            Welcome to Tournament Management System, a platform designed to
-            enhance athletic events for the State Colleges and Universities
-            Athletic Association (SCUAA) in the Bicol region.
+            A web-based Tournament Management System created to optimize event
+            hosting, specifically designed for the State Colleges and
+            Universities Athletic Association (SCUAA) in the Bicol region. This
+            system offers features for efficient scheduling, real-time updates,
+            and seamless management of team and player information. It supports
+            multiple sports disciplines, enabling organizers to coordinate while
+            enhancing the experience for participants and spectators. With its
+            user-friendly interface and robust functionality, the system ensures
+            smooth operations, promotes transparency, and elevates the quality
+            of athletic events in the region.
           </p>
         </section>
 

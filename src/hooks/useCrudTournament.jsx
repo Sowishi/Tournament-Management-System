@@ -36,7 +36,6 @@ const useCrudTournament = () => {
       const filterByRecent = await filterByLatestDate(output.data);
       setData(filterByRecent);
     } catch (error) {
-      toast.error(`Error fetching data: ${error.message}`);
       console.error("Error fetching data:", error);
     }
   };
@@ -52,7 +51,6 @@ const useCrudTournament = () => {
       const output = await res.json();
       return output;
     } catch (error) {
-      toast.error(`Error fetching data: ${error.message}`);
       console.error("Error fetching data:", error);
     }
   };
@@ -71,7 +69,6 @@ const useCrudTournament = () => {
       const output = await res.json();
       return output;
     } catch (error) {
-      toast.error(`Error fetching data: ${error.message}`);
       console.error("Error fetching data:", error);
     }
   };
@@ -90,7 +87,6 @@ const useCrudTournament = () => {
       const output = await res.json();
       return output;
     } catch (error) {
-      toast.error(`Error fetching data: ${error.message}`);
       console.error("Error fetching data:", error);
     }
   };

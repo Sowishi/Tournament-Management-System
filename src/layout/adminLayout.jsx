@@ -296,7 +296,11 @@ export default function AdminLayout({ children, client }) {
             <div className="wrapper mx-10 flex items-center justify-start">
               <div className="flex flex-col">
                 <h1 className="text-white textt-sm md:text-2xl">
-                  {currentAdmin.fullName} | {currentAdmin?.sportsEvent}
+                  {currentAdmin?.role !== "Master Admin" && (
+                    <>
+                      {currentAdmin.fullName} | {currentAdmin?.sportsEvent}
+                    </>
+                  )}
                 </h1>
                 <p className="text-blue-500 text-lg">
                   Logged in as: {getAdminRole(currentAdmin?.role)}
