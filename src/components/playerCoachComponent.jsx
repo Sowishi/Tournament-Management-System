@@ -16,12 +16,14 @@ const PlayerCoachComponent = ({
   deletePlayerCoach,
   currentUser,
 }) => {
-  const [addUserModal, setAddUserModal] = useState(false); // Tracks if the add modal is open or closed
-  const [editUserModal, setEditUserModal] = useState(false); // Tracks if the edit modal is open or closed
+  const [addUserModal, setAddUserModal] = useState(false);
+  const [editUserModal, setEditUserModal] = useState(false);
   const [selectedSport, setSelectedSport] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedGender, setSelectedGender] = useState("");
-  const [editingUser, setEditingUser] = useState(null); // Tracks the user being edited
+  const [editingUser, setEditingUser] = useState(null);
+  const [confirmationModal, setConfirmationModal] = useState(false); // Confirmation modal state
+  const [confirmationDetails, setConfirmationDetails] = useState({}); // Details for the action
 
   const { updatePlayerCoaches } = useUpdateUser();
 
@@ -31,6 +33,31 @@ const PlayerCoachComponent = ({
     setSelectedCategory(user.selectedCategory || "");
     setSelectedGender(user.selectedGender || "");
     setEditUserModal(true);
+  };
+
+  const confirmAction = (actionType, user) => {
+    setConfirmationDetails({ actionType, user });
+    setConfirmationModal(true);
+  };
+
+  const handleConfirmAction = () => {
+    const { actionType, user } = confirmationDetails;
+
+    if (actionType === "delete") {
+      deletePlayerCoach(currentUser.id, user.id);
+    } else if (actionType === "update") {
+      updatePlayerCoaches(
+        {
+          ...editingUser,
+          selectedSport,
+          selectedGender,
+          selectedCategory,
+        },
+        currentUser.id
+      );
+    }
+    setConfirmationModal(false);
+    setEditUserModal(false);
   };
 
   return (
@@ -95,18 +122,7 @@ const PlayerCoachComponent = ({
           title={"Edit Player/Coach"}
           openModal={editUserModal}
           handleClose={() => setEditUserModal(false)}
-          onSubmit={() => {
-            updatePlayerCoaches(
-              {
-                ...editingUser,
-                selectedSport,
-                selectedGender,
-                selectedCategory,
-              },
-              currentUser.id
-            );
-            setEditUserModal(false);
-          }}
+          onSubmit={() => confirmAction("update", editingUser)}
         >
           <div className="container">
             <TmsSelect
@@ -152,6 +168,20 @@ const PlayerCoachComponent = ({
           </div>
         </TmsModal>
       )}
+
+      {/* Confirmation Modal */}
+      <TmsModal
+        title="Confirmation"
+        openModal={confirmationModal}
+        handleClose={() => setConfirmationModal(false)}
+        onSubmit={handleConfirmAction}
+      >
+        <p>
+          Are you sure you want to{" "}
+          {confirmationDetails.actionType === "delete" ? "delete" : "update"}{" "}
+          this user?
+        </p>
+      </TmsModal>
 
       {/* Add Button */}
       <div className="flex justify-end mb-5">
@@ -209,7 +239,7 @@ const PlayerCoachComponent = ({
                     <Button
                       size="xs"
                       color="failure"
-                      onClick={() => deletePlayerCoach(currentUser.id, user.id)}
+                      onClick={() => confirmAction("delete", user)}
                     >
                       Remove
                     </Button>

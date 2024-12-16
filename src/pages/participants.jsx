@@ -18,7 +18,7 @@ const Participants = () => {
   const [selectedParticipant, setSelectedParticipant] = useState(null);
   const { getPlayerCoaches } = useUpdateUser();
   const filterData = data.filter((user) => {
-    return user.status === "Approve" && user.sportsEvent === currentEvent;
+    return user.status === "Approved" && user.sportsEvent === currentEvent;
   });
 
   // Function to open modal and set selected participant
