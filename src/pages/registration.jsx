@@ -96,7 +96,7 @@ const Registration = () => {
       const querySnapshot = await getDocs(q);
 
       const isDuplicate = querySnapshot.docs.some(
-        (doc) => doc.data().status === "Approve"
+        (doc) => doc.data().status === "Approved"
       );
 
       if (isDuplicate) {
