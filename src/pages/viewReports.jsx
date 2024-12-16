@@ -161,16 +161,14 @@ const ViewReports = () => {
           <div className="container mx-auto mt-10">
             <div className="wrapper flex flex-col md:flex-row items-center justify-between mb-5">
               {/* Header */}
-              <div className="wrapper mb-5 flex items-center justify-center ">
-                {currentAdmin.role !== "Tournament Manager" && (
+              <div className="wrapper mb-5 flex items-center justify-between  w-full ">
+                <div className="flex justify-center items-center">
                   <Button
                     onClick={() => navigation("/admin/reports")}
                     className="mr-5"
                   >
                     Back
                   </Button>
-                )}
-                <div className="flex justify-center items-center">
                   <h1 className="text-white text-sm md:text-3xl font-bold ">
                     {tournament?.name}
                   </h1>
@@ -181,6 +179,13 @@ const ViewReports = () => {
                     </span>
                   </Badge>
                 </div>
+                <Button
+                  color={"success"}
+                  onClick={() => navigation("/admin/reports")}
+                  className="mr-5"
+                >
+                  Generate Tournament Reports
+                </Button>
               </div>
             </div>
             <>
