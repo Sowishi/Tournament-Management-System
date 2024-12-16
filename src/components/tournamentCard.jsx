@@ -164,7 +164,9 @@ export default function TournamentCard({
             <Button
               className="mt-3"
               color={"failure"}
-              onClick={() => setIsModalOpen(true)}
+              onClick={() => {
+                navigate(`/admin/reports/${data.url}`);
+              }}
             >
               Generate Report
             </Button>
