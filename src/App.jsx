@@ -23,7 +23,10 @@ import User from "./pages/user";
 import AdminTournament from "./pages/admin-tournaments";
 import ViewTournament from "./pages/view-tournament";
 import SystemLog from "./pages/system-log";
+import Overwrite from "./pages/overwrite";
+
 import AdminTournamentManger from "./pages/admin-tournament-manager";
+import AdminReports from "./pages/admin-reports";
 
 const App = () => {
   const { currentUser, guest, currentAdmin } = useStore();
@@ -93,10 +96,14 @@ const App = () => {
           path="/admin/system-log"
           element={currentAdmin ? <SystemLog /> : <Login />}
         />
-        {/* <Route
+        <Route
           path="/admin/overwrite"
           element={currentAdmin ? <Overwrite /> : <Login />}
-        /> */}
+        />
+        <Route
+          path="/admin/reports"
+          element={currentAdmin ? <AdminReports /> : <Login />}
+        />
         <Route
           path="/tournament/:id"
           element={currentAdmin || currentUser ? <ViewTournament /> : <Login />}

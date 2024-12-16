@@ -176,7 +176,6 @@ export default function AdminLayout({ children, client }) {
                           </div>
                         </Sidebar.Item>
                       </Link>
-
                       <Link to="/admin/users">
                         <Sidebar.Item
                           onClick={() => setIsOpen(false)}
@@ -209,6 +208,17 @@ export default function AdminLayout({ children, client }) {
                           </div>
                         </Sidebar.Item>
                       </Link>
+                      <Link to="/admin/reports">
+                        <Sidebar.Item
+                          onClick={() => setIsOpen(false)}
+                          className="bg-blue-950 text-white hover:text-white hover:bg-red-500 my-3"
+                        >
+                          <div className="flex items-center">
+                            Generate Reports
+                            <HiOutlineUserCircle className="ml-3" />
+                          </div>{" "}
+                        </Sidebar.Item>
+                      </Link>{" "}
                       <Sidebar.Item
                         onClick={() => setIsOpen(false)}
                         className="mt-20"

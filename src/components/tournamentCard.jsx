@@ -16,6 +16,7 @@ export default function TournamentCard({
   setShowModal,
   deleteTournament,
   client,
+  isReport,
 }) {
   const { tournament: data } = tournament;
   const navigate = useNavigate();
@@ -119,42 +120,57 @@ export default function TournamentCard({
           </h1>
         </div>
       </div>
-      <div className="flex flex-col">
-        <Button
-          onClick={() => {
-            setSelectedTournament(data);
-            setShowModal(true);
-            if (client) {
-              navigate(`/tournament/${data.url}?client=true`);
-            } else {
-              navigate(`/tournament/${data.url}`);
-            }
-          }}
-        >
-          View Tournament
-          <svg
-            className="-mr-1 ml-2 h-4 w-4"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fillRule="evenodd"
-              d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </Button>
-        {!client && (
+      {!isReport && (
+        <div className="flex flex-col">
           <Button
-            className="mt-3"
-            color={"failure"}
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => {
+              setSelectedTournament(data);
+              setShowModal(true);
+              if (client) {
+                navigate(`/tournament/${data.url}?client=true`);
+              } else {
+                navigate(`/tournament/${data.url}`);
+              }
+            }}
           >
-            Delete
+            View Tournament
+            <svg
+              className="-mr-1 ml-2 h-4 w-4"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                clipRule="evenodd"
+              />
+            </svg>
           </Button>
-        )}
-      </div>
+          {!client && (
+            <Button
+              className="mt-3"
+              color={"failure"}
+              onClick={() => setIsModalOpen(true)}
+            >
+              Delete
+            </Button>
+          )}
+        </div>
+      )}
+      {isReport && (
+        <div className="flex flex-col">
+          {!client && (
+            <Button
+              className="mt-3"
+              color={"failure"}
+              onClick={() => setIsModalOpen(true)}
+            >
+              Generate Report
+            </Button>
+          )}
+        </div>
+      )}
       {/* Confirmation Modal */}
       <Modal show={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <Modal.Header>Confirm Deletion</Modal.Header>
