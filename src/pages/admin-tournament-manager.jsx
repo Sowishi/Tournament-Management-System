@@ -9,6 +9,7 @@ import useCrudAdmin from "../hooks/useCrudAdmin";
 import useGetEventName from "../hooks/useGetEventName";
 import { TournamentManagerTable } from "../components/tournamentManagerTable";
 import useCrudTournament from "../hooks/useCrudTournament";
+import sendEmail from "../utils/sendEmail";
 
 const AdminTournamentManager = () => {
   const [createModal, setCreateModal] = useState(false);
@@ -66,6 +67,7 @@ const AdminTournamentManager = () => {
         });
       } else {
         addAdmin({ ...forms, tournamentID: selectedTournament.tournament.url });
+        sendEmail(forms);
         toast.success("Successfully created admin.");
       }
       setCreateModal(false);
