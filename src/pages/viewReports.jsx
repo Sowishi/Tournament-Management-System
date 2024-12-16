@@ -27,10 +27,12 @@ import MatchCardReport from "../components/matchCardReport";
 import ParticipantsTablesReport from "../components/participantsTableReport";
 import RankingTableReports from "../components/rankingTableReport";
 import { data } from "autoprefixer";
+import { usePDF } from "react-to-pdf";
 
 const ViewReports = () => {
   const localizer = momentLocalizer(moment);
   const { currentAdmin } = useStore();
+  const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
 
   const { id } = useParams();
   const navigation = useNavigate();
@@ -179,12 +181,16 @@ const ViewReports = () => {
                     </span>
                   </Badge>
                 </div>
-                <Button color={"success"} className="mr-5">
+                <Button
+                  onClick={() => toPDF()}
+                  color={"success"}
+                  className="mr-5"
+                >
                   Generate Tournament Reports
                 </Button>
               </div>
             </div>
-            <>
+            <div>
               <div className="mb-5 hidden md:block">
                 <Table hoverable>
                   <Table.Head>
@@ -234,12 +240,12 @@ const ViewReports = () => {
                   </Table.Body>
                 </Table>
               </div>
-            </>
+            </div>
           </div>
 
           {/* Generate Reports Content */}
 
-          <>
+          <div ref={targetRef}>
             {/* Mathces Data */}
             <div className="flex flex-col items-center justify-center my-20">
               <h1 className="text-white text-sm md:text-5xl text-center font-bold mb-5">
@@ -353,7 +359,7 @@ const ViewReports = () => {
                 </svg>
               </div>
             </div>
-          </>
+          </div>
         </div>
       </div>
     </AdminLayout>
