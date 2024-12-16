@@ -8,7 +8,7 @@ import { HiOutlineUsers, HiOutlineSpeakerphone } from "react-icons/hi";
 import moment from "moment";
 import useCrudLogs from "../hooks/useCrudLogs";
 import { useStore } from "../zustand/store";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function TournamentCard({
   tournament,
@@ -22,6 +22,20 @@ export default function TournamentCard({
   const { addLog } = useCrudLogs();
   const { currentUser } = useStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [tournaInfo, setTournaInfo] = useState(null);
+
+  useEffect(() => {
+    if (data.description) {
+      try {
+        // Attempt to parse the description as JSON
+        const parsedData = JSON.parse(data.description);
+        setTournaInfo(parsedData);
+      } catch (error) {
+        // If parsing fails, set the description as is
+        setTournaInfo(data.description);
+      }
+    }
+  }, [data.description]);
 
   const getBadgeColor = (state) => {
     if (state === "pending") {
@@ -79,6 +93,17 @@ export default function TournamentCard({
         </div>
         <div className="content flex-grow">
           <h1 className="text-white font-bold text-3xl my-5">{data.name}</h1>
+          <div className="flex flex-col justify-between">
+            <div className="info text-white text-sm items-center">
+              <span className="opacity-80">Sports: </span>{" "}
+              {tournaInfo?.selectedSport} | {tournaInfo?.selectedCategory}
+            </div>
+            <div className="info text-white text-sm">
+              <span className="opacity-80">Category: </span>{" "}
+              {tournaInfo?.selectedGender}
+            </div>
+          </div>
+
           <div className="badge flex flex-col items-start">
             <Badge size={"md"} className="mt-3">
               {data.tournament_type}
@@ -90,7 +115,7 @@ export default function TournamentCard({
           </h1>
           <h1 className="text-white font-bold text-md flex items-center">
             <HiOutlineSpeakerphone className="mr-1" />
-            Event: {data.description}
+            Event: {tournaInfo?.eventName}
           </h1>
         </div>
       </div>

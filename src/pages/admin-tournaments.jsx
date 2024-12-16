@@ -86,7 +86,7 @@ const AdminTournament = ({ client, currentEvent }) => {
       ...forms,
       categories: {
         selectedCategory,
-        selectedEvent,
+        selectedSport,
         selectedGender,
       },
     };
