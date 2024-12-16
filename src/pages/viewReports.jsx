@@ -235,7 +235,11 @@ const ViewReports = () => {
                 </Table>
               </div>
             </>
+          </div>
 
+          {/* Generate Reports Content */}
+
+          <>
             {/* Mathces Data */}
             <div className="flex flex-col items-center justify-center my-20">
               <h1 className="text-white text-sm md:text-5xl text-center font-bold mb-5">
@@ -349,7 +353,7 @@ const ViewReports = () => {
                 </svg>
               </div>
             </div>
-          </div>
+          </>
         </div>
       </div>
     </AdminLayout>
