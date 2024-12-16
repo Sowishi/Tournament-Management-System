@@ -99,12 +99,14 @@ app.get("/show-participant", async (req, res) => {
 
 app.post("/add-participant", async (req, res) => {
   const { users, id } = req.body;
+
+  // Ensure proper mapping of participants
   const names = users
-    .filter((user) => user.username)
+    .filter((user) => user.collegeName) // Ensure collegeName exists
     .map((user) => {
       return { name: user.collegeName };
     });
-  console.log(id, names);
+
   try {
     const response = await fetch(
       `https://api.challonge.com/v1/tournaments/${id}/participants/bulk_add.json?api_key=UeuI5bUZKaMwWFf1TEsnJTj1VhQ2EWdvQ5KZ8g5M`,
@@ -114,21 +116,24 @@ app.post("/add-participant", async (req, res) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          participants: names,
+          participants: names, // Ensure correct payload structure
         }),
       }
     );
 
     if (!response.ok) {
       // If the response status is not OK, throw an error
-      throw new Error(`HTTP error! Status: ${response.status}`);
+      const errorText = await response.text(); // Retrieve detailed error message from the API
+      throw new Error(
+        `HTTP error! Status: ${response.status}. Details: ${errorText}`
+      );
     }
 
     const output = await response.json();
 
     // Send success response
     res.json({
-      message: "Participants Added successfully",
+      message: "Participants added successfully",
       data: output,
     });
   } catch (error) {

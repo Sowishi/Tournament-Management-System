@@ -33,7 +33,7 @@ export default function AddParticipantsTable({
 
   const filterUsers = users.filter((user) => {
     if (
-      user.sportsEvent === tournaInfo.eventName &&
+      user.sportsEvent === tournaInfo?.eventName &&
       user?.userType !== "admin"
     ) {
       return user;
@@ -48,8 +48,6 @@ export default function AddParticipantsTable({
           <Table.HeadCell className="p-4"></Table.HeadCell>
           <Table.HeadCell>School/College</Table.HeadCell>
           <Table.HeadCell>Email</Table.HeadCell>
-
-          <Table.HeadCell>Event Registered</Table.HeadCell>
         </Table.Head>
         <Table.Body className="divide-y">
           {filterUsers?.map((item) => {
@@ -65,8 +63,6 @@ export default function AddParticipantsTable({
 
                 <Table.Cell>{item.collegeName}</Table.Cell>
                 <Table.Cell>{item.email}</Table.Cell>
-
-                <Table.Cell>{tournaInfo?.eventName}</Table.Cell>
               </Table.Row>
             );
           })}
