@@ -32,7 +32,6 @@ import { usePDF } from "react-to-pdf";
 const ViewReports = () => {
   const localizer = momentLocalizer(moment);
   const { currentAdmin } = useStore();
-  const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
 
   const { id } = useParams();
   const navigation = useNavigate();
@@ -57,6 +56,8 @@ const ViewReports = () => {
   const [matchDates, setMatchDates] = useState([]);
   const [openMenu, setOpenMenu] = useState(false);
   const [tournaInfo, setTournaInfo] = useState(null);
+
+  const { toPDF, targetRef } = usePDF({ filename: `${tournament?.name}.pdf` });
 
   useEffect(() => {
     if (tournament?.description) {
@@ -140,7 +141,7 @@ const ViewReports = () => {
     return (
       <AdminLayout>
         <div className="container p-20 flex justify-center items-center mx-auto">
-          <h1 className="text-white text-4xl">Loading....</h1>
+          <h1 className="text-dark text-4xl">Loading....</h1>
         </div>
       </AdminLayout>
     );
@@ -149,7 +150,7 @@ const ViewReports = () => {
     return (
       <AdminLayout>
         <div className="container p-20 flex justify-center items-center mx-auto">
-          <h1 className="text-white text-4xl">
+          <h1 className="text-dark text-4xl">
             Sorry, the tournament has either expired or deleted
           </h1>
         </div>
@@ -157,212 +158,208 @@ const ViewReports = () => {
     );
   }
   return (
-    <AdminLayout>
-      <div className="flex items-start justify-start ">
-        <div className="basis-full p-10">
-          <div className="container mx-auto mt-10">
-            <div className="wrapper flex flex-col md:flex-row items-center justify-between mb-5">
-              {/* Header */}
-              <div className="wrapper mb-5 flex items-center justify-between  w-full ">
-                <div className="flex justify-center items-center">
-                  <Button
-                    onClick={() => navigation("/admin/reports")}
-                    className="mr-5"
-                  >
-                    Back
-                  </Button>
-                  <h1 className="text-white text-sm md:text-3xl font-bold ">
-                    {tournament?.name}
-                  </h1>
-                  <Badge size={"lg"} className="ml-5 text-center">
-                    <span className="text-xs md:text-lg text-center">
-                      {" "}
-                      {tournament?.tournament_type}
-                    </span>
-                  </Badge>
-                </div>
+    <div className="flex items-start justify-start ">
+      <div className="basis-full p-10">
+        <div className="container mx-auto mt-10">
+          <div className="wrapper flex flex-col md:flex-row items-center justify-between mb-5">
+            {/* Header */}
+            <div className="wrapper mb-5 flex items-center justify-between  w-full ">
+              <div className="flex justify-center items-center">
                 <Button
-                  onClick={() => toPDF()}
-                  color={"success"}
+                  onClick={() => navigation("/admin/reports")}
                   className="mr-5"
                 >
-                  Generate Tournament Reports
+                  Back
                 </Button>
+                <h1 className="text-dark text-sm md:text-3xl font-bold ">
+                  {tournament?.name}
+                </h1>
+                <Badge size={"lg"} className="ml-5 text-center">
+                  <span className="text-xs md:text-lg text-center">
+                    {" "}
+                    {tournament?.tournament_type}
+                  </span>
+                </Badge>
               </div>
-            </div>
-            <div>
-              <div className="mb-5 hidden md:block">
-                <Table hoverable>
-                  <Table.Head>
-                    <Table.HeadCell className="text-center text-xs bg-slate-900 text-white font-bold border">
-                      Tournament State
-                    </Table.HeadCell>
-                    <Table.HeadCell className="text-center text-xs bg-slate-900 text-white font-bold border">
-                      Registered Event
-                    </Table.HeadCell>
-                    <Table.HeadCell className="text-center text-xs bg-slate-900 text-white font-bold border">
-                      Category
-                    </Table.HeadCell>
-                    <Table.HeadCell className="text-center text-xs bg-slate-900 text-white font-bold border">
-                      Tournament Start Date
-                    </Table.HeadCell>
-                  </Table.Head>
-                  <Table.Body className="divide-y">
-                    <Table.Cell className="text-center flex items-center justify-center">
-                      <Badge color={"warning"} size={"lg"} className="px-10">
-                        <h1 className="text-lg"> {tournament?.state}</h1>
-                      </Badge>
-                    </Table.Cell>
-                    <Table.Cell className="text-center">
-                      <h1 className="text-lg text-white">
-                        {tournaInfo?.eventName}
-                      </h1>
-                    </Table.Cell>
-                    <Table.Cell className="text-center">
-                      <div className="flex flex-col">
-                        <h1 className="text-lg text-white">
-                          {tournaInfo?.selectedSport}{" "}
-                          {tournaInfo?.selectedCategory ? " | " : ""}
-                          {tournaInfo?.selectedCategory}
-                        </h1>
-                        <h1 className="text-lg text-white">
-                          {tournaInfo?.selectedGender}
-                        </h1>{" "}
-                      </div>
-                    </Table.Cell>
-                    <Table.Cell className="text-center">
-                      <h1 className="text-lg text-white">
-                        {tournament?.started_at
-                          ? moment(tournament?.started_at).format("LLL")
-                          : "Waiting to start"}
-                      </h1>
-                    </Table.Cell>
-                  </Table.Body>
-                </Table>
-              </div>
+              <Button
+                onClick={() => toPDF()}
+                color={"success"}
+                className="mr-5"
+              >
+                Generate Tournament Reports
+              </Button>
             </div>
           </div>
+          <div>
+            <div className="mb-5 hidden md:block">
+              <Table hoverable>
+                <Table.Head>
+                  <Table.HeadCell className="text-center text-xs  text-dark font-bold border">
+                    Tournament State
+                  </Table.HeadCell>
+                  <Table.HeadCell className="text-center text-xs  text-dark font-bold border">
+                    Registered Event
+                  </Table.HeadCell>
+                  <Table.HeadCell className="text-center text-xs  text-dark font-bold border">
+                    Category
+                  </Table.HeadCell>
+                  <Table.HeadCell className="text-center text-xs  text-dark font-bold border">
+                    Tournament Start Date
+                  </Table.HeadCell>
+                </Table.Head>
+                <Table.Body className="divide-y">
+                  <Table.Cell className="text-center flex items-center justify-center">
+                    <Badge color={"warning"} size={"lg"} className="px-10">
+                      <h1 className="text-lg"> {tournament?.state}</h1>
+                    </Badge>
+                  </Table.Cell>
+                  <Table.Cell className="text-center">
+                    <h1 className="text-lg text-dark">
+                      {tournaInfo?.eventName}
+                    </h1>
+                  </Table.Cell>
+                  <Table.Cell className="text-center">
+                    <div className="flex flex-col">
+                      <h1 className="text-lg text-dark">
+                        {tournaInfo?.selectedSport}{" "}
+                        {tournaInfo?.selectedCategory ? " | " : ""}
+                        {tournaInfo?.selectedCategory}
+                      </h1>
+                      <h1 className="text-lg text-dark">
+                        {tournaInfo?.selectedGender}
+                      </h1>{" "}
+                    </div>
+                  </Table.Cell>
+                  <Table.Cell className="text-center">
+                    <h1 className="text-lg text-dark">
+                      {tournament?.started_at
+                        ? moment(tournament?.started_at).format("LLL")
+                        : "Waiting to start"}
+                    </h1>
+                  </Table.Cell>
+                </Table.Body>
+              </Table>
+            </div>
+          </div>
+        </div>
 
-          {/* Generate Reports Content */}
+        {/* Generate Reports Content */}
 
-          <div ref={targetRef}>
-            {/* Mathces Data */}
-            <div className="flex flex-col items-center justify-center my-20">
-              <h1 className="text-white text-sm md:text-5xl text-center font-bold mb-5">
-                Tournament Name: {tournament?.name}
-              </h1>
-              <h1 className="text-white text-2xl">
-                {tournament?.tournament_type}
+        <div ref={targetRef}>
+          {/* Mathces Data */}
+          <div className="flex flex-col items-center justify-center my-20">
+            <h1 className="text-dark text-sm md:text-5xl text-center font-bold mb-5">
+              Tournament Name: {tournament?.name}
+            </h1>
+            <h1 className="text-dark text-2xl">
+              {tournament?.tournament_type}
+            </h1>
+          </div>
+          {matches.length >= 1 && (
+            <div className="matches my-20">
+              <div className="wrapper flex items-center my-5">
+                <h1 className="text-dark text-3xl font-bold">
+                  Tournament Matches
+                </h1>
+                <Badge className="ml-3">{matches.length}</Badge>
+              </div>
+              <div className="flex justify-center items-center flex-wrap">
+                {matches.map((item, index) => {
+                  const { match } = item;
+
+                  return (
+                    <div className="basis-5/12 mx-3" key={index}>
+                      <motion.div
+                        key={match.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                      >
+                        <MatchCardReport
+                          id={id}
+                          match={match}
+                          tournament={tournament}
+                        />
+                      </motion.div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          <>
+            <div className="participants my-20">
+              <div className="wrapper flex items-center my-5">
+                <h1 className="text-dark text-3xl font-bold">
+                  Tournament Ranking
+                </h1>
+                <Badge className="ml-3">{participants.length}</Badge>
+              </div>
+              {participants.length <= 0 && (
+                <h1 className="text-dark text-center text-3xl">
+                  No Participants yet. try adding one.
+                </h1>
+              )}
+              {participants.length >= 1 && (
+                <RankingTableReports
+                  handleFinalizeTournament={handleFinalizeTournament}
+                  handleGetParticipants={handleGetParticipantsRanking}
+                  tournamentState={tournament?.state}
+                  tournament={tournament}
+                  handleDeleteParticipant={handleDeleteParticipant}
+                  participants={participants}
+                />
+              )}
+            </div>
+          </>
+          <>
+            <div className="wrapper flex items-center my-5">
+              <h1 className="text-dark text-3xl font-bold">
+                Schedule of Tournament
               </h1>
             </div>
-            {matches.length >= 1 && (
-              <div className="matches my-20">
-                <div className="wrapper flex items-center my-5">
-                  <h1 className="text-white text-3xl font-bold">
-                    Tournament Matches
-                  </h1>
-                  <Badge className="ml-3">{matches.length}</Badge>
-                </div>
-                <div className="flex justify-center items-center flex-wrap">
-                  {matches.map((item, index) => {
-                    const { match } = item;
-
-                    return (
-                      <div className="basis-5/12 mx-3" key={index}>
-                        <motion.div
-                          key={match.id}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: index * 0.1 }}
-                        >
-                          <MatchCardReport
-                            id={id}
-                            match={match}
-                            tournament={tournament}
-                          />
-                        </motion.div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-
-            <>
-              <div className="participants my-20">
-                <div className="wrapper flex items-center my-5">
-                  <h1 className="text-white text-3xl font-bold">
-                    Tournament Ranking
-                  </h1>
-                  <Badge className="ml-3">{participants.length}</Badge>
-                </div>
-                {participants.length <= 0 && (
-                  <h1 className="text-white text-center text-3xl">
-                    No Participants yet. try adding one.
-                  </h1>
-                )}
-                {participants.length >= 1 && (
-                  <RankingTableReports
-                    handleFinalizeTournament={handleFinalizeTournament}
-                    handleGetParticipants={handleGetParticipantsRanking}
-                    tournamentState={tournament?.state}
-                    tournament={tournament}
-                    handleDeleteParticipant={handleDeleteParticipant}
-                    participants={participants}
-                  />
-                )}
-              </div>
-            </>
-            <>
-              <div className="wrapper flex items-center my-5">
-                <h1 className="text-white text-3xl font-bold">
-                  Schedule of Tournament
-                </h1>
-              </div>
-              <Calendar
-                events={matchDates}
-                localizer={localizer}
-                views={["month", "agenda"]}
-                className="mx-5 bg-white rounded p-6"
-                startAccessor="start"
-                endAccessor="end"
-                style={{ height: 500, width: "100%" }}
-              />
-            </>
-            <div className="mt-20 flex flex-col items-center">
-              <p className="text-white text-4xl font-bold mt-2">
-                {tournamentManger?.fullName
-                  ? tournamentManger.fullName
-                  : "No Tournament Manager Yet."}
-              </p>
-              <h2 className="text-white text-lg font-semibold">
-                Tournament Manager
-              </h2>
-              <h1 className="text-white mt-10">
-                ______________________________
-              </h1>
-              <h1 className="text-white">Signature</h1>
-              <div className="mt-5">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="2"
-                  stroke="currentColor"
-                  className="w-20 h-10 text-white"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M4 20l8-8m0 0l8 8m-8-8v16"
-                  />
-                </svg>
-              </div>
+            <Calendar
+              events={matchDates}
+              localizer={localizer}
+              views={["month", "agenda"]}
+              className="mx-5 bg-dark rounded p-6"
+              startAccessor="start"
+              endAccessor="end"
+              style={{ height: 500, width: "100%" }}
+            />
+          </>
+          <div className="mt-20 flex flex-col items-center">
+            <p className="text-dark text-4xl font-bold mt-2">
+              {tournamentManger?.fullName
+                ? tournamentManger.fullName
+                : "No Tournament Manager Yet."}
+            </p>
+            <h2 className="text-dark text-lg font-semibold">
+              Tournament Manager
+            </h2>
+            <h1 className="text-dark mt-10">______________________________</h1>
+            <h1 className="text-dark">Signature</h1>
+            <div className="mt-5">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="2"
+                stroke="currentColor"
+                className="w-20 h-10 text-dark"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4 20l8-8m0 0l8 8m-8-8v16"
+                />
+              </svg>
             </div>
           </div>
         </div>
       </div>
-    </AdminLayout>
+    </div>
   );
 };
 

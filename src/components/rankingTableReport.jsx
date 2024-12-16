@@ -11,17 +11,17 @@ export default function RankingTableReport({ participants, tournament }) {
   });
 
   return (
-    <div className="p-5 my-5 bg-gray-800 rounded-md text-white">
-      <h2 className="text-2xl font-bold text-center mb-5">
+    <div className="p-5 my-5 rounded-md  text-black">
+      <h2 className="text-2xl font-bold text-center mb-5 text-black">
         Ranking Report - {tournament.name}
       </h2>
 
-      <Table className="w-full text-left text-gray-100">
+      <Table className="w-full text-left text-black">
         <Table.Head>
-          <Table.HeadCell className="p-4 text-lg font-bold bg-gray-900">
+          <Table.HeadCell className="p-4 text-lg font-bold text-black">
             Participant Name
           </Table.HeadCell>
-          <Table.HeadCell className="p-4 text-lg font-bold bg-gray-900">
+          <Table.HeadCell className="p-4 text-lg font-bold text-black">
             Ranking
           </Table.HeadCell>
         </Table.Head>
@@ -30,9 +30,11 @@ export default function RankingTableReport({ participants, tournament }) {
             const { participant } = item;
 
             return (
-              <tr key={index} className="bg-gray-700">
-                <Table.Cell className="p-4">{participant.name}</Table.Cell>
-                <Table.Cell className="p-4">
+              <tr key={index} className="text-black">
+                <Table.Cell className="p-4 text-black">
+                  <h1 className="text-black">{participant.name}</h1>
+                </Table.Cell>
+                <Table.Cell className="p-4 text-black">
                   {participant.final_rank || "----"}
                 </Table.Cell>
               </tr>

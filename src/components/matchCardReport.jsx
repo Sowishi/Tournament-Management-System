@@ -27,7 +27,7 @@ export default function MatchReport({ match, id, tournament }) {
   }, []);
 
   return (
-    <div className="p-5 my-5 bg-gray-800 rounded-md text-white">
+    <div className="p-5 my-5 border border-slate-900 rounded-md text-dark">
       <h2 className="text-2xl font-bold text-center mb-5">
         Match Report - Round {match.round}
       </h2>
@@ -41,7 +41,7 @@ export default function MatchReport({ match, id, tournament }) {
       </div>
 
       <div className="space-y-3">
-        <div className="bg-gray-700 p-3 rounded-md">
+        <div className=" p-3 rounded-md">
           <p className="text-lg">
             <strong>Player 1:</strong>{" "}
             {player1?.name || (
@@ -55,9 +55,9 @@ export default function MatchReport({ match, id, tournament }) {
           </p>
         </div>
 
-        <p className="text-center text-xl text-gray-300 font-semibold">VS</p>
+        <p className="text-center text-xl text-dark font-semibold">VS</p>
 
-        <div className="bg-gray-700 p-3 rounded-md">
+        <div className=" p-3 rounded-md">
           <p className="text-lg">
             <strong>Player 2:</strong>{" "}
             {player2?.name || (
