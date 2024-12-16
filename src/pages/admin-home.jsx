@@ -143,7 +143,7 @@ const AdminHome = () => {
   });
 
   const activeUsers = users.filter((user) => {
-    if (user.status == "Approve") {
+    if (user.status == "Approved") {
       return user;
     }
   });
