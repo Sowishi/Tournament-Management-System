@@ -9,6 +9,7 @@ import { useStore } from "../zustand/store";
 import { toast } from "react-toastify";
 import Lottie from "lottie-react";
 import welcomeAnim from "../assets/Animation - 1707144264244 (1).json";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -16,7 +17,7 @@ const Login = () => {
 
   const { data } = useGetUsers();
   const { setCurrentUser, setGuest, setCurrentAdmin } = useStore();
-
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = () => {
@@ -93,17 +94,26 @@ const Login = () => {
               placeHolder="Enter your email"
               label="Email"
             />
-            <TmsInput
-              type={"password"}
-              onChange={(event) => setPassword(event.target.value)}
-              placeHolder="Enter your password"
-              label="Password"
-            />
-            {/* <div className="flex justify-end items-center mt-2">
-              <Link className="text-blue-950 font-bold" to={"/forgot"}>
-                Forgot Password?
-              </Link>
-            </div> */}
+
+            <div className="relative">
+              <TmsInput
+                type={showPassword ? "text" : "password"}
+                onChange={(event) => setPassword(event.target.value)}
+                placeHolder="Enter your password"
+                label="Password"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-2 top-8 flex items-center"
+              >
+                {showPassword ? (
+                  <FaEyeSlash className="w-5" />
+                ) : (
+                  <FaEye className="w-5" />
+                )}
+              </button>
+            </div>
 
             <div className="flex justify-center items-center">
               <Button

@@ -129,19 +129,6 @@ const AboutPage = () => {
           </p>
         </section>
 
-        {/* Contact Us Section */}
-        <section className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4">Contact Us</h2>
-          <p className="text-lg text-gray-600">
-            For more details, don’t hesitate to contact us:
-          </p>
-          <ul className="text-gray-600 mt-4">
-            <li>+639186841062</li>
-            <li>+639297586496 </li>
-            <li>+63 (XXX) YYY ZZZZ</li>
-          </ul>
-        </section>
-
         {/* Meet The Team Section */}
         <section className="mb-12">
           <h2 className="text-3xl font-bold text-gray-800 text-center mb-4">
