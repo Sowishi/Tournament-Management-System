@@ -13,6 +13,7 @@ import moment from "moment";
 import { motion } from "framer-motion";
 import useCrudLogs from "../hooks/useCrudLogs";
 import { useStore } from "../zustand/store";
+import sports from "../utils/sports";
 
 const AdminTournament = ({ client, currentEvent }) => {
   const [createModal, setCreateModal] = useState(false);
@@ -31,6 +32,21 @@ const AdminTournament = ({ client, currentEvent }) => {
     tournamentEvent: currentAdmin ? currentAdmin?.sportsEvent : "",
     tournamentType: "",
   });
+
+  const [selectedSport, setSelectedSport] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedGender, setSelectedGender] = useState("");
+
+  const handleSportChange = (event) => {
+    const selected = event.target.value;
+    setSelectedSport(selected);
+    setSelectedCategory(""); // Reset category selection when sport changes
+    setSelectedGender(""); // Reset gender selection when sport changes
+  };
+
+  const selectedSportData = sports.find(
+    (sport) => sport.sport === selectedSport
+  );
 
   const [selectedEvent, setSelectedEvent] = useState(
     currentAdmin ? currentAdmin?.sportsEvent : ""
@@ -65,7 +81,15 @@ const AdminTournament = ({ client, currentEvent }) => {
   const handleAddTournament = async () => {
     if (!validateForm()) return;
 
-    const res = await addTournament(forms);
+    const tournamentParameter = {
+      ...forms,
+      categories: {
+        selectedCategory,
+        selectedEvent,
+        selectedGender,
+      },
+    };
+    const res = await addTournament(tournamentParameter);
     if (res.error) {
       toast.error(res.message);
       return;
@@ -113,6 +137,38 @@ const AdminTournament = ({ client, currentEvent }) => {
         handleClose={() => setCreateModal(false)}
       >
         <form>
+          <TmsSelect
+            dark={true}
+            name="sport"
+            label="Select Sport"
+            data={["Select Sport", ...sports.map((sport) => sport.sport)]}
+            onChange={handleSportChange}
+            value={selectedSport}
+          />
+
+          {selectedSportData?.categories &&
+            selectedSportData.categories.length > 0 && (
+              <TmsSelect
+                dark={true}
+                name="category"
+                label="Select Category"
+                data={["Select Category", ...selectedSportData.categories]}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                value={selectedCategory}
+              />
+            )}
+
+          {selectedSportData?.genders && (
+            <TmsSelect
+              dark={true}
+              name="gender"
+              label="Select Gender"
+              data={["Select Gender", ...selectedSportData.genders]}
+              onChange={(e) => setSelectedGender(e.target.value)}
+              value={selectedGender}
+            />
+          )}
+
           <TmsInput
             placeHolder={"Enter Tournament Name"}
             name={"tournamentName"}

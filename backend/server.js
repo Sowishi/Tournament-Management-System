@@ -222,8 +222,10 @@ app.post("/create-tournament", async (req, res) => {
     tournamentType,
     tournamentEvent,
     startAt,
-    allowTies,
+    categories,
   } = req.body;
+
+  const tournaParameter = { ...categories, eventName: tournamentEvent };
 
   try {
     const response = await fetch(
@@ -238,7 +240,7 @@ app.post("/create-tournament", async (req, res) => {
           tournament: {
             name: tournamentName,
             tournament_type: tournamentType,
-            description: tournamentEvent,
+            description: JSON.stringify(tournaParameter),
             show_rounds: true,
             review_before_finalizing: true,
             ranked_by: "points scored",
