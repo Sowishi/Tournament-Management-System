@@ -179,11 +179,7 @@ const ViewReports = () => {
                     </span>
                   </Badge>
                 </div>
-                <Button
-                  color={"success"}
-                  onClick={() => navigation("/admin/reports")}
-                  className="mr-5"
-                >
+                <Button color={"success"} className="mr-5">
                   Generate Tournament Reports
                 </Button>
               </div>
@@ -241,7 +237,14 @@ const ViewReports = () => {
             </>
 
             {/* Mathces Data */}
-
+            <div className="flex flex-col items-center justify-center my-20">
+              <h1 className="text-white text-sm md:text-5xl text-center font-bold mb-5">
+                Tournament Name: {tournament?.name}
+              </h1>
+              <h1 className="text-white text-2xl">
+                {tournament?.tournament_type}
+              </h1>
+            </div>
             {matches.length >= 1 && (
               <div className="matches my-20">
                 <div className="wrapper flex items-center my-5">
