@@ -26,6 +26,7 @@ import { useStore } from "../zustand/store";
 import MatchCardReport from "../components/matchCardReport";
 import ParticipantsTablesReport from "../components/participantsTableReport";
 import RankingTableReports from "../components/rankingTableReport";
+import { data } from "autoprefixer";
 
 const ViewReports = () => {
   const localizer = momentLocalizer(moment);
@@ -99,14 +100,6 @@ const ViewReports = () => {
     setTournament(tournament);
   };
 
-  const handleStartTournament = async () => {
-    const output = await startTournament(id);
-    if (!output.error) {
-      toast.success(output.message);
-      window.location.reload();
-    }
-  };
-
   const handleFinalizeTournament = async () => {
     const output = await finalizeTournament(id);
     if (!output.error) {
@@ -134,6 +127,12 @@ const ViewReports = () => {
   }, []);
 
   const tournamentID = id;
+
+  const tournamentManger = users.find((user) => {
+    if (tournament?.name == user.assignTournament) {
+      return user;
+    }
+  });
 
   if (loading) {
     return (
@@ -312,6 +311,36 @@ const ViewReports = () => {
                 style={{ height: 500, width: "100%" }}
               />
             </>
+            <div className="mt-20 flex flex-col items-center">
+              <p className="text-white text-4xl font-bold mt-2">
+                {tournamentManger?.fullName
+                  ? tournamentManger.fullName
+                  : "No Tournament Manager Yet."}
+              </p>
+              <h2 className="text-white text-lg font-semibold">
+                Tournament Manager
+              </h2>
+              <h1 className="text-white mt-10">
+                ______________________________
+              </h1>
+              <h1 className="text-white">Signature</h1>
+              <div className="mt-5">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="2"
+                  stroke="currentColor"
+                  className="w-20 h-10 text-white"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M4 20l8-8m0 0l8 8m-8-8v16"
+                  />
+                </svg>
+              </div>
+            </div>
           </div>
         </div>
       </div>
