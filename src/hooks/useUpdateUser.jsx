@@ -76,6 +76,12 @@ const useUpdateUser = () => {
     const colRef = collection(db, "users", id, "playersCoaches");
     addDoc(colRef, { ...user, createdAt: serverTimestamp() });
   };
+
+  const updatePlayerCoaches = (user, id) => {
+    console.log(user);
+    const docRef = doc(db, "users", id, "playersCoaches", user.id);
+    updateDoc(docRef, user);
+  };
   const getPlayerCoaches = (id, setPlayerCoaches) => {
     if (id) {
       const colRef = collection(db, "users", id, "playersCoaches");
@@ -104,6 +110,7 @@ const useUpdateUser = () => {
     addPlayersCoaches,
     getPlayerCoaches,
     deletePlayerCoach,
+    updatePlayerCoaches,
     documents,
   };
 };
