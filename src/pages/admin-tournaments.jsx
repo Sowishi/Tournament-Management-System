@@ -36,6 +36,7 @@ const AdminTournament = ({ client, currentEvent }) => {
   const [selectedSport, setSelectedSport] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedGender, setSelectedGender] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
 
   const handleSportChange = (event) => {
     const selected = event.target.value;
@@ -116,17 +117,33 @@ const AdminTournament = ({ client, currentEvent }) => {
 
   const filterEvent = eventNames.map((item) => item.eventName);
 
-  const filterTournament = data.filter((item) => {
-    if (client) {
-      if (currentEvent === item.tournament.description) {
-        return item;
-      }
-    } else {
-      if (selectedEvent === "all") return item;
-      if (item.tournament.description === selectedEvent) return item;
-    }
-    return null;
-  });
+  const filterTournament = async () => {
+    const filteredData = await Promise.all(
+      data.map(async (item) => {
+        const tournaInfo = await JSON.parse(item.tournament.description);
+        if (client) {
+          if (currentEvent === tournaInfo.eventName) {
+            return item; // Include the item if it matches
+          }
+        } else {
+          if (selectedEvent === "all") return item;
+          if (tournaInfo.eventName === selectedEvent) return item;
+        }
+        return null; // Exclude the item if it doesn't match
+      })
+    );
+
+    // Filter out null values (non-matching items)
+    return filteredData.filter((item) => item !== null);
+  };
+
+  useEffect(() => {
+    filterTournament().then((filteredData) => {
+      setFilteredData(filteredData);
+    });
+  }, [data]);
+
+  console.log(filteredData);
 
   return (
     <AdminLayout client={client}>
@@ -216,7 +233,7 @@ const AdminTournament = ({ client, currentEvent }) => {
             </div>
           )}
           {!loading &&
-            filterTournament.map((item) => (
+            filteredData.map((item) => (
               <motion.div
                 key={item.id}
                 className="basis-full md:basis-3/12 my-5 p-5"
@@ -234,6 +251,14 @@ const AdminTournament = ({ client, currentEvent }) => {
                 />
               </motion.div>
             ))}
+
+          {filteredData.length <= 0 && !loading && (
+            <>
+              <h1 className="text-white opacity-50 font-bold text-2xl text-center p-20 w-full ">
+                There's no tournaments as of the moment...
+              </h1>
+            </>
+          )}
         </div>
       </div>
     </AdminLayout>
