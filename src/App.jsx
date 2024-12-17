@@ -28,6 +28,7 @@ import Overwrite from "./pages/overwrite";
 import AdminTournamentManger from "./pages/admin-tournament-manager";
 import AdminReports from "./pages/admin-reports";
 import ViewReports from "./pages/viewReports";
+import SelectTournament from "./pages/selectTournament";
 
 const App = () => {
   const { currentUser, guest, currentAdmin } = useStore();
@@ -104,6 +105,10 @@ const App = () => {
         <Route
           path="/admin/reports"
           element={currentAdmin ? <AdminReports /> : <Login />}
+        />
+        <Route
+          path="/admin/select-tournament"
+          element={currentAdmin ? <SelectTournament /> : <Login />}
         />
         <Route
           path="/admin/reports/:id"
