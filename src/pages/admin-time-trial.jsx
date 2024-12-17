@@ -4,84 +4,75 @@ import { useEffect, useState } from "react";
 import TmsModal from "../components/tmsModal";
 import TmsInput from "../components/tmsInput";
 import TmsSelect from "../components/tmsSelect";
-import useCrudTournament from "../hooks/useCrudTournament";
+import useCrudRace from "../hooks/useCrudRace";
 import { toast } from "react-toastify";
-import TournamentCard from "../components/tournamentCard";
-import useGetEventName from "../hooks/useGetEventName";
-import useCrudCalendar from "../hooks/useCrudCalendar";
-import moment from "moment";
+import TournamentCardRace from "../components/tournamentCardRace";
 import { motion } from "framer-motion";
-import useCrudLogs from "../hooks/useCrudLogs";
 import { useStore } from "../zustand/store";
 import timeTrialSports from "../utils/timeTrialSport";
 
-const AdminTimeTrial = ({ client, currentEvent }) => {
+const AdminTimeTrial = ({ client }) => {
   const [createModal, setCreateModal] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedTournament, setSelectedTournament] = useState();
-  const { addTournament, data, deleteTournament, loading } =
-    useCrudTournament();
-  const { data: eventNames } = useGetEventName();
-
-  const { addCalendar } = useCrudCalendar();
-  const { currentUser, currentAdmin } = useStore();
-  const { addLog } = useCrudLogs();
-
+  const [confirmModal, setConfirmModal] = useState(false); // Confirmation modal for add
+  const [deleteModal, setDeleteModal] = useState(false); // Confirmation modal for delete
+  const [selectedTournament, setSelectedTournament] = useState(); // Tournament to delete
+  const [loading, setLoading] = useState(false);
+  const { currentAdmin } = useStore();
+  const { addRace, getRaces, deleteRace } = useCrudRace();
+  const [races, setRaces] = useState([]);
   const [forms, setForms] = useState({
     tournamentName: "",
-    tournamentEvent: currentAdmin ? currentAdmin?.sportsEvent : "",
+    tournamentEvent: currentAdmin?.sportsEvent || "",
     tournamentType: "",
   });
-
   const [selectedSport, setSelectedSport] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedGender, setSelectedGender] = useState("");
-  const [filteredData, setFilteredData] = useState([]);
 
+  // Fetch races on mount
+  useEffect(() => {
+    getRaces(setRaces);
+  }, []);
+
+  // Handle sport change
   const handleSportChange = (event) => {
-    const selected = event.target.value;
-    setSelectedSport(selected);
-    setSelectedCategory(""); // Reset category selection when sport changes
-    setSelectedGender(""); // Reset gender selection when sport changes
+    setSelectedSport(event.target.value);
+    setSelectedCategory("");
+    setSelectedGender("");
   };
-
-  const selectedSportData = timeTrialSports.find(
-    (sport) => sport.sport === selectedSport
-  );
-
-  const [selectedEvent, setSelectedEvent] = useState(
-    currentAdmin ? currentAdmin?.sportsEvent : ""
-  );
 
   const handleChange = (event) => {
     const { value, name } = event.target;
-
-    // Map the display values to the saved values
-    const valueMappings = {
-      "Single-Elimination": "single elimination",
-      "Double-Elimination": "double elimination",
-      Swiss: "swiss",
-      "Round-Robin": "round robin",
-    };
-
-    setForms((prev) => ({
-      ...prev,
-      [name]: valueMappings[value] || value, // Save the mapped value if it exists
-    }));
+    setForms((prev) => ({ ...prev, [name]: value }));
   };
 
   const validateForm = () => {
-    const { tournamentName, tournamentEvent, tournamentType } = forms;
-    if (!tournamentName || !tournamentEvent || !tournamentType) {
-      toast.error("Please fill in all required fields.");
+    if (!forms.tournamentName) {
+      toast.error("Tournament Name is required.");
+      return false;
+    }
+    if (!selectedSport) {
+      toast.error("Please select a Sport.");
+      return false;
+    }
+    if (!selectedCategory) {
+      toast.error("Please select a Category.");
+      return false;
+    }
+    if (!selectedGender) {
+      toast.error("Please select a Gender.");
       return false;
     }
     return true;
   };
 
-  const handleAddTournament = async () => {
-    if (!validateForm()) return;
+  const handleSubmit = () => {
+    if (validateForm()) {
+      setConfirmModal(true); // Show confirmation modal for add
+    }
+  };
 
+  const handleConfirmAddTournament = () => {
     const tournamentParameter = {
       ...forms,
       categories: {
@@ -90,70 +81,35 @@ const AdminTimeTrial = ({ client, currentEvent }) => {
         selectedGender,
       },
     };
-    const res = await addTournament(tournamentParameter);
-    if (res.error) {
-      toast.error(res.message);
-      return;
-    }
-
-    const startDateMoment = moment().format("LLL"); // Today's date
-    const endDateMoment = moment().add(7, "days").format("LLL"); // 7 days after today
-    const output = {
-      title: forms.tournamentName,
-      eventName: forms.tournamentEvent,
-      ["start"]: startDateMoment,
-      ["end"]: endDateMoment,
-    };
-
-    addCalendar(output);
-    addLog(currentUser, `Created a tournament: ${forms.tournamentName}`);
-
-    setTimeout(() => {
-      toast.success(res.message);
-      setCreateModal(false);
-      window.location.reload();
-    }, 2000);
+    addRace({ tournament: tournamentParameter });
+    setCreateModal(false);
+    setConfirmModal(false);
+    toast.success("Tournament successfully added!");
   };
 
-  const filterEvent = eventNames.map((item) => item.eventName);
-
-  const filterTournament = async () => {
-    const filteredData = await Promise.all(
-      data.map(async (item) => {
-        const tournaInfo = await JSON.parse(item.tournament.description);
-        if (client) {
-          if (currentEvent === tournaInfo.eventName) {
-            return item; // Include the item if it matches
-          }
-        } else {
-          if (selectedEvent === "all") return item;
-          if (tournaInfo.eventName === selectedEvent) return item;
-        }
-        return null; // Exclude the item if it doesn't match
-      })
-    );
-
-    // Filter out null values (non-matching items)
-    return filteredData.filter((item) => item !== null);
+  const handleDeleteTournament = () => {
+    console.log(`Deleting tournament with ID: ${selectedTournament?.id}`);
+    setDeleteModal(false);
+    toast.success("Tournament deleted successfully!");
+    deleteRace(selectedTournament?.id);
   };
 
-  useEffect(() => {
-    filterTournament().then((filteredData) => {
-      setFilteredData(filteredData);
-    });
-  }, [data]);
+  const selectedSportData = timeTrialSports.find(
+    (sport) => sport.sport === selectedSport
+  );
 
   return (
     <AdminLayout client={client}>
+      {/* Tournament Creation Modal */}
       <TmsModal
-        onSubmit={handleAddTournament}
+        onSubmit={handleSubmit}
         title={"Create Tournament"}
         openModal={createModal}
         handleClose={() => setCreateModal(false)}
       >
         <form>
           <TmsSelect
-            dark={true}
+            dark
             name="sport"
             label="Select Sport"
             data={[
@@ -163,22 +119,19 @@ const AdminTimeTrial = ({ client, currentEvent }) => {
             onChange={handleSportChange}
             value={selectedSport}
           />
-
-          {selectedSportData?.categories &&
-            selectedSportData.categories.length > 0 && (
-              <TmsSelect
-                dark={true}
-                name="category"
-                label="Select Category"
-                data={["Select Category", ...selectedSportData.categories]}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                value={selectedCategory}
-              />
-            )}
-
+          {selectedSportData?.categories && (
+            <TmsSelect
+              dark
+              name="category"
+              label="Select Category"
+              data={["Select Category", ...selectedSportData.categories]}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              value={selectedCategory}
+            />
+          )}
           {selectedSportData?.genders && (
             <TmsSelect
-              dark={true}
+              dark
               name="gender"
               label="Select Gender"
               data={["Select Gender", ...selectedSportData.genders]}
@@ -186,42 +139,50 @@ const AdminTimeTrial = ({ client, currentEvent }) => {
               value={selectedGender}
             />
           )}
-
           <TmsInput
-            placeHolder={"Enter Tournament Name"}
-            name={"tournamentName"}
+            placeHolder="Enter Tournament Name"
+            name="tournamentName"
             onChange={handleChange}
-            label={"Tournament Name"}
-            dark={true}
-          />
-          <TmsSelect
-            name={"tournamentType"}
-            onChange={handleChange}
-            data={[
-              "Please select tournament type",
-              "Single-Elimination",
-              "Double-Elimination",
-              "Swiss",
-              "Round-Robin",
-            ]}
-            label={"Tournament Type"}
-            dark={true}
-          />
-          <TmsSelect
-            disable={true}
+            label="Tournament Name"
             dark
-            label={"Tournament Event"}
-            name={"tournamentEvent"}
+          />
+          <TmsSelect
+            disable
+            dark
+            label="Tournament Event"
+            name="tournamentEvent"
             data={[currentAdmin?.sportsEvent]}
             onChange={handleChange}
+            value={forms.tournamentEvent}
           />
         </form>
       </TmsModal>
 
+      {/* Confirmation Modal for Add */}
+      <TmsModal
+        title="Confirm Tournament Creation"
+        openModal={confirmModal}
+        handleClose={() => setConfirmModal(false)}
+        onSubmit={handleConfirmAddTournament}
+      >
+        <p>Are you sure you want to create this tournament?</p>
+      </TmsModal>
+
+      {/* Confirmation Modal for Delete */}
+      <TmsModal
+        title="Confirm Delete"
+        openModal={deleteModal}
+        handleClose={() => setDeleteModal(false)}
+        onSubmit={handleDeleteTournament}
+      >
+        <p>Are you sure you want to delete this tournament?</p>
+      </TmsModal>
+
+      {/* Tournaments List */}
       <div className="container mx-auto px-5 my-10">
         {!client && currentAdmin.role !== "Tournament Manager" && (
-          <div className="wrapper flex justify-between items-center mb-5">
-            <h1 className="text-white text-4xl font-bold ">
+          <div className="flex justify-between items-center mb-5">
+            <h1 className="text-white text-4xl font-bold">
               Tournaments (Time Trial)
             </h1>
             <Button onClick={() => setCreateModal(true)}>
@@ -229,6 +190,7 @@ const AdminTimeTrial = ({ client, currentEvent }) => {
             </Button>
           </div>
         )}
+
         <div className="flex flex-wrap">
           {loading && (
             <div className="flex justify-center items-center w-full p-20">
@@ -236,7 +198,7 @@ const AdminTimeTrial = ({ client, currentEvent }) => {
             </div>
           )}
           {!loading &&
-            filteredData.map((item) => (
+            races.map((item) => (
               <motion.div
                 key={item.id}
                 className="basis-full md:basis-3/12 my-5 p-5"
@@ -245,26 +207,20 @@ const AdminTimeTrial = ({ client, currentEvent }) => {
                 exit={{ opacity: 0, scale: 0.8 }}
                 transition={{ duration: 0.3 }}
               >
-                <TournamentCard
+                <TournamentCardRace
                   client={client}
-                  deleteTournament={deleteTournament}
-                  setShowModal={setShowModal}
-                  setSelectedTournament={setSelectedTournament}
                   tournament={item}
+                  onDelete={() => {
+                    setSelectedTournament(item);
+                    setDeleteModal(true);
+                  }}
                 />
               </motion.div>
             ))}
-
-          {filteredData.length <= 0 && !loading && (
-            <>
-              <h1
-                className={`${
-                  client ? "text-dark" : "text-white"
-                } opacity-50 font-bold text-2xl text-center p-20 w-full `}
-              >
-                There's no tournaments as of the moment...
-              </h1>
-            </>
+          {races.length === 0 && !loading && (
+            <h1 className="text-white opacity-50 font-bold text-2xl text-center p-20 w-full">
+              There's no tournaments at the moment...
+            </h1>
           )}
         </div>
       </div>

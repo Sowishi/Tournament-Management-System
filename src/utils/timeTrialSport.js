@@ -19,9 +19,9 @@ const timeTrialSports = [
     ],
     genders: ["Men", "Women"],
   },
-
   {
-    sport: "Swimming",
+    sport: "Swimming Freestyle Events",
+    categories: ["50 meters", "100 meters"],
     genders: ["Men", "Women"],
   },
 ];
