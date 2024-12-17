@@ -4,13 +4,15 @@ import {
   collection,
   onSnapshot,
   serverTimestamp,
+  deleteDoc,
+  updateDoc,
+  doc,
 } from "firebase/firestore";
 import { db } from "../../firebase";
 
 const useCrudTally = () => {
   const [data, setData] = useState([]);
 
-  console.log(data);
   // Fetch data on component mount and set up a real-time listener
   useEffect(() => {
     const colRef = collection(db, "tally");
@@ -36,7 +38,27 @@ const useCrudTally = () => {
     }
   };
 
-  return { data, addTally };
+  // Delete a tally record by ID
+  const deleteTally = async (id) => {
+    try {
+      const docRef = doc(db, "tally", id);
+      await deleteDoc(docRef);
+    } catch (error) {
+      console.error("Error deleting tally:", error);
+    }
+  };
+
+  // Update a tally record by ID
+  const updateTally = async (id, newData) => {
+    try {
+      const docRef = doc(db, "tally", id);
+      await updateDoc(docRef, { ...newData, timestamp: serverTimestamp() });
+    } catch (error) {
+      console.error("Error updating tally:", error);
+    }
+  };
+
+  return { data, addTally, deleteTally, updateTally };
 };
 
 export default useCrudTally;
