@@ -1,11 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import useCrudPoints from "../hooks/useCrudPoints";
+import { useStore } from "../zustand/store";
+import { toast } from "react-toastify";
 
 const PointSystem = () => {
+  const { addPoints, getPoints } = useCrudPoints();
+  const { currentAdmin } = useStore();
   const [points, setPoints] = useState({
     gold: "",
     silver: "",
     bronze: "",
   });
+  const [showModal, setShowModal] = useState(false);
 
   // Handle input change
   const handleChange = (e) => {
@@ -16,10 +22,22 @@ const PointSystem = () => {
     }));
   };
 
+  useEffect(() => {
+    if (currentAdmin) {
+      getPoints(currentAdmin?.sportsEvent, setPoints);
+    }
+  }, [currentAdmin]);
+
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Submitted Points:", points);
+    setShowModal(true); // Show the confirmation modal
+  };
+
+  const confirmSubmit = () => {
+    addPoints(points, currentAdmin.sportsEvent);
+    toast.success("Points successfully submitted!");
+    setShowModal(false); // Close modal after submission
   };
 
   return (
@@ -82,6 +100,30 @@ const PointSystem = () => {
           <h1 className="text-2xl font-bold">Submit</h1>
         </button>
       </form>
+
+      {/* Confirmation Modal */}
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-gray-800 p-6 rounded shadow-lg text-white w-96">
+            <h2 className="text-xl font-bold mb-4">Confirm Submission</h2>
+            <p className="mb-4">Are you sure you want to submit the points?</p>
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={() => setShowModal(false)}
+                className="bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmSubmit}
+                className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
