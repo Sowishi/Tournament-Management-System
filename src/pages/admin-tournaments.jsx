@@ -254,7 +254,11 @@ const AdminTournament = ({ client, currentEvent }) => {
 
           {filteredData.length <= 0 && !loading && (
             <>
-              <h1 className="text-white opacity-50 font-bold text-2xl text-center p-20 w-full ">
+              <h1
+                className={`${
+                  client ? "text-dark" : "text-white"
+                } opacity-50 font-bold text-2xl text-center p-20 w-full `}
+              >
                 There's no tournaments as of the moment...
               </h1>
             </>

@@ -7,19 +7,25 @@ import { useEffect, useState } from "react";
 import logo from "../assets/logo2.png";
 import useCrudTally from "../hooks/useCrudTally";
 import { useStore } from "../zustand/store";
+import useCrudPoints from "../hooks/useCrudPoints";
 
 export function TallyTableEvent() {
   const { data } = useCrudTally();
+  const { getPoints } = useCrudPoints();
   const { currentAdmin } = useStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedInstitution, setSelectedInstitution] = useState(null);
   const [filteredData, setFilteredData] = useState([]);
-
+  const [points, setPoints] = useState();
   const parseEvent = async (event) => {
     return await JSON.parse(event);
   };
 
   useEffect(() => {
+    if (currentAdmin) {
+      getPoints(currentAdmin?.sportsEvent, setPoints);
+    }
+
     const filterData = async () => {
       const filtered = await Promise.all(
         data.map(async (item) => {
@@ -41,11 +47,18 @@ export function TallyTableEvent() {
     const rank = item.rank; // Rank field (1 = Gold, 2 = Silver, 3 = Bronze)
 
     if (!acc[institution]) {
-      acc[institution] = { Gold: 0, Silver: 0, Bronze: 0, tournaments: [] };
+      acc[institution] = {
+        Gold: 0,
+        Silver: 0,
+        Bronze: 0,
+        tournaments: [],
+        Points: 0, // Default points
+      };
     }
 
     if (rank === 1) {
       acc[institution].Gold += 1;
+      acc[institution].Points += parseInt(points?.gold); // Gold = 20 points
       acc[institution].tournaments.push({
         tournamentName: item.tournamentName,
         medal: "Gold",
@@ -53,6 +66,7 @@ export function TallyTableEvent() {
     }
     if (rank === 2) {
       acc[institution].Silver += 1;
+      acc[institution].Points += parseInt(points?.silver); // Silver = 10 points
       acc[institution].tournaments.push({
         tournamentName: item.tournamentName,
         medal: "Silver",
@@ -60,6 +74,7 @@ export function TallyTableEvent() {
     }
     if (rank === 3) {
       acc[institution].Bronze += 1;
+      acc[institution].Points += parseInt(points?.Bronze); // Bronze = 5 points
       acc[institution].tournaments.push({
         tournamentName: item.tournamentName,
         medal: "Bronze",
@@ -69,10 +84,11 @@ export function TallyTableEvent() {
     return acc;
   }, {});
 
-  // Convert rankCounts object to an array and sort by Gold, Silver, and Bronze
+  // Convert rankCounts object to an array and sort by Points, Gold, Silver, and Bronze
   const sortedRankData = Object.entries(rankCounts)
     .map(([institution, counts]) => ({ institution, ...counts }))
     .sort((a, b) => {
+      if (b.Points !== a.Points) return b.Points - a.Points;
       if (b.Gold !== a.Gold) return b.Gold - a.Gold;
       if (b.Silver !== a.Silver) return b.Silver - a.Silver;
       return b.Bronze - a.Bronze;
@@ -92,7 +108,7 @@ export function TallyTableEvent() {
 
   if (filteredData.length <= 0) {
     return (
-      <div className="container h-[20rem] mx-auto flex justify-center items-center">
+      <div className="container h-[20rem]  text-white  opacity-50 text-4xl mx-auto flex justify-center items-center">
         <p>There's no tally yet</p>
       </div>
     );
@@ -117,6 +133,9 @@ export function TallyTableEvent() {
           <Table.HeadCell className="text-gray-300 p-5 bg-slate-800">
             <h1 className="text-lg font-bold text-amber-900">Bronze</h1>
           </Table.HeadCell>
+          <Table.HeadCell className="text-gray-300 p-5 bg-slate-800">
+            <h1 className="text-lg font-bold text-white">Points</h1>
+          </Table.HeadCell>
         </Table.Head>
         <Table.Body className="divide-y divide-gray-700">
           {sortedRankData.map((item, index) => {
@@ -138,15 +157,6 @@ export function TallyTableEvent() {
                 ? "bg-orange-300 bg-opacity-50"
                 : "bg-gray-700";
 
-            const fontStyle =
-              index === 0
-                ? "text-black"
-                : index === 1
-                ? "text-black"
-                : index === 2
-                ? "text-black"
-                : "text-white";
-
             return (
               <motion.tr
                 key={index}
@@ -160,32 +170,27 @@ export function TallyTableEvent() {
                 <Table.Cell className="p-4 text-lg font-medium">
                   <div className="flex items-center justify-center">
                     {rankIcon}
-                    <span
-                      className={`ml-2 ${fontStyle} text-white font-bold text-3xl`}
-                    >
+                    <span className="ml-2 text-white font-bold text-3xl">
                       {index + 1}
                     </span>
                   </div>
                 </Table.Cell>
-                <Table.Cell className="p-4 text-lg font-medium text-white dark">
-                  <div className={`flex items-center ${fontStyle}`}>
+                <Table.Cell className="p-4 text-lg font-medium text-white">
+                  <div className="flex items-center">
                     <img
                       src={logo}
                       style={{ width: "50px" }}
                       alt={`${item.institution} logo`}
                       className="mr-3"
                     />
-                    <span className="text-white">{item.institution}</span>
+                    {item.institution}
                   </div>
                 </Table.Cell>
-                <Table.Cell className={`p-4 ${fontStyle}`}>
-                  <span className="text-white">{item.Gold}</span>
-                </Table.Cell>
-                <Table.Cell className={`p-4 ${fontStyle}`}>
-                  <span className="text-white">{item.Silver}</span>
-                </Table.Cell>
-                <Table.Cell className={`p-4 ${fontStyle}`}>
-                  <span className="text-white">{item.Bronze}</span>
+                <Table.Cell className="p-4">{item.Gold}</Table.Cell>
+                <Table.Cell className="p-4">{item.Silver}</Table.Cell>
+                <Table.Cell className="p-4">{item.Bronze}</Table.Cell>
+                <Table.Cell className="p-4 text-white text-3xl font-bold">
+                  {item.Points}
                 </Table.Cell>
               </motion.tr>
             );

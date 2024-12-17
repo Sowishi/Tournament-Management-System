@@ -92,8 +92,8 @@ export function TallyTable() {
 
   if (filteredData.length <= 0) {
     return (
-      <div className="container h-[20rem] mx-auto flex justify-center items-center">
-        <p>There's no tally yet</p>
+      <div className="container h-[20rem] text-2xl font-bold opacity-50 mx-auto flex justify-center items-center">
+        <p>There's no tally as of the moment...</p>
       </div>
     );
   }
