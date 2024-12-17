@@ -21,6 +21,7 @@ import useGetUsers from "../hooks/useGetUsers";
 import useCrudTournament from "../hooks/useCrudTournament";
 import { useStore } from "../zustand/store";
 import { useNavigate } from "react-router-dom";
+import PointSystem from "../components/pointSystem";
 
 const AdminHome = () => {
   const [addPicModal, setAddPicModal] = useState(false);
@@ -342,60 +343,60 @@ const AdminHome = () => {
               </motion.div>
             </Tabs.Item>
           )}
-
-          <Tabs.Item title="Event Name">
-            <motion.div
-              className="wrapper mx-10 mt-10"
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <div className="header w-full flex justify-between items-center mb-5">
-                <h1 className="text-white text-4xl font-bold">Event Names</h1>
-                <Button
-                  onClick={() => setAddEventModal(true)}
-                  color={"success"}
-                >
-                  Add Event
-                </Button>
-              </div>
-              <table className="min-w-full bg-gray-800 rounded-md shadow-md">
-                <thead>
-                  <tr className="text-white">
-                    <th className="py-3 px-4 text-left">Event Name</th>
-                    <th className="py-3 px-4 text-center">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {eventNameData?.map((event) => (
-                    <motion.tr
-                      key={event.id}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.5, delay: 0.2 }}
-                    >
-                      <td className="text-dark py-3 px-4 text-white">
-                        {event.eventName}
-                      </td>
-                      <td className="py-3 px-4 text-right items-center flex justify-center">
-                        <Button
-                          onClick={() => {
-                            setDeleteModal(true);
-                            setSelectedEvent(event.id);
-                          }}
-                          color={"failure"}
-                          className="ml-2"
-                        >
-                          <HiOutlineTrash />
-                        </Button>
-                      </td>
-                    </motion.tr>
-                  ))}
-                </tbody>
-              </table>
-            </motion.div>
-          </Tabs.Item>
-
+          {currentAdmin?.role == "Master Admin" && (
+            <Tabs.Item title="Event Name">
+              <motion.div
+                className="wrapper mx-10 mt-10"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <div className="header w-full flex justify-between items-center mb-5">
+                  <h1 className="text-white text-4xl font-bold">Event Names</h1>
+                  <Button
+                    onClick={() => setAddEventModal(true)}
+                    color={"success"}
+                  >
+                    Add Event
+                  </Button>
+                </div>
+                <table className="min-w-full bg-gray-800 rounded-md shadow-md">
+                  <thead>
+                    <tr className="text-white">
+                      <th className="py-3 px-4 text-left">Event Name</th>
+                      <th className="py-3 px-4 text-center">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {eventNameData?.map((event) => (
+                      <motion.tr
+                        key={event.id}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.5, delay: 0.2 }}
+                      >
+                        <td className="text-dark py-3 px-4 text-white">
+                          {event.eventName}
+                        </td>
+                        <td className="py-3 px-4 text-right items-center flex justify-center">
+                          <Button
+                            onClick={() => {
+                              setDeleteModal(true);
+                              setSelectedEvent(event.id);
+                            }}
+                            color={"failure"}
+                            className="ml-2"
+                          >
+                            <HiOutlineTrash />
+                          </Button>
+                        </td>
+                      </motion.tr>
+                    ))}
+                  </tbody>
+                </table>
+              </motion.div>
+            </Tabs.Item>
+          )}
           <Tabs.Item title="Delegates">
             <motion.div
               className="wrapper mx-10 mt-10"
@@ -454,6 +455,12 @@ const AdminHome = () => {
               </table>
             </motion.div>
           </Tabs.Item>
+
+          {currentAdmin?.role == "Event Admin" && (
+            <Tabs.Item title="Point System">
+              <PointSystem />
+            </Tabs.Item>
+          )}
         </Tabs>
       </div>
     </AdminLayout>

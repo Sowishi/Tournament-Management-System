@@ -13,18 +13,27 @@ export function TallyTable() {
   const { currentEvent } = useStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedInstitution, setSelectedInstitution] = useState(null);
+  const [filteredData, setFilteredData] = useState([]);
 
   const parseEvent = async (event) => {
     return await JSON.parse(event);
   };
 
-  // Filter data for the current event
-  const filteredData = data.filter(async (item) => {
-    const info = await parseEvent(item.event);
-    if (info.eventName === currentEvent) {
-      return item;
+  useEffect(() => {
+    const filterData = async () => {
+      const filtered = await Promise.all(
+        data.map(async (item) => {
+          const info = await parseEvent(item.event);
+          return info.eventName === currentEvent ? item : null;
+        })
+      );
+      setFilteredData(filtered.filter(Boolean)); // Remove null values
+    };
+
+    if (data.length > 0 && currentEvent) {
+      filterData();
     }
-  });
+  }, [data, currentEvent]);
 
   // Group and count medals for each institution
   const rankCounts = filteredData.reduce((acc, item) => {
