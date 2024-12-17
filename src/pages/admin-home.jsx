@@ -22,6 +22,9 @@ import useCrudTournament from "../hooks/useCrudTournament";
 import { useStore } from "../zustand/store";
 import { useNavigate } from "react-router-dom";
 import PointSystem from "../components/pointSystem";
+import { TallyTable } from "../components/tallyTable";
+import { TallyTableAdmin } from "../components/tallyTableAdmin";
+import { TallyTableEvent } from "../components/tallyTableEvent";
 
 const AdminHome = () => {
   const [addPicModal, setAddPicModal] = useState(false);
@@ -459,6 +462,11 @@ const AdminHome = () => {
           {currentAdmin?.role == "Event Admin" && (
             <Tabs.Item title="Point System">
               <PointSystem />
+            </Tabs.Item>
+          )}
+          {currentAdmin?.role == "Event Admin" && (
+            <Tabs.Item title={currentAdmin?.sportsEvent + " " + "Tally"}>
+              <TallyTableEvent />
             </Tabs.Item>
           )}
         </Tabs>
