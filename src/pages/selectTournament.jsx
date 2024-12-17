@@ -11,7 +11,7 @@ const SelectTournament = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 w-3/4">
         {/* Time Trial Card */}
         <div
-          onClick={() => navigate("/time-trial")}
+          onClick={() => navigate("/admin/time-trial")}
           className="flex flex-col items-center justify-center bg-gray-800 p-8 rounded-lg shadow-lg cursor-pointer hover:bg-gray-700 hover:shadow-2xl transition duration-300"
         >
           <FaClock className="text-blue-400 text-6xl mb-4" />

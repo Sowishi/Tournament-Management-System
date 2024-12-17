@@ -13,9 +13,9 @@ import moment from "moment";
 import { motion } from "framer-motion";
 import useCrudLogs from "../hooks/useCrudLogs";
 import { useStore } from "../zustand/store";
-import sports from "../utils/sports";
+import timeTrialSports from "../utils/timeTrialSport";
 
-const AdminTournament = ({ client, currentEvent }) => {
+const AdminTimeTrial = ({ client, currentEvent }) => {
   const [createModal, setCreateModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selectedTournament, setSelectedTournament] = useState();
@@ -45,7 +45,7 @@ const AdminTournament = ({ client, currentEvent }) => {
     setSelectedGender(""); // Reset gender selection when sport changes
   };
 
-  const selectedSportData = sports.find(
+  const selectedSportData = timeTrialSports.find(
     (sport) => sport.sport === selectedSport
   );
 
@@ -143,8 +143,6 @@ const AdminTournament = ({ client, currentEvent }) => {
     });
   }, [data]);
 
-  console.log(filteredData);
-
   return (
     <AdminLayout client={client}>
       <TmsModal
@@ -158,7 +156,10 @@ const AdminTournament = ({ client, currentEvent }) => {
             dark={true}
             name="sport"
             label="Select Sport"
-            data={["Select Sport", ...sports.map((sport) => sport.sport)]}
+            data={[
+              "Select Sport",
+              ...timeTrialSports.map((sport) => sport.sport),
+            ]}
             onChange={handleSportChange}
             value={selectedSport}
           />
@@ -221,7 +222,7 @@ const AdminTournament = ({ client, currentEvent }) => {
         {!client && currentAdmin.role !== "Tournament Manager" && (
           <div className="wrapper flex justify-between items-center mb-5">
             <h1 className="text-white text-4xl font-bold ">
-              Tournaments (Bracket)
+              Tournaments (Time Trial)
             </h1>
             <Button onClick={() => setCreateModal(true)}>
               Create Tournament
@@ -271,4 +272,4 @@ const AdminTournament = ({ client, currentEvent }) => {
   );
 };
 
-export default AdminTournament;
+export default AdminTimeTrial;
