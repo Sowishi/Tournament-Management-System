@@ -8,9 +8,12 @@ import logo from "../assets/logo2.png";
 import useCrudTally from "../hooks/useCrudTally";
 import { useStore } from "../zustand/store";
 import useCrudPoints from "../hooks/useCrudPoints";
+import useGetEventName from "../hooks/useGetEventName";
 
 export function TallyTableEvent() {
   const { data } = useCrudTally();
+  const { data: events, finalizeEvent: handleFinalizeEvent } =
+    useGetEventName();
   const { getPoints } = useCrudPoints();
   const { currentAdmin } = useStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -114,8 +117,23 @@ export function TallyTableEvent() {
     );
   }
 
+  const finalizeEvent = () => {
+    const event = events.find(
+      (event) => event.eventName === currentAdmin?.sportsEvent
+    );
+
+    if (event) {
+      handleFinalizeEvent(event);
+    }
+  };
+
   return (
     <div className="overflow-x-auto">
+      <div className="flex justify-end items-center">
+        <Button onClick={finalizeEvent} color={"success"} className="px-5 my-5">
+          Finalize Event
+        </Button>
+      </div>
       <Table className="min-w-full text-center text-gray-100">
         <Table.Head>
           <Table.HeadCell className="text-gray-300 p-5 bg-slate-800">

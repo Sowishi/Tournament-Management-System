@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import {
   addDoc,
   collection,
+  doc,
   onSnapshot,
   serverTimestamp,
+  updateDoc,
 } from "firebase/firestore";
 import { db } from "../../firebase";
 
@@ -21,7 +23,13 @@ const useGetEventName = () => {
       setData(output);
     });
   }, []);
-  return { data };
+
+  const finalizeEvent = (event) => {
+    const docRef = doc(db, "event-name", event.id);
+    updateDoc(docRef, { status: "complete" });
+  };
+
+  return { data, finalizeEvent };
 };
 
 export default useGetEventName;
