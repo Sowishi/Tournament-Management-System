@@ -177,14 +177,14 @@ const AdminAdmins = () => {
               onClick={() => setCurrentRole("Event Admin")}
               color={currentRole === "Event Admin" ? "info" : "light"}
             >
-              <h1 className="text-xs ">Event </h1>
+              <h1 className="text-xs ">Event Admin</h1>
             </Button>
             <Button
               className="mx-1"
               onClick={() => setCurrentRole("Document Admin")}
               color={currentRole === "Document Admin" ? "info" : "light"}
             >
-              <h1 className="text-xs ">Document </h1>
+              <h1 className="text-xs ">Document Admin</h1>
             </Button>
           </div>
           <Button

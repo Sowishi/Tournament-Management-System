@@ -16,10 +16,13 @@ export function UsersTable() {
   const { data } = useGetUsers();
   const { data: eventNames } = useGetEventName();
   const { approveUser, rejectUser, deleteUser, documents } = useUpdateUser();
-  const [selectedEvent, setSelectedEvent] = useState("all");
   const [documentModal, setDocumentModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const { currentAdmin } = useStore();
+  const [selectedEvent, setSelectedEvent] = useState(
+    currentAdmin?.role == "Master Admin" ? "all" : currentAdmin?.sportsEvent
+  );
+
   const [deleteModal, setDeleteModal] = useState(false);
   const [approveModal, setApproveModal] = useState(false);
   const [rejectModal, setRejectModal] = useState(false);
@@ -220,25 +223,27 @@ export function UsersTable() {
         )}
       </TmsModal>
 
-      <div className="wrapper flex mb-3 py-3">
-        <Button
-          color={selectedEvent === "all" ? "info" : "gray"}
-          onClick={() => setSelectedEvent("all")}
-          className="mx-3"
-        >
-          All
-        </Button>
-        {eventNames.map((event) => (
+      {currentAdmin?.role == "Master Admin" && (
+        <div className="wrapper flex mb-3 py-3">
           <Button
-            key={event.id}
-            color={selectedEvent === event.eventName ? "info" : "gray"}
+            color={selectedEvent === "all" ? "info" : "gray"}
+            onClick={() => setSelectedEvent("all")}
             className="mx-3"
-            onClick={() => setSelectedEvent(event.eventName)}
           >
-            {event.eventName}
+            All
           </Button>
-        ))}
-      </div>
+          {eventNames.map((event) => (
+            <Button
+              key={event.id}
+              color={selectedEvent === event.eventName ? "info" : "gray"}
+              className="mx-3"
+              onClick={() => setSelectedEvent(event.eventName)}
+            >
+              {event.eventName}
+            </Button>
+          ))}
+        </div>
+      )}
 
       <ConfirmationModals
         title={"Are you sure you want to delete this user?"}
