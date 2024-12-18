@@ -40,18 +40,16 @@ const Landing = () => {
               initial="hidden"
               animate="visible"
             >
-              <h1 className="font-bold text-4xl text-gray-800 mb-4">
+              <h1 className="font-bold text-2xl text-gray-800 mb-4">
                 Tournament Management System
               </h1>
-              <p className="text-gray-600 mb-6 text-sm leading-relaxed">
+              <p className="text-gray-600 mb-6 text-xs leading-relaxed">
                 A Web-based: Tournament Management System designed to optimize
                 event hosting, especially designed for the State Colleges and
                 Universities Athletic Association (SCUAA) in the Bicol region.
                 This system facilitates efficient scheduling, real-time
                 tournament updates, and comprehensive management of team and
-                player data. It ensures smooth coordination across various
-                sports disciplines, enhancing the overall experience for
-                participants, organizers, and spectators alike.
+                player data.
               </p>
               <Button
                 onClick={() => navigation("/about")}
