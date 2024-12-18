@@ -9,6 +9,7 @@ import useCrudTally from "../hooks/useCrudTally";
 import { useStore } from "../zustand/store";
 import useCrudPoints from "../hooks/useCrudPoints";
 import getLatestTimestamp from "../utils/getLatestTimestamp";
+import useGetEventName from "../hooks/useGetEventName";
 
 export function TallyTable() {
   const { data } = useCrudTally();
@@ -19,6 +20,8 @@ export function TallyTable() {
   const [selectedInstitution, setSelectedInstitution] = useState(null);
   const [filteredData, setFilteredData] = useState([]);
   const [points, setPoints] = useState();
+  const [eventState, setEventState] = useState("active");
+  const { data: events } = useGetEventName();
   const parseEvent = async (event) => {
     return await JSON.parse(event);
   };
@@ -39,6 +42,12 @@ export function TallyTable() {
 
     if (data.length > 0 && currentEvent) {
       filterData();
+    }
+
+    const event = events.find((event) => event.eventName === currentEvent);
+
+    if (event) {
+      setEventState(event.status);
     }
   }, [data, currentEvent]);
 
@@ -119,7 +128,7 @@ export function TallyTable() {
   return (
     <div className="overflow-x-auto">
       <h1 className="text-right mb-3 text-lg">
-        Ranking as of{" "}
+        {eventState == "complete" ? "Completed" : "Ranking"} as of{" "}
         <span className="text-lg text-blue-500 font-bold">
           {" "}
           {latestTimestamp}

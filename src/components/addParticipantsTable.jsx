@@ -34,7 +34,8 @@ export default function AddParticipantsTable({
   const filterUsers = users.filter((user) => {
     if (
       user.sportsEvent === tournaInfo?.eventName &&
-      user?.userType !== "admin"
+      user?.userType !== "admin" &&
+      user.status == "Approved"
     ) {
       return user;
     }
