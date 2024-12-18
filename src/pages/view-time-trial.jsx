@@ -1,6 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
 import AdminLayout from "../layout/adminLayout";
-import RaceTable from "../components/raceTable";
 import { Badge, Button } from "flowbite-react";
 import { useEffect, useState } from "react";
 import useCrudRace from "../hooks/useCrudRace";
@@ -8,12 +7,13 @@ import TmsModal from "../components/tmsModal";
 import AddParticipantsTable from "../components/addParticipantsTable";
 import useGetUsers from "../hooks/useGetUsers";
 import { toast } from "react-toastify";
+import RaceTableParticipants from "../components/raceTableParticipants";
 
 const ViewTimeTrial = () => {
   const { id } = useParams();
   const navigation = useNavigate();
   const [race, setRace] = useState();
-  const { getRace, addParticipant } = useCrudRace();
+  const { getRace, addParticipants } = useCrudRace();
   const { data: users } = useGetUsers();
 
   const [addModal, setAddModal] = useState(false);
@@ -23,21 +23,12 @@ const ViewTimeTrial = () => {
     getRace(id, setRace);
   }, [id]);
 
-  const handleAddParticpant = () => {
-    let error = false;
-    if (selectedUsers.length >= 1) {
-      selectedUsers.map((user) => {
-        error = addParticipant(race.id, user);
-      });
+  const handleAddParticpant = async () => {
+    if (selectedUsers.length < 1) {
+      toast.error("Please select at least one participant.");
+      return;
     }
-
-    if (error) {
-      toast.error("Participants Already Exist");
-    } else {
-      toast.success("Successfully Added Participant");
-    }
-
-    setAddModal(false);
+    addParticipants(race.id, selectedUsers);
   };
 
   return (
@@ -98,7 +89,7 @@ const ViewTimeTrial = () => {
               </div>
             </div>
 
-            <RaceTable raceData={race.participants || []} />
+            <RaceTableParticipants raceData={race.participants || []} />
           </div>
         </>
       ) : (
