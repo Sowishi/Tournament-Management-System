@@ -7,6 +7,7 @@ export default function AddParticipantsTable({
   users,
   setSelectedUsers,
   event,
+  race,
 }) {
   const [tournaInfo, setTournaInfo] = useState(null);
 
@@ -41,6 +42,16 @@ export default function AddParticipantsTable({
     }
   });
 
+  const filterUsersRace = users.filter((user) => {
+    if (
+      user.sportsEvent === event &&
+      user?.userType !== "admin" &&
+      user.status == "Approved"
+    ) {
+      return user;
+    }
+  });
+
   return (
     <div className="overflow-x-auto">
       <Table hoverable>
@@ -51,23 +62,48 @@ export default function AddParticipantsTable({
           <Table.HeadCell>Registered Event</Table.HeadCell>
         </Table.Head>
         <Table.Body className="divide-y">
-          {filterUsers?.map((item) => {
-            return (
-              <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                <Table.Cell className="p-4">
-                  <Checkbox
-                    onChange={(event) => {
-                      handleCheckboxChange(item, event.target.checked);
-                    }}
-                  />
-                </Table.Cell>
+          {!race && (
+            <>
+              {filterUsers?.map((item) => {
+                return (
+                  <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                    <Table.Cell className="p-4">
+                      <Checkbox
+                        onChange={(event) => {
+                          handleCheckboxChange(item, event.target.checked);
+                        }}
+                      />
+                    </Table.Cell>
 
-                <Table.Cell>{item.collegeName}</Table.Cell>
-                <Table.Cell>{item.email}</Table.Cell>
-                <Table.Cell>{item.sportsEvent}</Table.Cell>
-              </Table.Row>
-            );
-          })}
+                    <Table.Cell>{item.collegeName}</Table.Cell>
+                    <Table.Cell>{item.email}</Table.Cell>
+                    <Table.Cell>{item.sportsEvent}</Table.Cell>
+                  </Table.Row>
+                );
+              })}
+            </>
+          )}
+          {race && (
+            <>
+              {filterUsersRace?.map((item) => {
+                return (
+                  <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                    <Table.Cell className="p-4">
+                      <Checkbox
+                        onChange={(event) => {
+                          handleCheckboxChange(item, event.target.checked);
+                        }}
+                      />
+                    </Table.Cell>
+
+                    <Table.Cell>{item.collegeName}</Table.Cell>
+                    <Table.Cell>{item.email}</Table.Cell>
+                    <Table.Cell>{item.sportsEvent}</Table.Cell>
+                  </Table.Row>
+                );
+              })}
+            </>
+          )}
         </Table.Body>
       </Table>
     </div>
