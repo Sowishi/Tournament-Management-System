@@ -44,6 +44,8 @@ export function TMSCarousel() {
             style={{
               backgroundImage: `url(${pic.url})`,
               filter: "brightness(60%)", // Darken the image
+              backgroundSize: "contain",
+              backgroundPositionY: 50,
             }}
           >
             {/* Overlay text with Framer Motion */}

@@ -40,7 +40,7 @@ const Landing = () => {
               initial="hidden"
               animate="visible"
             >
-              <h1 className="font-bold text-2xl text-gray-800 mb-4">
+              <h1 className="font-bold text-4xl text-gray-800 mb-4">
                 Tournament Management System
               </h1>
               <p className="text-gray-600 mb-6 text-sm leading-relaxed">
