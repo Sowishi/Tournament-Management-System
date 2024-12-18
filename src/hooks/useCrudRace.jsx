@@ -100,12 +100,45 @@ const useCrudRace = () => {
     }
   };
 
+  const deleteParticipant = async (raceID, participantID) => {
+    try {
+      const raceRef = doc(db, "races", raceID);
+      const raceSnapshot = await getDoc(raceRef);
+
+      if (!raceSnapshot.exists()) {
+        console.error("Race not found");
+        return;
+      }
+
+      const raceData = raceSnapshot.data();
+      let participants = raceData.participants || [];
+
+      // Filter out the participant by ID
+      const updatedParticipants = participants.filter(
+        (participant) => participant.id !== participantID
+      );
+
+      if (updatedParticipants.length === participants.length) {
+        toast.error("Participant not found in the race.");
+        return;
+      }
+
+      // Update the race document with the new participants list
+      await updateDoc(raceRef, { participants: updatedParticipants });
+      toast.success("Participant deleted successfully.");
+    } catch (error) {
+      console.error("Error deleting participant:", error);
+      toast.error("Error deleting participant.");
+    }
+  };
+
   return {
     addRace,
     getRaces,
     deleteRace,
     getRace,
     addParticipants,
+    deleteParticipant,
   };
 };
 

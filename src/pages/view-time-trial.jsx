@@ -29,6 +29,7 @@ const ViewTimeTrial = () => {
       return;
     }
     addParticipants(race.id, selectedUsers);
+    setAddModal(false);
   };
 
   return (
@@ -89,7 +90,10 @@ const ViewTimeTrial = () => {
               </div>
             </div>
 
-            <RaceTableParticipants raceData={race.participants || []} />
+            <RaceTableParticipants
+              race={race}
+              participants={race.participants || []}
+            />
           </div>
         </>
       ) : (

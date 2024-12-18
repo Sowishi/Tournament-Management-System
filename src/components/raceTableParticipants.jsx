@@ -1,47 +1,88 @@
-import { Button } from "flowbite-react";
+import { Button, Table, Modal } from "flowbite-react";
 import { FaTrophy, FaTrashAlt } from "react-icons/fa";
+import { useState } from "react";
+import useCrudRace from "../hooks/useCrudRace";
 
-const RaceTableParticipants = ({ raceData }) => {
+const RaceTableParticipants = ({ participants, race }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedParticipant, setSelectedParticipant] = useState(null);
+  const { deleteParticipant } = useCrudRace();
+  const openModal = (participant) => {
+    setSelectedParticipant(participant);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setSelectedParticipant(null);
+    setIsModalOpen(false);
+  };
+
+  const handleDelete = () => {
+    deleteParticipant(race.id, selectedParticipant.id);
+    closeModal(); // Close the modal after deletion
+  };
+
   return (
     <div className="w-full min-h-[600px] bg-gray-800 rounded-lg shadow-lg p-4">
       <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
         <FaTrophy className="text-yellow-400" /> Race Participants
       </h2>
       <div className="overflow-x-auto">
-        <table className="min-w-full table-auto text-white border-collapse border border-gray-700 rounded-lg">
-          <thead className="bg-gray-700">
-            <tr>
-              <th className="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider border border-gray-600">
-                Participant
-              </th>
-              <th className="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider border border-gray-600">
-                Action
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-700">
-            {raceData.map((item, index) => (
-              <tr
+        <Table hoverable={true}>
+          <Table.Head className="bg-black">
+            <Table.HeadCell className="px-6 py-3 uppercase bg-slate-900 text-white tracking-wider p-5">
+              Participant
+            </Table.HeadCell>
+            <Table.HeadCell className="px-6 py-3 uppercase tracking-wider p-5 bg-slate-900 text-white">
+              Action
+            </Table.HeadCell>
+          </Table.Head>
+          <Table.Body className="divide-y divide-gray-700">
+            {participants.map((item, index) => (
+              <Table.Row
                 key={index}
                 className="bg-gray-800 hover:bg-gray-700 transition-colors duration-200"
               >
-                <td className="px-6 py-4 text-lg font-bold flex items-center gap-3">
-                  <FaTrophy className="text-yellow-400" /> {item.collegeName}
-                </td>
-                <td className="px-6 py-4 flex items-center gap-2">
+                <Table.Cell className="px-6 py-4 text-lg font-bold">
+                  {item.collegeName}
+                </Table.Cell>
+                <Table.Cell className="px-6 py-4">
                   <Button
-                    color={"failure"}
+                    color="failure"
                     size="sm"
                     className="flex items-center gap-2"
+                    onClick={() => openModal(item)}
                   >
                     <FaTrashAlt /> Delete
                   </Button>
-                </td>
-              </tr>
+                </Table.Cell>
+              </Table.Row>
             ))}
-          </tbody>
-        </table>
+          </Table.Body>
+        </Table>
       </div>
+
+      {/* Confirmation Modal */}
+      <Modal show={isModalOpen} size="md" onClose={closeModal}>
+        <Modal.Header>Confirm Deletion</Modal.Header>
+        <Modal.Body>
+          <div className="text-gray-700">
+            Are you sure you want to delete{" "}
+            <span className="font-bold">
+              {selectedParticipant?.collegeName}
+            </span>
+            ? This action cannot be undone.
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button color="failure" onClick={handleDelete}>
+            Confirm
+          </Button>
+          <Button color="gray" onClick={closeModal}>
+            Cancel
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
