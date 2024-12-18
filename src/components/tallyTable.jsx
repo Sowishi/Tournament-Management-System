@@ -8,6 +8,7 @@ import logo from "../assets/logo2.png";
 import useCrudTally from "../hooks/useCrudTally";
 import { useStore } from "../zustand/store";
 import useCrudPoints from "../hooks/useCrudPoints";
+import getLatestTimestamp from "../utils/getLatestTimestamp";
 
 export function TallyTable() {
   const { data } = useCrudTally();
@@ -113,8 +114,18 @@ export function TallyTable() {
     );
   }
 
+  const latestTimestamp = getLatestTimestamp(data);
+
   return (
     <div className="overflow-x-auto">
+      <h1 className="text-right mb-3 text-lg">
+        Ranking as of{" "}
+        <span className="text-lg text-blue-500 font-bold">
+          {" "}
+          {latestTimestamp}
+        </span>
+      </h1>
+
       <Table className="min-w-full text-center text-gray-100">
         <Table.Head>
           <Table.HeadCell className="text-gray-300 p-5 bg-slate-800">
