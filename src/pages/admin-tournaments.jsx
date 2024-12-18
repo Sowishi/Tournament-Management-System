@@ -15,6 +15,7 @@ import useCrudLogs from "../hooks/useCrudLogs";
 import { useStore } from "../zustand/store";
 import sports from "../utils/sports";
 import { FaProjectDiagram } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const AdminTournament = ({ client, currentEvent }) => {
   const [createModal, setCreateModal] = useState(false);
@@ -23,6 +24,7 @@ const AdminTournament = ({ client, currentEvent }) => {
   const { addTournament, data, deleteTournament, loading } =
     useCrudTournament();
   const { data: eventNames } = useGetEventName();
+  const navigation = useNavigate();
 
   const { addCalendar } = useCrudCalendar();
   const { currentUser, currentAdmin, currentEvent: event } = useStore();
@@ -222,6 +224,15 @@ const AdminTournament = ({ client, currentEvent }) => {
         {!client && currentAdmin.role !== "Tournament Manager" && (
           <div className="wrapper flex justify-between items-center mb-5">
             <div className="flex items-center justify-start">
+              <Button
+                className="mr-5"
+                onClick={() => {
+                  navigation("/admin/select-tournament");
+                }}
+              >
+                Back
+              </Button>
+
               <h1 className="text-white text-4xl font-bold ">
                 Tournaments (Bracket)
               </h1>

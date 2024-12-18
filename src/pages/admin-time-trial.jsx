@@ -11,6 +11,7 @@ import { motion } from "framer-motion";
 import { useStore } from "../zustand/store";
 import timeTrialSports from "../utils/timeTrialSport";
 import { FaClock } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const AdminTimeTrial = ({ client }) => {
   const [createModal, setCreateModal] = useState(false);
@@ -99,6 +100,8 @@ const AdminTimeTrial = ({ client }) => {
     (sport) => sport.sport === selectedSport
   );
 
+  const navigation = useNavigate();
+
   return (
     <AdminLayout client={client}>
       {/* Tournament Creation Modal */}
@@ -184,6 +187,14 @@ const AdminTimeTrial = ({ client }) => {
         {!client && currentAdmin.role !== "Tournament Manager" && (
           <div className="flex justify-between items-center mb-5">
             <div className="flex items-center justify-start ">
+              <Button
+                className="mr-5"
+                onClick={() => {
+                  navigation("/admin/select-tournament");
+                }}
+              >
+                Back
+              </Button>
               <h1 className="text-white text-4xl font-bold">
                 Tournaments (Time Trial){" "}
               </h1>

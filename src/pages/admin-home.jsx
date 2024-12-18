@@ -290,22 +290,6 @@ const AdminHome = () => {
               On Going Tournaments
             </Badge>
           </motion.div>
-
-          {/* Events Card */}
-          <motion.div
-            className="bg-gray-800 mx-3 basis-full my-3 md:basis-3/12 px-3 text-white p-4 rounded-lg shadow-md flex items-center justify-between"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-          >
-            <div>
-              <h4 className="text-2xl font-bold">Events</h4>
-              <p>{eventNameData.length}</p>
-            </div>
-            <Badge color="info" size={"lg"}>
-              Events
-            </Badge>
-          </motion.div>
         </div>
         <Tabs className="mx-3" aria-label="Default tabs" variant="default">
           {currentAdmin?.role == "Master Admin" && (

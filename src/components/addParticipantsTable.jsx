@@ -41,7 +41,6 @@ export default function AddParticipantsTable({
     }
   });
 
-  console.log(event);
   return (
     <div className="overflow-x-auto">
       <Table hoverable>
@@ -49,6 +48,7 @@ export default function AddParticipantsTable({
           <Table.HeadCell className="p-4"></Table.HeadCell>
           <Table.HeadCell>School/College</Table.HeadCell>
           <Table.HeadCell>Email</Table.HeadCell>
+          <Table.HeadCell>Registered Event</Table.HeadCell>
         </Table.Head>
         <Table.Body className="divide-y">
           {filterUsers?.map((item) => {
@@ -64,6 +64,7 @@ export default function AddParticipantsTable({
 
                 <Table.Cell>{item.collegeName}</Table.Cell>
                 <Table.Cell>{item.email}</Table.Cell>
+                <Table.Cell>{item.sportsEvent}</Table.Cell>
               </Table.Row>
             );
           })}
