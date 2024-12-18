@@ -25,6 +25,8 @@ import PointSystem from "../components/pointSystem";
 import { TallyTable } from "../components/tallyTable";
 import { TallyTableAdmin } from "../components/tallyTableAdmin";
 import { TallyTableEvent } from "../components/tallyTableEvent";
+import useUpdateUser from "../hooks/useUpdateUser";
+import useCrudTally from "../hooks/useCrudTally";
 
 const AdminHome = () => {
   const [addPicModal, setAddPicModal] = useState(false);
@@ -51,7 +53,9 @@ const AdminHome = () => {
   const { deleteEventName } = useDeleteEventName();
 
   const { data: users } = useGetUsers();
-  const { data: tournaments } = useCrudTournament();
+  const { deleteUser } = useUpdateUser();
+  const { data: tally, deleteTally } = useCrudTally();
+  const { data: tournaments, deleteTournament } = useCrudTournament();
   const { currentAdmin, currentEvent } = useStore();
   const [selectedEventFilter, setSelectedEventFilter] = useState(
     currentAdmin?.role == "Master Admin" ? "all" : currentAdmin?.sportsEvent
@@ -161,6 +165,52 @@ const AdminHome = () => {
     }
   });
 
+  const handleDeleteEvent = () => {
+    const eventName = selectedEvent.eventName;
+
+    const tallyData = tally.filter((item) => {
+      const { event } = item;
+      if (event.includes(eventName)) {
+        return item;
+      }
+    });
+
+    const tournaData = tournaments.filter((item) => {
+      const { tournament } = item;
+      if (tournament.description.includes(eventName)) {
+        return item;
+      }
+    });
+
+    const userData = users.filter((user) => {
+      if (user.assignEvent == eventName || user.sportsEvent == eventName) {
+        return user;
+      }
+    });
+
+    if (userData.length >= 1) {
+      userData.map((user) => {
+        deleteUser(user.id);
+      });
+    }
+
+    if (tournaData.length >= 1) {
+      tournaData.map((tournament) => {
+        deleteTournament(tournament);
+      });
+    }
+
+    if (tallyData.length >= 1) {
+      tallyData.map((item) => {
+        deleteTally(item.id);
+      });
+    }
+
+    deleteEventName(selectedEvent.id);
+
+    setDeleteModal(false);
+  };
+
   return (
     <AdminLayout>
       <TmsModal
@@ -182,10 +232,7 @@ const AdminHome = () => {
       </TmsModal>
       <ConfirmationModals
         title={"Are you sure to delete this event name?"}
-        handleSubmit={() => {
-          deleteEventName(selectedEvent);
-          setDeleteModal(false);
-        }}
+        handleSubmit={handleDeleteEvent}
         openModal={deleteModal}
         handleClose={() => setDeleteModal(false)}
       />
@@ -384,7 +431,7 @@ const AdminHome = () => {
                           <Button
                             onClick={() => {
                               setDeleteModal(true);
-                              setSelectedEvent(event.id);
+                              setSelectedEvent(event);
                             }}
                             color={"failure"}
                             className="ml-2"
