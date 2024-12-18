@@ -1,5 +1,5 @@
 import { Button, Drawer, Sidebar, TextInput } from "flowbite-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   HiSearch,
   HiOutlineChartSquareBar,
@@ -14,18 +14,24 @@ import { useStore } from "../zustand/store";
 import { HiOutlineReply, HiOutlineUser } from "react-icons/hi";
 import { TbTournament } from "react-icons/tb";
 import logo from "../assets/logo2.png";
+import useGetEventName from "../hooks/useGetEventName";
 
 export default function AdminLayout({ children, client }) {
   const [isOpen, setIsOpen] = useState(false);
-
+  const { data } = useGetEventName();
   const handleClose = () => setIsOpen(false);
-  const { currentAdmin, setCurrentUser, setCurrentAdmin } = useStore();
+  const {
+    currentAdmin,
+    setCurrentUser,
+    setCurrentAdmin,
+    setCurrentEvent,
+    currentEvent,
+  } = useStore();
 
   const isMasterAdmin = currentAdmin?.role == "Master Admin";
   const isEventAdmin = currentAdmin?.role == "Event Admin";
   const isDocumentAdmin = currentAdmin?.role == "Document Admin";
   const isTournamentManager = currentAdmin?.role == "Tournament Manager";
-
   const navigation = useNavigate();
 
   const getAdminRole = (role) => {
@@ -56,6 +62,16 @@ export default function AdminLayout({ children, client }) {
       return "bg-red-800";
     }
   };
+
+  useEffect(() => {
+    if (data) {
+      const event = data.find(
+        (event) => event.eventName == currentAdmin?.sportsEvent
+      );
+
+      setCurrentEvent(event);
+    }
+  }, [data]);
 
   return (
     <>
@@ -176,27 +192,31 @@ export default function AdminLayout({ children, client }) {
                           </div>
                         </Sidebar.Item>
                       </Link>
-                      <Link to="/admin/users">
-                        <Sidebar.Item
-                          onClick={() => setIsOpen(false)}
-                          className="bg-blue-950 text-white hover:text-white hover:bg-red-500 my-3"
-                        >
-                          <div className="flex items-center">
-                            Users Management <HiUsers className="ml-3" />
-                          </div>
-                        </Sidebar.Item>
-                      </Link>
-                      <Link to="/admin/tournament-manager">
-                        <Sidebar.Item
-                          onClick={() => setIsOpen(false)}
-                          className="bg-blue-950 text-white hover:text-white hover:bg-red-500 my-3"
-                        >
-                          <div className="flex items-center">
-                            Tournament Managers
-                            <HiUsers className="ml-3" />
-                          </div>
-                        </Sidebar.Item>
-                      </Link>
+                      {!currentEvent?.status && (
+                        <>
+                          <Link to="/admin/users">
+                            <Sidebar.Item
+                              onClick={() => setIsOpen(false)}
+                              className="bg-blue-950 text-white hover:text-white hover:bg-red-500 my-3"
+                            >
+                              <div className="flex items-center">
+                                Users Management <HiUsers className="ml-3" />
+                              </div>
+                            </Sidebar.Item>
+                          </Link>
+                          <Link to="/admin/tournament-manager">
+                            <Sidebar.Item
+                              onClick={() => setIsOpen(false)}
+                              className="bg-blue-950 text-white hover:text-white hover:bg-red-500 my-3"
+                            >
+                              <div className="flex items-center">
+                                Tournament Managers
+                                <HiUsers className="ml-3" />
+                              </div>
+                            </Sidebar.Item>
+                          </Link>
+                        </>
+                      )}
                       <Link to="/admin/select-tournament">
                         <Sidebar.Item
                           onClick={() => setIsOpen(false)}

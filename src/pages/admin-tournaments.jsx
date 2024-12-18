@@ -25,7 +25,7 @@ const AdminTournament = ({ client, currentEvent }) => {
   const { data: eventNames } = useGetEventName();
 
   const { addCalendar } = useCrudCalendar();
-  const { currentUser, currentAdmin } = useStore();
+  const { currentUser, currentAdmin, currentEvent: event } = useStore();
   const { addLog } = useCrudLogs();
 
   const [forms, setForms] = useState({
@@ -225,10 +225,11 @@ const AdminTournament = ({ client, currentEvent }) => {
               </h1>
               <FaProjectDiagram className="text-green-400 text-6xl mb-4 ml-4" />
             </div>
-
-            <Button onClick={() => setCreateModal(true)}>
-              Create Tournament
-            </Button>
+            {!event?.status && (
+              <Button onClick={() => setCreateModal(true)}>
+                Create Tournament
+              </Button>
+            )}
           </div>
         )}
         <div className="flex flex-wrap">

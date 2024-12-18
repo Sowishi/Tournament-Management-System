@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 const PointSystem = () => {
   const { addPoints, getPoints } = useCrudPoints();
-  const { currentAdmin } = useStore();
+  const { currentAdmin, currentEvent } = useStore();
   const [points, setPoints] = useState({
     gold: "",
     silver: "",
@@ -93,12 +93,14 @@ const PointSystem = () => {
             </tr>
           </tbody>
         </table>
-        <button
-          type="submit"
-          className="mt-10 w-full p-2 py-5 bg-blue-600 text-white rounded hover:bg-blue-700"
-        >
-          <h1 className="text-2xl font-bold">Submit</h1>
-        </button>
+        {!currentEvent?.status && (
+          <button
+            type="submit"
+            className="mt-10 w-full p-2 py-5 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            <h1 className="text-2xl font-bold">Submit</h1>
+          </button>
+        )}
       </form>
 
       {/* Confirmation Modal */}

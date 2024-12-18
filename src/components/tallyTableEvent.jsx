@@ -15,7 +15,7 @@ export function TallyTableEvent() {
   const { data: events, finalizeEvent: handleFinalizeEvent } =
     useGetEventName();
   const { getPoints } = useCrudPoints();
-  const { currentAdmin } = useStore();
+  const { currentAdmin, currentEvent } = useStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedInstitution, setSelectedInstitution] = useState(null);
   const [filteredData, setFilteredData] = useState([]);
@@ -130,9 +130,15 @@ export function TallyTableEvent() {
   return (
     <div className="overflow-x-auto">
       <div className="flex justify-end items-center">
-        <Button onClick={finalizeEvent} color={"success"} className="px-5 my-5">
-          Finalize Event
-        </Button>
+        {!currentEvent?.status && (
+          <Button
+            onClick={finalizeEvent}
+            color={"success"}
+            className="px-5 my-5"
+          >
+            Finalize Event
+          </Button>
+        )}
       </div>
       <Table className="min-w-full text-center text-gray-100">
         <Table.Head>

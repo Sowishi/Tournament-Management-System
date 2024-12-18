@@ -18,7 +18,7 @@ const AdminTimeTrial = ({ client }) => {
   const [deleteModal, setDeleteModal] = useState(false); // Confirmation modal for delete
   const [selectedTournament, setSelectedTournament] = useState(); // Tournament to delete
   const [loading, setLoading] = useState(false);
-  const { currentAdmin } = useStore();
+  const { currentAdmin, currentEvent } = useStore();
   const { addRace, getRaces, deleteRace } = useCrudRace();
   const [races, setRaces] = useState([]);
   const [forms, setForms] = useState({
@@ -190,9 +190,11 @@ const AdminTimeTrial = ({ client }) => {
               <FaClock className="text-blue-400 text-6xl mb-4 ml-3" />
             </div>
 
-            <Button onClick={() => setCreateModal(true)}>
-              Create Tournament
-            </Button>
+            {!currentEvent?.status && (
+              <Button onClick={() => setCreateModal(true)}>
+                Create Tournament
+              </Button>
+            )}
           </div>
         )}
 

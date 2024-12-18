@@ -52,7 +52,7 @@ const AdminHome = () => {
 
   const { data: users } = useGetUsers();
   const { data: tournaments } = useCrudTournament();
-  const { currentAdmin } = useStore();
+  const { currentAdmin, currentEvent } = useStore();
   const [selectedEventFilter, setSelectedEventFilter] = useState(
     currentAdmin?.role == "Master Admin" ? "all" : currentAdmin?.sportsEvent
   );
@@ -424,12 +424,14 @@ const AdminHome = () => {
             >
               <div className="header w-full flex justify-between items-center mb-5">
                 <h1 className="text-white text-4xl font-bold">Delegates</h1>
-                <Button
-                  onClick={() => setAddCollegeModal(true)}
-                  color={"success"}
-                >
-                  Add Delegates
-                </Button>
+                {!currentEvent?.status && (
+                  <Button
+                    onClick={() => setAddCollegeModal(true)}
+                    color={"success"}
+                  >
+                    Add Delegates
+                  </Button>
+                )}
               </div>
 
               {currentAdmin.role == "Master Admin" && (
@@ -462,16 +464,18 @@ const AdminHome = () => {
                         {college.collegeName}
                       </td>
                       <td className="py-3 px-4 text-right flex items-center justify-center">
-                        <Button
-                          onClick={() => {
-                            setCollegeDeleteModal(true);
-                            setSelectedCollegeName(college.id);
-                          }}
-                          color={"failure"}
-                          className="ml-2"
-                        >
-                          <HiOutlineTrash />
-                        </Button>
+                        {!currentEvent?.status && (
+                          <Button
+                            onClick={() => {
+                              setCollegeDeleteModal(true);
+                              setSelectedCollegeName(college.id);
+                            }}
+                            color={"failure"}
+                            className="ml-2"
+                          >
+                            <HiOutlineTrash />
+                          </Button>
+                        )}
                       </td>
                     </motion.tr>
                   ))}
