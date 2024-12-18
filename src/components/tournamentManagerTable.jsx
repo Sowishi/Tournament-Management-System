@@ -7,13 +7,17 @@ import useCrudAdmin from "../hooks/useCrudAdmin";
 import ConfirmationModals from "./confirmationModal";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { useStore } from "../zustand/store";
 
 export function TournamentManagerTable({ handleUpdateForms, data }) {
   const { deleteAdmin } = useCrudAdmin();
   const [deleteModal, setDeleteModal] = useState(false);
   const [selectedAdmin, setSelectedAdmin] = useState();
+  const { currentEvent } = useStore();
 
-  console.log(data);
+  const filterData = data.filter(
+    (user) => user.assignEvent == currentEvent?.eventName
+  );
 
   return (
     <div className="overflow-x-auto mt-10">
@@ -46,11 +50,14 @@ export function TournamentManagerTable({ handleUpdateForms, data }) {
             Assigned Tournament
           </Table.HeadCell>
           <Table.HeadCell className="bg-slate-800 text-white">
+            Assigned Event
+          </Table.HeadCell>
+          <Table.HeadCell className="bg-slate-800 text-white">
             Action
           </Table.HeadCell>
         </Table.Head>
         <Table.Body className="divide-y">
-          {data?.map((user) => {
+          {filterData?.map((user) => {
             return (
               <Table.Row
                 key={user.id}
@@ -62,6 +69,9 @@ export function TournamentManagerTable({ handleUpdateForms, data }) {
                 <Table.Cell className="font-bold">{user.role}</Table.Cell>
                 <Table.Cell className="font-bold">
                   {user.assignTournament}
+                </Table.Cell>
+                <Table.Cell className="font-bold">
+                  {user.assignEvent}
                 </Table.Cell>
 
                 <Table.Cell className="font-bold">

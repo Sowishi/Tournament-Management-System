@@ -10,6 +10,7 @@ import useGetEventName from "../hooks/useGetEventName";
 import { TournamentManagerTable } from "../components/tournamentManagerTable";
 import useCrudTournament from "../hooks/useCrudTournament";
 import sendEmail from "../utils/sendEmail";
+import { useStore } from "../zustand/store";
 
 const AdminTournamentManager = () => {
   const [createModal, setCreateModal] = useState(false);
@@ -26,7 +27,7 @@ const AdminTournamentManager = () => {
   const { addAdmin, updateAdmin, data } = useCrudAdmin();
   const { data: tournaments } = useCrudTournament();
   const { data: eventNames } = useGetEventName();
-
+  const { currentEvent } = useStore();
   const handleChange = ({ target: { name, value } }) => {
     setForms({ ...forms, [name]: value });
     setValidationErrors({ ...validationErrors, [name]: "" });
@@ -64,9 +65,14 @@ const AdminTournamentManager = () => {
         updateAdmin({
           ...forms,
           tournamentID: selectedTournament.tournament.url,
+          assignEvent: currentEvent.eventName,
         });
       } else {
-        addAdmin({ ...forms, tournamentID: selectedTournament.tournament.url });
+        addAdmin({
+          ...forms,
+          tournamentID: selectedTournament.tournament.url,
+          assignEvent: currentEvent.eventName,
+        });
         sendEmail(forms);
         toast.success("Successfully created admin.");
       }
@@ -98,8 +104,6 @@ const AdminTournamentManager = () => {
   const tournamentManagers = data.filter(
     (user) => user.role === "Tournament Manager"
   );
-
-  console.log(tournamentManagers);
 
   return (
     <AdminLayout>
@@ -163,7 +167,12 @@ const AdminTournamentManager = () => {
         </div>
       </TmsModal>
       <div className="container mx-auto mt-10 px-5 pb-20">
-        <h1 className="text-white text-4xl font-bold">Tournament Managers</h1>
+        <h1 className="text-white text-4xl font-bold">
+          Tournament Managers of{" "}
+          <span className="text-blue-500 font-bold">
+            {currentEvent?.eventName}
+          </span>
+        </h1>
         <div className="wrapper mt-10 flex justify-end items-center">
           <Button onClick={resetForm}>Create Tournament Manager</Button>
         </div>
