@@ -105,7 +105,9 @@ const AdminTournamentManager = () => {
     <AdminLayout>
       <TmsModal
         onSubmit={handleSubmit}
-        title={isUpdate ? "Update Admin" : "Create Admin"}
+        title={
+          isUpdate ? "Update Tournament Manager" : "Create Tournament Manager"
+        }
         openModal={createModal}
         handleClose={() => setCreateModal(false)}
       >
@@ -163,7 +165,7 @@ const AdminTournamentManager = () => {
       <div className="container mx-auto mt-10 px-5 pb-20">
         <h1 className="text-white text-4xl font-bold">Tournament Managers</h1>
         <div className="wrapper mt-10 flex justify-end items-center">
-          <Button onClick={resetForm}>Create Admin</Button>
+          <Button onClick={resetForm}>Create Tournament Manager</Button>
         </div>
         <TournamentManagerTable
           data={tournamentManagers}

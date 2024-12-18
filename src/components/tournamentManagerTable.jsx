@@ -13,6 +13,8 @@ export function TournamentManagerTable({ handleUpdateForms, data }) {
   const [deleteModal, setDeleteModal] = useState(false);
   const [selectedAdmin, setSelectedAdmin] = useState();
 
+  console.log(data);
+
   return (
     <div className="overflow-x-auto mt-10">
       <ConfirmationModals
