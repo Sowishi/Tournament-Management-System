@@ -15,6 +15,7 @@ import { HiOutlineReply, HiOutlineUser } from "react-icons/hi";
 import { TbTournament } from "react-icons/tb";
 import logo from "../assets/logo2.png";
 import useGetEventName from "../hooks/useGetEventName";
+import { MdLogout } from "react-icons/md";
 
 export default function AdminLayout({ children, client }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -321,6 +322,22 @@ export default function AdminLayout({ children, client }) {
                       </Sidebar.Item>
                     </Sidebar.ItemGroup>
                   )}
+                  <Sidebar.ItemGroup>
+                    <Button
+                      className="w-full"
+                      color={"failure"}
+                      onClick={async () => {
+                        setCurrentUser(null);
+                        setCurrentAdmin(null);
+                        localStorage.removeItem("user");
+                        window.location.reload();
+
+                        navigation("/");
+                      }}
+                    >
+                      Logout
+                    </Button>
+                  </Sidebar.ItemGroup>
                 </Sidebar.Items>
               </div>
             </div>
@@ -357,21 +374,6 @@ export default function AdminLayout({ children, client }) {
                   Logged in as: {getAdminRole(currentAdmin?.role)}
                 </p>
               </div>
-
-              <Button
-                onClick={async () => {
-                  setCurrentUser(null);
-                  setCurrentAdmin(null);
-                  localStorage.removeItem("user");
-                  window.location.reload();
-
-                  navigation("/");
-                }}
-                color={"failure"}
-                className="ml-5"
-              >
-                Logout
-              </Button>
             </div>
           </div>
         )}
