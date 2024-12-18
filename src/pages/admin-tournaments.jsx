@@ -73,7 +73,7 @@ const AdminTournament = ({ client, currentEvent }) => {
 
   const validateForm = () => {
     const { tournamentName, tournamentEvent, tournamentType } = forms;
-    if (!tournamentName || !tournamentEvent || !tournamentType) {
+    if (!tournamentEvent || !tournamentType) {
       toast.error("Please fill in all required fields.");
       return false;
     }
@@ -82,6 +82,8 @@ const AdminTournament = ({ client, currentEvent }) => {
 
   const handleAddTournament = async () => {
     if (!validateForm()) return;
+    forms.tournamentName =
+      selectedSport + " " + selectedCategory + " " + selectedGender;
 
     const tournamentParameter = {
       ...forms,
@@ -181,13 +183,6 @@ const AdminTournament = ({ client, currentEvent }) => {
             />
           )}
 
-          <TmsInput
-            placeHolder={"Enter Tournament Name"}
-            name={"tournamentName"}
-            onChange={handleChange}
-            label={"Tournament Name"}
-            dark={true}
-          />
           <TmsSelect
             name={"tournamentType"}
             onChange={handleChange}
@@ -199,6 +194,17 @@ const AdminTournament = ({ client, currentEvent }) => {
               "Round-Robin",
             ]}
             label={"Tournament Type"}
+            dark={true}
+          />
+          <TmsInput
+            disable={true}
+            placeHolder={"Enter Tournament Name"}
+            name={"tournamentName"}
+            onChange={handleChange}
+            label={"Tournament Name"}
+            value={
+              selectedSport + " " + selectedCategory + " " + selectedGender
+            }
             dark={true}
           />
           <TmsSelect
