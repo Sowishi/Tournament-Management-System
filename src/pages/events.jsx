@@ -7,6 +7,7 @@ import { useStore } from "../zustand/store";
 
 const Events = () => {
   const { currentEvent } = useStore();
+
   return (
     <DefaultLayout>
       <Title title={"Events Display"} />

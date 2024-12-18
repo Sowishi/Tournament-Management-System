@@ -65,7 +65,7 @@ export default function AdminLayout({ children, client }) {
   };
 
   useEffect(() => {
-    if (data) {
+    if (data && !client) {
       const event = data.find(
         (event) => event.eventName == currentAdmin?.sportsEvent
       );

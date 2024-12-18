@@ -16,7 +16,8 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   const { data } = useGetUsers();
-  const { setCurrentUser, setGuest, setCurrentAdmin } = useStore();
+  const { setCurrentUser, setGuest, setCurrentAdmin, setCurrentEvent } =
+    useStore();
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 

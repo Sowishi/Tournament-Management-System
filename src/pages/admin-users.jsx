@@ -8,7 +8,7 @@ const AdminUsers = () => {
     <AdminLayout>
       <div className="container mx-auto p-5 mt-10 ">
         <h1 className="text-white text-4xl font-bold">
-          All Users of{" "}
+          All Users{" "}
           <span className="text-blue-500 font-bold">
             {currentEvent?.eventName}
           </span>
