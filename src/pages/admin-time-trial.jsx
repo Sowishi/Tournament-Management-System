@@ -10,6 +10,7 @@ import TournamentCardRace from "../components/tournamentCardRace";
 import { motion } from "framer-motion";
 import { useStore } from "../zustand/store";
 import timeTrialSports from "../utils/timeTrialSport";
+import { FaClock } from "react-icons/fa";
 
 const AdminTimeTrial = ({ client }) => {
   const [createModal, setCreateModal] = useState(false);
@@ -182,9 +183,13 @@ const AdminTimeTrial = ({ client }) => {
       <div className="container mx-auto px-5 my-10">
         {!client && currentAdmin.role !== "Tournament Manager" && (
           <div className="flex justify-between items-center mb-5">
-            <h1 className="text-white text-4xl font-bold">
-              Tournaments (Time Trial)
-            </h1>
+            <div className="flex items-center justify-start ">
+              <h1 className="text-white text-4xl font-bold">
+                Tournaments (Time Trial){" "}
+              </h1>
+              <FaClock className="text-blue-400 text-6xl mb-4 ml-3" />
+            </div>
+
             <Button onClick={() => setCreateModal(true)}>
               Create Tournament
             </Button>

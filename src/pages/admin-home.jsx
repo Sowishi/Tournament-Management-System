@@ -41,7 +41,6 @@ const AdminHome = () => {
   const [selectedCollegeName, setSelectedCollegeName] = useState();
   const [collegeDeleteModal, setCollegeDeleteModal] = useState(false);
   const [selectedEventName, setSelectedEventName] = useState();
-  const [selectedEventFilter, setSelectedEventFilter] = useState("all");
 
   // Hooks
   const { addCarouselPic } = useAddCarouselPic();
@@ -54,6 +53,10 @@ const AdminHome = () => {
   const { data: users } = useGetUsers();
   const { data: tournaments } = useCrudTournament();
   const { currentAdmin } = useStore();
+  const [selectedEventFilter, setSelectedEventFilter] = useState(
+    currentAdmin?.role == "Master Admin" ? "all" : currentAdmin?.sportsEvent
+  );
+
   const navigation = useNavigate();
   const {
     addCollegeName,
@@ -124,7 +127,13 @@ const AdminHome = () => {
 
   const handleUploadCollege = () => {
     if (collegeName.length >= 1) {
-      addCollegeName({ collegeName, selectedEventName });
+      addCollegeName({
+        collegeName,
+        selectedEventName:
+          currentAdmin?.role == "Master Admin"
+            ? selectedEventName
+            : currentAdmin?.sportsEvent,
+      });
       setAddCollegeModal(false);
       toast.success("Successfully Added College Name");
       setCollegeName("");
@@ -220,21 +229,27 @@ const AdminHome = () => {
       {/* College Name Modal */}
       <TmsModal
         onSubmit={handleUploadCollege}
-        title="Add College Name Modal"
+        title="Add Delegates"
         openModal={addCollegeModal}
         handleClose={() => setAddCollegeModal(false)}
       >
         <div className="p-10">
-          <h1 className="font-bold">Enter your college name</h1>
+          <h1 className="font-bold">Enter your delegate name:</h1>
           <TmsInput
             onChange={(event) => setCollegeName(event.target.value)}
             type={"text"}
           />
+          <h1 className="font-bold mt-5">Enter event name:</h1>
+
           <TmsSelect
+            disable={currentAdmin?.role == "Event Admin"}
             onChange={(event) => setSelectedEventName(event.target.value)}
             dark
-            label={"Enter Event Name"}
-            data={["Please Select Event Name", ...formatEventNames]}
+            data={
+              currentAdmin?.role == "Master Admin"
+                ? ["Select Event", ...formatEventNames]
+                : [currentAdmin?.sportsEvent]
+            }
           />
         </div>
       </TmsModal>
@@ -416,12 +431,18 @@ const AdminHome = () => {
                   Add Delegates
                 </Button>
               </div>
-              <TmsSelect
-                onChange={(event) => setSelectedEventFilter(event.target.value)}
-                dark
-                label={"Select Event Name"}
-                data={["all", ...formatEventNames]}
-              />
+
+              {currentAdmin.role == "Master Admin" && (
+                <TmsSelect
+                  onChange={(event) =>
+                    setSelectedEventFilter(event.target.value)
+                  }
+                  dark
+                  label={"Select Event Name"}
+                  data={["all", ...formatEventNames]}
+                />
+              )}
+
               <table className="min-w-full bg-gray-800 rounded-md shadow-md mt-5">
                 <thead>
                   <tr className="text-white">

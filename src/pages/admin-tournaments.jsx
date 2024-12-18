@@ -14,6 +14,7 @@ import { motion } from "framer-motion";
 import useCrudLogs from "../hooks/useCrudLogs";
 import { useStore } from "../zustand/store";
 import sports from "../utils/sports";
+import { FaProjectDiagram } from "react-icons/fa";
 
 const AdminTournament = ({ client, currentEvent }) => {
   const [createModal, setCreateModal] = useState(false);
@@ -143,8 +144,6 @@ const AdminTournament = ({ client, currentEvent }) => {
     });
   }, [data]);
 
-  console.log(filteredData);
-
   return (
     <AdminLayout client={client}>
       <TmsModal
@@ -220,9 +219,13 @@ const AdminTournament = ({ client, currentEvent }) => {
       <div className="container mx-auto px-5 my-10">
         {!client && currentAdmin.role !== "Tournament Manager" && (
           <div className="wrapper flex justify-between items-center mb-5">
-            <h1 className="text-white text-4xl font-bold ">
-              Tournaments (Bracket)
-            </h1>
+            <div className="flex items-center justify-start">
+              <h1 className="text-white text-4xl font-bold ">
+                Tournaments (Bracket)
+              </h1>
+              <FaProjectDiagram className="text-green-400 text-6xl mb-4 ml-4" />
+            </div>
+
             <Button onClick={() => setCreateModal(true)}>
               Create Tournament
             </Button>
