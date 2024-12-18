@@ -7,12 +7,13 @@ import useCrudRace from "../hooks/useCrudRace";
 import TmsModal from "../components/tmsModal";
 import AddParticipantsTable from "../components/addParticipantsTable";
 import useGetUsers from "../hooks/useGetUsers";
+import { toast } from "react-toastify";
 
 const ViewTimeTrial = () => {
   const { id } = useParams();
   const navigation = useNavigate();
   const [race, setRace] = useState();
-  const { getRace } = useCrudRace();
+  const { getRace, addParticipant } = useCrudRace();
   const { data: users } = useGetUsers();
 
   const [addModal, setAddModal] = useState(false);
@@ -23,7 +24,20 @@ const ViewTimeTrial = () => {
   }, [id]);
 
   const handleAddParticpant = () => {
-    console.log(selectedUsers);
+    let error = false;
+    if (selectedUsers.length >= 1) {
+      selectedUsers.map((user) => {
+        error = addParticipant(race.id, user);
+      });
+    }
+
+    if (error) {
+      toast.error("Participants Already Exist");
+    } else {
+      toast.success("Successfully Added Participant");
+    }
+
+    setAddModal(false);
   };
 
   return (
@@ -84,7 +98,7 @@ const ViewTimeTrial = () => {
               </div>
             </div>
 
-            <RaceTable />
+            <RaceTable raceData={race.participants || []} />
           </div>
         </>
       ) : (

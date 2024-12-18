@@ -147,7 +147,7 @@ const Registration = () => {
                   name="schoolRepresentative"
                   onChange={handleChange}
                   value={forms.schoolRepresentative}
-                  label="Delegate Name"
+                  label="Delegate Representative"
                 />
                 <TmsInput
                   name="email"

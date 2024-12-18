@@ -8,6 +8,7 @@ import {
   updateDoc,
   doc,
   setDoc,
+  getDoc,
 } from "firebase/firestore";
 import { db } from "../../firebase";
 
@@ -23,13 +24,12 @@ const useCrudRace = () => {
     });
   };
 
-  // Add a new tally record to the "tally" collection
   const addRace = async (data) => {
     try {
       const colRef = collection(db, "races");
-      addDoc(colRef, data);
+      await addDoc(colRef, { ...data, timestamp: serverTimestamp() });
     } catch (error) {
-      console.error("Error adding tally:", error);
+      console.error("Error adding race:", error);
     }
   };
 
@@ -51,13 +51,44 @@ const useCrudRace = () => {
   const deleteRace = async (id) => {
     try {
       const docRef = doc(db, "races", id);
-      deleteDoc(docRef);
+      await deleteDoc(docRef);
     } catch (error) {
-      console.error("Error adding tally:", error);
+      console.error("Error deleting race:", error);
     }
   };
 
-  return { addRace, getRaces, deleteRace, getRace };
+  const addParticipant = async (raceId, participant) => {
+    try {
+      const raceRef = doc(db, "races", raceId);
+
+      // Fetch the race document
+      const raceSnapshot = await getDoc(raceRef);
+
+      if (!raceSnapshot.exists()) {
+        throw new Error("Race not found");
+      }
+
+      const raceData = raceSnapshot.data();
+      const participants = raceData.participants || [];
+
+      // Check if the participant already exists
+      if (participants.some((p) => p.id === participant.id)) {
+        throw new Error("Participant is already added to the race");
+      }
+
+      // Add the new participant
+      participants.push(participant);
+      await updateDoc(raceRef, { participants });
+
+      console.log("Participant added successfully");
+      return false;
+    } catch (error) {
+      console.error("Error adding participant:", error);
+      return true;
+    }
+  };
+
+  return { addRace, getRaces, deleteRace, getRace, addParticipant };
 };
 
 export default useCrudRace;
