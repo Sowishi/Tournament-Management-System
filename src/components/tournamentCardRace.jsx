@@ -12,18 +12,13 @@ import { useEffect, useState } from "react";
 
 export default function TournamentCardRace({
   tournament,
-  setSelectedTournament,
-  setShowModal,
-  deleteTournament,
+
   client,
   isReport,
   onDelete,
 }) {
   const { tournament: data } = tournament;
   const navigate = useNavigate();
-  const { addLog } = useCrudLogs();
-  const { currentUser } = useStore();
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [tournaInfo, setTournaInfo] = useState(null);
 
   useEffect(() => {
@@ -38,18 +33,6 @@ export default function TournamentCardRace({
       }
     }
   }, [data.categories]);
-
-  const getBadgeColor = (state) => {
-    if (state === "pending") {
-      return "bg-blue-500";
-    } else if (state === "underway") {
-      return "bg-yellow-200";
-    } else if (state === "complete") {
-      return "bg-green-500";
-    } else if (state === "awaiting_review") {
-      return "bg-yellow-500";
-    }
-  };
 
   return (
     <Card
@@ -111,12 +94,10 @@ export default function TournamentCardRace({
         <div className="flex flex-col">
           <Button
             onClick={() => {
-              setSelectedTournament(data);
-              setShowModal(true);
               if (client) {
-                navigate(`/tournament/${data.url}?client=true`);
+                navigate(`/time-trial/${tournament.id}?client=true`);
               } else {
-                navigate(`/tournament/${data.url}`);
+                navigate(`/time-trial/${tournament.id}`);
               }
             }}
           >

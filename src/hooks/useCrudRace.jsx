@@ -33,6 +33,21 @@ const useCrudRace = () => {
     }
   };
 
+  const getRace = (id, setRace) => {
+    try {
+      const docRef = doc(db, "races", id);
+      onSnapshot(docRef, (snapshot) => {
+        if (snapshot.exists()) {
+          setRace({ ...snapshot.data(), id: snapshot.id });
+        } else {
+          console.error("Race not found");
+        }
+      });
+    } catch (error) {
+      console.error("Error fetching race:", error);
+    }
+  };
+
   const deleteRace = async (id) => {
     try {
       const docRef = doc(db, "races", id);
@@ -42,7 +57,7 @@ const useCrudRace = () => {
     }
   };
 
-  return { addRace, getRaces, deleteRace };
+  return { addRace, getRaces, deleteRace, getRace };
 };
 
 export default useCrudRace;

@@ -30,6 +30,7 @@ import AdminReports from "./pages/admin-reports";
 import ViewReports from "./pages/viewReports";
 import SelectTournament from "./pages/selectTournament";
 import AdminTimeTrial from "./pages/admin-time-trial";
+import ViewTimeTrial from "./pages/view-time-trial";
 
 const App = () => {
   const { currentUser, guest, currentAdmin } = useStore();
@@ -122,6 +123,10 @@ const App = () => {
         <Route
           path="/tournament/:id"
           element={currentAdmin || currentUser ? <ViewTournament /> : <Login />}
+        />
+        <Route
+          path="/time-trial/:id"
+          element={currentAdmin || currentUser ? <ViewTimeTrial /> : <Login />}
         />
       </Routes>
     </>

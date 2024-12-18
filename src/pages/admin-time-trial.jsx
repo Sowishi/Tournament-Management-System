@@ -49,10 +49,6 @@ const AdminTimeTrial = ({ client }) => {
   };
 
   const validateForm = () => {
-    if (!forms.tournamentName) {
-      toast.error("Tournament Name is required.");
-      return false;
-    }
     if (!selectedSport) {
       toast.error("Please select a Sport.");
       return false;
@@ -75,6 +71,9 @@ const AdminTimeTrial = ({ client }) => {
   };
 
   const handleConfirmAddTournament = () => {
+    forms.tournamentName =
+      selectedSport + " " + selectedCategory + " " + selectedGender;
+
     const tournamentParameter = {
       ...forms,
       categories: {
@@ -144,9 +143,12 @@ const AdminTimeTrial = ({ client }) => {
             />
           )}
           <TmsInput
+            disable={true}
             placeHolder="Enter Tournament Name"
             name="tournamentName"
-            onChange={handleChange}
+            value={
+              selectedSport + " " + selectedCategory + " " + selectedGender
+            }
             label="Tournament Name"
             dark
           />
