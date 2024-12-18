@@ -92,10 +92,6 @@ const AdminTournament = ({ client, currentEvent }) => {
       },
     };
     const res = await addTournament(tournamentParameter);
-    if (res.error) {
-      toast.error(res.message);
-      return;
-    }
 
     const startDateMoment = moment().format("LLL"); // Today's date
     const endDateMoment = moment().add(7, "days").format("LLL"); // 7 days after today
