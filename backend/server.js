@@ -10,7 +10,7 @@ const allowedOrigins = [
   "https://tournament-772d1.web.app",
 ];
 
-const apiKey = "6lE1ynQ5sWrcVKSgo20blaGB77WKX63MO330Wzuy";
+const apiKey = "XM8Bhakm5AqmJdo5fwsAW0N8TgoZHhTfQJ6XGBx2";
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "https://tournament-772d1.web.app");
