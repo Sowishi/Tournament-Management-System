@@ -36,6 +36,9 @@ export default function Header({ removeMargin }) {
   const { pathname } = useLocation();
 
   const filterNotif = notifications.filter((item) => {
+    if (item.ownerID == "all" && item.event == currentUser.sportsEvent) {
+      return item;
+    }
     if (item.ownerID == currentUser?.id) {
       return item;
     }

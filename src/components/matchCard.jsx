@@ -6,6 +6,8 @@ import useCrudParticipants from "../hooks/useCrudParticipants";
 import useCrudMatches from "../hooks/useCrudMatches";
 import useCrudLogs from "../hooks/useCrudLogs";
 import { useStore } from "../zustand/store";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { db } from "../../firebase";
 
 export default function MatchCard({ match, id, client, tournament }) {
   const { showParticipant } = useCrudParticipants();
@@ -59,6 +61,14 @@ export default function MatchCard({ match, id, client, tournament }) {
     updateMatchWinner(id, match.id, selectedWinner, winnerPlayer);
     const logsLabel = `${winnerName} won in round ${match.round} of the tournament ${tournament.name}.`;
     addLog(currentUser, logsLabel);
+    const notifRef = collection(db, "notifications");
+    addDoc(notifRef, {
+      message: logsLabel,
+      ownerID: "all",
+      createdAt: serverTimestamp(),
+      read: false,
+      event: currentUser.sportsEvent,
+    });
 
     setTimeout(() => {
       window.location.reload();
