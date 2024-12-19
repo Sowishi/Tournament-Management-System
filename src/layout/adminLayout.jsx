@@ -103,6 +103,12 @@ export default function AdminLayout({ children, client }) {
       return item;
     }
   });
+
+  const playAudio = () => {
+    const audio = new Audio("../assets/mixkit-bell-notification-933.wav");
+    audio.play();
+  };
+
   return (
     <>
       <Drawer open={isOpen} onClose={handleClose}>

@@ -1,30 +1,30 @@
-import { Button, Table } from "flowbite-react";
+import { Button, Table, Modal } from "flowbite-react";
 import { FaTrophy, FaMedal } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import moment from "moment";
+import useCrudTally from "../hooks/useCrudTally";
 
 const RaceRankingTable = ({ participants, race }) => {
   const [rankedParticipants, setRankedParticipants] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { addTally } = useCrudTally();
 
   const calculateRankingAndDifferences = () => {
     if (!participants || participants.length === 0) return;
 
-    // Sort participants by time in ascending order
     const sortedParticipants = [...participants].sort((a, b) =>
       moment(a.time, "HH:mm:ss.SSS").diff(moment(b.time, "HH:mm:ss.SSS"))
     );
 
-    // Assign ranks and calculate differences
     const updatedParticipants = sortedParticipants.map((participant, index) => {
       const bestTime = moment(sortedParticipants[0].time, "HH:mm:ss.SSS");
       const currentTime = moment(participant.time, "HH:mm:ss.SSS");
 
-      // Calculate the difference from the best time
       const difference = moment
         .utc(currentTime.diff(bestTime))
         .format("HH:mm:ss.SSS");
 
-      // Calculate the gap from the previous participant
       const previousTime =
         index > 0
           ? moment(sortedParticipants[index - 1].time, "HH:mm:ss.SSS")
@@ -49,7 +49,20 @@ const RaceRankingTable = ({ participants, race }) => {
   }, [participants]);
 
   const handleFinalize = () => {
-    console.log("Finalizing the tournament...");
+    setIsModalOpen(true);
+  };
+
+  const confirmTally = () => {
+    console.log(rankedParticipants);
+    rankedParticipants.forEach((item) => {
+      addTally({
+        name: item.collegeName,
+        rank: item.rank || "Unranked",
+        event: item.sportsEvent,
+        tournamentName: race.tournament.tournamentName,
+      });
+    });
+    setIsModalOpen(false);
   };
 
   const getRankLabel = (rank) => {
@@ -79,10 +92,10 @@ const RaceRankingTable = ({ participants, race }) => {
 
   return (
     <>
-      {race.status === "Underway" && (
+      {race.status === "Awaiting_Review" && (
         <div className="flex justify-end items-center w-full mb-5">
           <Button color="success" className="mr-3" onClick={handleFinalize}>
-            Finalize Tournament
+            Submit to tally
           </Button>
         </div>
       )}
@@ -136,6 +149,20 @@ const RaceRankingTable = ({ participants, race }) => {
           </Table>
         </div>
       </div>
+      <Modal show={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <Modal.Header>Confirm Finalization</Modal.Header>
+        <Modal.Body>
+          <p>Are you sure you want to finalize and submit the tally?</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button color="success" onClick={confirmTally}>
+            Confirm
+          </Button>
+          <Button color="failure" onClick={() => setIsModalOpen(false)}>
+            Cancel
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };
