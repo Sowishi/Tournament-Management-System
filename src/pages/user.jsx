@@ -191,7 +191,13 @@ const User = () => {
   };
 
   const handleUploadDocument = () => {
-    handleCreateFile(file, fileLabel, currentUser.id, currentFolder.id);
+    handleCreateFile(
+      file,
+      fileLabel,
+      currentUser.id,
+      currentFolder.id,
+      currentUser.schoolRepresentative
+    );
     toast.success("Uploaded Successfully");
     setAddDocumentModal(false);
   };

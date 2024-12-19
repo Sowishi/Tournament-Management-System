@@ -73,7 +73,13 @@ const useCrudDocs = () => {
     }
   };
 
-  const handleCreateFile = async (file, fileLabel, ownerId, folderId) => {
+  const handleCreateFile = async (
+    file,
+    fileLabel,
+    ownerId,
+    folderId,
+    userFullName
+  ) => {
     try {
       // Reference to the specific folder's files sub-collection
       const folderRef = doc(db, "folders", folderId);
@@ -88,6 +94,15 @@ const useCrudDocs = () => {
       });
 
       toast.success("File created successfully.");
+
+      const notifRef = collection(db, "admin-notiications");
+      const message = `A user: ${userFullName} uploaded a document for ${fileLabel}`;
+      addDoc(notifRef, {
+        owner: ["Document Admin"],
+        message,
+        read: false,
+        createdAt: serverTimestamp(),
+      });
     } catch (error) {
       console.error("Error creating file: ", error);
       toast.error("Failed to create file.");

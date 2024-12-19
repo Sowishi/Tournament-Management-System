@@ -278,13 +278,7 @@ export function UsersTable() {
         handleClose={() => setRejectModal(false)}
       />
 
-      {filter.length <= 1 && (
-        <h1 className="text-white text-center text-3xl opacity-50 mt-20">
-          There's no user as of the moment...
-        </h1>
-      )}
-
-      {currentAdmin && filter.length >= 1 && (
+      {currentAdmin && (
         <Table>
           <Table.Head className="bg-slate-800">
             <Table.HeadCell className="bg-slate-800 text-white">
