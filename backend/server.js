@@ -452,7 +452,7 @@ app.put("/update-match-winner", async (req, res) => {
     api_key: apiKey,
     match: {
       scores_csv:
-        winnerID == "tie" ? "1-1" : winnerPlayer == "player1" ? "1-0" : "0-1",
+        winnerID == "tie" ? "1-1" : winnerPlayer == "player1" ? "3-0" : "0-3",
       winner_id: winnerID,
     },
   };

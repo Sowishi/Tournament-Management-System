@@ -174,6 +174,15 @@ export default function MatchCard({ match, id, client, tournament }) {
                 Player 2
               </Button>
             </Tooltip>
+            <Tooltip content={"Draw the game"}>
+              <Button
+                onClick={handleDraw}
+                color="pink"
+                className="w-32 hover:bg-pink-700"
+              >
+                Draw
+              </Button>
+            </Tooltip>
           </div>
         </div>
       )}
