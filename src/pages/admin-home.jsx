@@ -1,6 +1,6 @@
 import { Badge, Button, ListGroup, Spinner, Tabs } from "flowbite-react";
 import AdminLayout from "../layout/adminLayout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TmsInput from "../components/tmsInput";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../firebase";
@@ -27,6 +27,7 @@ import { TallyTableAdmin } from "../components/tallyTableAdmin";
 import { TallyTableEvent } from "../components/tallyTableEvent";
 import useUpdateUser from "../hooks/useUpdateUser";
 import useCrudTally from "../hooks/useCrudTally";
+import useCrudRace from "../hooks/useCrudRace";
 
 const AdminHome = () => {
   const [addPicModal, setAddPicModal] = useState(false);
@@ -60,6 +61,10 @@ const AdminHome = () => {
   const [selectedEventFilter, setSelectedEventFilter] = useState(
     currentAdmin?.role == "Master Admin" ? "all" : currentAdmin?.sportsEvent
   );
+
+  const [races, setRaces] = useState([]);
+
+  const { getRaces, deleteRace } = useCrudRace();
 
   const navigation = useNavigate();
   const {
@@ -182,6 +187,13 @@ const AdminHome = () => {
       }
     });
 
+    const racesData = races.filter((item) => {
+      const { tournament } = item;
+      if (tournament.tournamentEvent.includes(eventName)) {
+        return item;
+      }
+    });
+
     const userData = users.filter((user) => {
       if (user.assignEvent == eventName || user.sportsEvent == eventName) {
         return user;
@@ -200,6 +212,12 @@ const AdminHome = () => {
       });
     }
 
+    if (racesData.length >= 1) {
+      racesData.map((tournament) => {
+        deleteRace(tournament.id);
+      });
+    }
+
     if (tallyData.length >= 1) {
       tallyData.map((item) => {
         deleteTally(item.id);
@@ -210,6 +228,12 @@ const AdminHome = () => {
 
     setDeleteModal(false);
   };
+
+  useEffect(() => {
+    getRaces(setRaces);
+  }, []);
+
+  console.log(races);
 
   return (
     <AdminLayout>
