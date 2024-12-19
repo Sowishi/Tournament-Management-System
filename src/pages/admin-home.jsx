@@ -173,6 +173,12 @@ const AdminHome = () => {
   const handleDeleteEvent = () => {
     const eventName = selectedEvent.eventName;
 
+    const delegateData = collegeNameData.filter((item) => {
+      if (item.event == eventName) {
+        return item;
+      }
+    });
+
     const tallyData = tally.filter((item) => {
       const { event } = item;
       if (event.includes(eventName)) {
@@ -199,6 +205,12 @@ const AdminHome = () => {
         return user;
       }
     });
+
+    if (collegeNameData.length >= 1) {
+      delegateData.map((user) => {
+        deleteCollegeName(user.id);
+      });
+    }
 
     if (userData.length >= 1) {
       userData.map((user) => {
