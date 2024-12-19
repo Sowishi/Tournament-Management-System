@@ -1,4 +1,11 @@
-import { Button, Drawer, Dropdown, Sidebar, TextInput } from "flowbite-react";
+import {
+  Badge,
+  Button,
+  Drawer,
+  Dropdown,
+  Sidebar,
+  TextInput,
+} from "flowbite-react";
 import { useEffect, useState } from "react";
 import {
   HiSearch,
@@ -9,6 +16,7 @@ import {
   HiDesktopComputer,
   HiUsers,
   HiOutlineBell,
+  HiOutlineRss,
 } from "react-icons/hi";
 import { Link, useNavigate } from "react-router-dom";
 import { useStore } from "../zustand/store";
@@ -18,6 +26,7 @@ import logo from "../assets/logo2.png";
 import useGetEventName from "../hooks/useGetEventName";
 import { MdLogout } from "react-icons/md";
 import useAdminNotifiication from "../hooks/useCrudAdminNotification";
+import moment from "moment/moment";
 
 export default function AdminLayout({ children, client }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -84,7 +93,7 @@ export default function AdminLayout({ children, client }) {
     useAdminNotifiication();
 
   const filterNotif = notifications.filter((item) => {
-    if (item.ownerID == currentAdmin?.id) {
+    if (item.owner.includes(currentAdmin?.role)) {
       return item;
     }
   });
