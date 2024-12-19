@@ -3,12 +3,14 @@ import { FaTrophy, FaMedal } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import moment from "moment";
 import useCrudTally from "../hooks/useCrudTally";
+import useCrudRace from "../hooks/useCrudRace";
 
 const RaceRankingTable = ({ participants, race }) => {
   const [rankedParticipants, setRankedParticipants] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { addTally } = useCrudTally();
+  const { updateRaceStateComplete } = useCrudRace();
 
   const calculateRankingAndDifferences = () => {
     if (!participants || participants.length === 0) return;
@@ -61,6 +63,8 @@ const RaceRankingTable = ({ participants, race }) => {
         tournamentName: race.tournament.tournamentName,
       });
     });
+
+    updateRaceStateComplete(race.id);
     setIsModalOpen(false);
   };
 

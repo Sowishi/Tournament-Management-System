@@ -57,7 +57,7 @@ const ViewTimeTrial = () => {
       );
     }
 
-    if (status == "Awaiting_Review") {
+    if (status == "Awaiting_Review" || status == "Complete") {
       return (
         <RaceRankingTable race={race} participants={race.participants || []} />
       );

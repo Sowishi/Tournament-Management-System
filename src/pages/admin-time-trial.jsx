@@ -12,6 +12,7 @@ import { useStore } from "../zustand/store";
 import timeTrialSports from "../utils/timeTrialSport";
 import { FaClock } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { data } from "autoprefixer";
 
 const AdminTimeTrial = ({ client }) => {
   const [createModal, setCreateModal] = useState(false);
@@ -89,7 +90,6 @@ const AdminTimeTrial = ({ client }) => {
   };
 
   const handleDeleteTournament = () => {
-    console.log(`Deleting tournament with ID: ${selectedTournament?.id}`);
     setDeleteModal(false);
     toast.success("Tournament deleted successfully!");
     deleteRace(selectedTournament?.id);
@@ -100,6 +100,12 @@ const AdminTimeTrial = ({ client }) => {
   );
 
   const navigation = useNavigate();
+
+  const filterRaces = races.filter((race) => {
+    if (race.tournament.tournamentEvent == currentAdmin?.sportsEvent) {
+      return race;
+    }
+  });
 
   return (
     <AdminLayout client={client}>
@@ -218,7 +224,7 @@ const AdminTimeTrial = ({ client }) => {
             </div>
           )}
           {!loading &&
-            races.map((item) => (
+            filterRaces.map((item) => (
               <motion.div
                 key={item.id}
                 className="basis-full md:basis-3/12 my-5 p-5"

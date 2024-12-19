@@ -179,6 +179,11 @@ const useCrudRace = () => {
     }
   };
 
+  const updateRaceStateComplete = (id) => {
+    const docRef = doc(db, "races", id);
+    updateDoc(docRef, { status: "Complete" });
+  };
+
   return {
     addRace,
     getRaces,
@@ -188,6 +193,7 @@ const useCrudRace = () => {
     deleteParticipant,
     updateRaceState,
     finalizeRace,
+    updateRaceStateComplete,
   };
 };
 
