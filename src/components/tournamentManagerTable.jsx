@@ -53,6 +53,9 @@ export function TournamentManagerTable({ handleUpdateForms, data }) {
             Assigned Event
           </Table.HeadCell>
           <Table.HeadCell className="bg-slate-800 text-white">
+            Tournament Mode
+          </Table.HeadCell>
+          <Table.HeadCell className="bg-slate-800 text-white">
             Action
           </Table.HeadCell>
         </Table.Head>
@@ -72,6 +75,9 @@ export function TournamentManagerTable({ handleUpdateForms, data }) {
                 </Table.Cell>
                 <Table.Cell className="font-bold">
                   {user.assignEvent}
+                </Table.Cell>
+                <Table.Cell className="font-bold">
+                  {user.tournamentMode}
                 </Table.Cell>
 
                 <Table.Cell className="font-bold">

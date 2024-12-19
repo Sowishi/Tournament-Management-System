@@ -30,7 +30,11 @@ const Login = () => {
           setCurrentAdmin(user);
           userFound = true;
           if (user.role === "Tournament Manager") {
-            navigate(`/tournament/${user.tournamentID}`);
+            if (user.tournamentMode == "bracket") {
+              navigate(`/tournament/${user.tournamentID}`);
+            } else {
+              navigate(`/time-trial/${user.tournamentID}`);
+            }
           } else {
             navigate("/admin/home");
           }
