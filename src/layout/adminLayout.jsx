@@ -1,4 +1,4 @@
-import { Button, Drawer, Sidebar, TextInput } from "flowbite-react";
+import { Button, Drawer, Dropdown, Sidebar, TextInput } from "flowbite-react";
 import { useEffect, useState } from "react";
 import {
   HiSearch,
@@ -8,6 +8,7 @@ import {
   HiOutlineCalendar,
   HiDesktopComputer,
   HiUsers,
+  HiOutlineBell,
 } from "react-icons/hi";
 import { Link, useNavigate } from "react-router-dom";
 import { useStore } from "../zustand/store";
@@ -16,6 +17,7 @@ import { TbTournament } from "react-icons/tb";
 import logo from "../assets/logo2.png";
 import useGetEventName from "../hooks/useGetEventName";
 import { MdLogout } from "react-icons/md";
+import useAdminNotifiication from "../hooks/useCrudAdminNotification";
 
 export default function AdminLayout({ children, client }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -74,6 +76,24 @@ export default function AdminLayout({ children, client }) {
     }
   }, [data]);
 
+  const handleBellClick = () => {
+    markNotificationsAsRead(filterNotif);
+  };
+
+  const { data: notifications, markNotificationsAsRead } =
+    useAdminNotifiication();
+
+  const filterNotif = notifications.filter((item) => {
+    if (item.ownerID == currentAdmin?.id) {
+      return item;
+    }
+  });
+
+  const unreadNotif = filterNotif.filter((item) => {
+    if (!item.read) {
+      return item;
+    }
+  });
   return (
     <>
       <Drawer open={isOpen} onClose={handleClose}>
@@ -377,6 +397,96 @@ export default function AdminLayout({ children, client }) {
                   Logged in as: {getAdminRole(currentAdmin?.role)}
                 </p>
               </div>
+              {currentAdmin && (
+                <>
+                  {/* Notification Icon */}
+                  <Dropdown
+                    arrowIcon={false}
+                    inline
+                    label={
+                      <div className="relative" onClick={handleBellClick}>
+                        <HiOutlineBell
+                          className="ml-5"
+                          color="white"
+                          size={30}
+                        />
+                        {filterNotif.length > 0 && (
+                          <>
+                            {unreadNotif.length >= 1 && (
+                              <Badge
+                                color="failure"
+                                className="absolute -top-1 -right-2 rounded-full"
+                              >
+                                {unreadNotif.length}
+                              </Badge>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    }
+                  >
+                    {filterNotif.length > 0 ? (
+                      filterNotif.map((notification) => (
+                        <Dropdown.Item
+                          onClick={() => {
+                            if (
+                              notification.message
+                                .toLowerCase()
+                                .includes("scheduled")
+                            ) {
+                              navigation("/events");
+                            }
+                            if (
+                              notification.message.toLowerCase().includes("suc")
+                            ) {
+                              navigation("/user");
+                            }
+                          }}
+                          key={notification.id}
+                          className="flex items-center gap-3 py-3 px-4 bg-gray-100 hover:bg-gray-200 rounded-md transition-all"
+                        >
+                          {/* Icon */}
+                          <HiOutlineRss className="h-6 w-6 text-blue-500 flex-shrink-0" />
+
+                          {/* Message and Date */}
+                          <div className="flex flex-col items-start justify-start">
+                            <span
+                              className={`text-sm ${
+                                notification.unread
+                                  ? "font-bold text-black"
+                                  : "font-normal text-gray-700"
+                              }`}
+                            >
+                              {notification.message}
+                            </span>
+                            {/* Date and Time */}
+                            <h1>
+                              {moment(notification.createdAt.toDate()).format(
+                                "LLL"
+                              )}
+                            </h1>
+                          </div>
+                        </Dropdown.Item>
+                      ))
+                    ) : (
+                      <Dropdown.Item className="text-center text-gray-500">
+                        No notifications
+                      </Dropdown.Item>
+                    )}
+                    <Dropdown.Divider />
+                    {/* <Dropdown.Item>
+                                <Button
+                                  onClick={() => navigation("/notifications")}
+                                  color="info"
+                                  size="sm"
+                                  className="w-full"
+                                >
+                                  See All Notifications
+                                </Button>
+                              </Dropdown.Item> */}
+                  </Dropdown>
+                </>
+              )}
             </div>
           </div>
         )}
