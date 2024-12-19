@@ -74,6 +74,8 @@ export default function MatchCard({ match, id, client, tournament }) {
     setIsModalOpen(false);
   };
 
+  const tournamentMode = tournament.tournament_type || null;
+
   return (
     <Card
       className="max-w-sm md:w-96 sm:w-80 w-full my-5 p-5 border shadow-lg rounded-lg dark:bg-gray-800 dark:border-gray-700"
@@ -156,7 +158,7 @@ export default function MatchCard({ match, id, client, tournament }) {
       {matchData && (
         <div className="winner-selection text-center mt-5">
           <h5 className="text-lg text-white mb-3">Who is the winner?</h5>
-          <div className="flex justify-around items-center space-x-3">
+          <div className="flex justify-around items-center space-x-3 flex-wrap">
             <Tooltip content={player1?.name || "Player 1"}>
               <Button
                 onClick={() => openModal(match.player1_id)}
@@ -174,15 +176,17 @@ export default function MatchCard({ match, id, client, tournament }) {
                 Player 2
               </Button>
             </Tooltip>
-            <Tooltip content={"Draw the game"}>
-              <Button
-                onClick={handleDraw}
-                color="pink"
-                className="w-32 hover:bg-pink-700"
-              >
-                Draw
-              </Button>
-            </Tooltip>
+            {(tournamentMode == "round robin" || tournamentMode == "swiss") && (
+              <Tooltip content={"Draw the game"}>
+                <Button
+                  onClick={handleDraw}
+                  color="dark"
+                  className="w-32 hover:bg-pink-700 mt-5"
+                >
+                  Draw
+                </Button>
+              </Tooltip>
+            )}
           </div>
         </div>
       )}
