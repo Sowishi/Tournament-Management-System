@@ -135,7 +135,7 @@ const AdminHome = () => {
   };
 
   const handleUploadCollege = () => {
-    if (collegeName.length >= 1) {
+    if (collegeName.length >= 1 && selectedEvent.length >= 1) {
       addCollegeName({
         collegeName,
         selectedEventName:
@@ -147,7 +147,7 @@ const AdminHome = () => {
       toast.success("Successfully Added College Name");
       setCollegeName("");
     } else {
-      toast.error("Please enter your college name.");
+      toast.error("Please fill up the fields.");
     }
   };
 
