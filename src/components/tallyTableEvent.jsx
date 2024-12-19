@@ -77,7 +77,7 @@ export function TallyTableEvent() {
     }
     if (rank === 3) {
       acc[institution].Bronze += 1;
-      acc[institution].Points += parseInt(points?.Bronze); // Bronze = 5 points
+      acc[institution].Points += parseInt(points?.bronze); // Bronze = 5 points
       acc[institution].tournaments.push({
         tournamentName: item.tournamentName,
         medal: "Bronze",
@@ -126,6 +126,8 @@ export function TallyTableEvent() {
       handleFinalizeEvent(event);
     }
   };
+
+  console.log(sortedRankData);
 
   return (
     <div className="overflow-x-auto">

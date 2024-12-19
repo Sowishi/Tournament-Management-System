@@ -53,12 +53,11 @@ const RaceRankingTable = ({ participants, race }) => {
   };
 
   const confirmTally = () => {
-    console.log(rankedParticipants);
     rankedParticipants.forEach((item) => {
       addTally({
         name: item.collegeName,
         rank: item.rank || "Unranked",
-        event: item.sportsEvent,
+        event: `{"selectedCategory":"","selectedSport":"Badminton","selectedGender":"Men","eventName": "${item.sportsEvent}"}`,
         tournamentName: race.tournament.tournamentName,
       });
     });
