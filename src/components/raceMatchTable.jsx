@@ -47,23 +47,9 @@ const RaceMatchTable = ({ participants, race }) => {
       return acc;
     }, {})
   );
+  const [isFinalizeModalOpen, setIsFinalizeModalOpen] = useState(false);
 
-  const { deleteParticipant } = useCrudRace();
-
-  const openModal = (participant) => {
-    setSelectedParticipant(participant);
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setSelectedParticipant(null);
-    setIsModalOpen(false);
-  };
-
-  const handleDelete = () => {
-    deleteParticipant(race.id, selectedParticipant.id);
-    closeModal(); // Close the modal after deletion
-  };
+  const { finalizeRace } = useCrudRace();
 
   const handleTimeChange = (id, momentObj) => {
     if (!momentObj.isValid()) return;
@@ -82,12 +68,37 @@ const RaceMatchTable = ({ participants, race }) => {
     console.log(`Updated time for participant ${id}: ${formattedTime}`);
   };
 
+  const validateTimes = () => {
+    return participants.every((participant) => times[participant.id] !== "---");
+  };
+
+  const handleFinalize = () => {
+    if (!validateTimes()) {
+      alert("All participants must have a valid time before finalizing.");
+      return;
+    }
+
+    setIsFinalizeModalOpen(true);
+  };
+
+  const confirmFinalize = () => {
+    finalizeRace(race.id, times);
+    setIsFinalizeModalOpen(false);
+  };
+
   return (
-    <div className="w-full min-h-[600px] bg-gray-800 rounded-lg shadow-lg p-4">
-      <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-        <FaTrophy className="text-yellow-400" /> Race Participants
-      </h2>
-      <div className="overflow-x-auto">
+    <>
+      {race.status === "Underway" && (
+        <div className="flex justify-end items-center w-full mb-5">
+          <Button color="success" className="mr-3" onClick={handleFinalize}>
+            Finalize Tournament
+          </Button>
+        </div>
+      )}
+      <div className="w-full min-h-[600px] bg-gray-800 rounded-lg shadow-lg p-4">
+        <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+          <FaTrophy className="text-yellow-400" /> Race Participants
+        </h2>
         <Table hoverable={true}>
           <Table.Head className="bg-black">
             <Table.HeadCell className="px-6 py-3 uppercase bg-slate-900 text-white tracking-wider p-5">
@@ -135,30 +146,31 @@ const RaceMatchTable = ({ participants, race }) => {
             ))}
           </Table.Body>
         </Table>
-      </div>
 
-      {/* Confirmation Modal */}
-      <Modal show={isModalOpen} size="md" onClose={closeModal}>
-        <Modal.Header>Confirm Deletion</Modal.Header>
-        <Modal.Body>
-          <div className="text-gray-700">
-            Are you sure you want to delete{" "}
-            <span className="font-bold">
-              {selectedParticipant?.collegeName}
-            </span>
-            ? This action cannot be undone.
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button color="failure" onClick={handleDelete}>
-            Confirm
-          </Button>
-          <Button color="gray" onClick={closeModal}>
-            Cancel
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </div>
+        {/* Finalization Confirmation Modal */}
+        <Modal
+          show={isFinalizeModalOpen}
+          size="md"
+          onClose={() => setIsFinalizeModalOpen(false)}
+        >
+          <Modal.Header>Finalize Tournament</Modal.Header>
+          <Modal.Body>
+            <div className="text-gray-700">
+              Are you sure you want to finalize the tournament? This action
+              cannot be undone.
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button color="success" onClick={confirmFinalize}>
+              Confirm
+            </Button>
+            <Button color="gray" onClick={() => setIsFinalizeModalOpen(false)}>
+              Cancel
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    </>
   );
 };
 

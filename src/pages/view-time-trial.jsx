@@ -9,6 +9,7 @@ import useGetUsers from "../hooks/useGetUsers";
 import { toast } from "react-toastify";
 import RaceTableParticipants from "../components/raceTableParticipants";
 import RaceMatchTable from "../components/raceMatchTable";
+import RaceRankingTable from "../components/raceRankingTable";
 
 const ViewTimeTrial = () => {
   const { id } = useParams();
@@ -41,7 +42,6 @@ const ViewTimeTrial = () => {
   };
 
   function RenderTable({ status }) {
-    console.log(status);
     if (status == "Pending") {
       return (
         <RaceTableParticipants
@@ -54,6 +54,12 @@ const ViewTimeTrial = () => {
     if (status == "Underway") {
       return (
         <RaceMatchTable race={race} participants={race.participants || []} />
+      );
+    }
+
+    if (status == "Awaiting_Review") {
+      return (
+        <RaceRankingTable race={race} participants={race.participants || []} />
       );
     }
 
@@ -95,7 +101,7 @@ const ViewTimeTrial = () => {
             <p>Are you sure you want to start the tournament?</p>
           </TmsModal>
 
-          <div className="container mx-auto flex flex-col justify-starta items-start min-h-[85vh] my-10">
+          <div className="container mx-auto flex flex-col justify-starta items-start min-h-screen mt-20">
             <div className="flex items-center justify-between w-full mb-2">
               <div className="wrapper mb-5 flex items-center justify-center">
                 <Button
@@ -111,30 +117,32 @@ const ViewTimeTrial = () => {
                   </h1>
                   <Badge size={"lg"} className="ml-5 text-center">
                     <span className="text-xs md:text-lg text-center">
-                      Time Trial
+                      {race.status}
                     </span>
                   </Badge>
                 </div>
               </div>
-              <div className="flex">
-                <Button
-                  className="mr-3"
-                  onClick={() => {
-                    setAddModal(true);
-                  }}
-                >
-                  Add Participants
-                </Button>
-                {race.participants && (
+              {race.status == "Pending" && (
+                <div className="flex">
                   <Button
-                    color={"success"}
-                    onClick={() => setConfirmModal(true)}
-                    disabled={race.participants?.length <= 1}
+                    className="mr-3"
+                    onClick={() => {
+                      setAddModal(true);
+                    }}
                   >
-                    Start Tournament
+                    Add Participants
                   </Button>
-                )}
-              </div>
+                  {race.participants && (
+                    <Button
+                      color={"success"}
+                      onClick={() => setConfirmModal(true)}
+                      disabled={race.participants?.length <= 1}
+                    >
+                      Start Tournament
+                    </Button>
+                  )}
+                </div>
+              )}
             </div>
             <RenderTable status={race.status} />
           </div>

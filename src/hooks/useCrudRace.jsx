@@ -141,6 +141,44 @@ const useCrudRace = () => {
     updateDoc(docRef, { status: "Underway" });
   };
 
+  const finalizeRace = async (id, participantTimes) => {
+    try {
+      const raceRef = doc(db, "races", id);
+      const raceSnapshot = await getDoc(raceRef);
+
+      if (!raceSnapshot.exists()) {
+        console.error("Race not found");
+        return;
+      }
+
+      const raceData = raceSnapshot.data();
+      let participants = raceData.participants || [];
+
+      // Update participant times
+      participants = participants.map((participant) => {
+        if (participantTimes[participant.id]) {
+          return {
+            ...participant,
+            time: participantTimes[participant.id], // Assign the time from participantTimes
+          };
+        }
+        return participant;
+      });
+
+      // Update the race document with new status and participants
+      await updateDoc(raceRef, {
+        status: "Awaiting_Review",
+        participants,
+      });
+
+      console.log("Race finalized successfully.");
+      toast.success("Race finalized and status updated to Awaiting_Review.");
+    } catch (error) {
+      console.error("Error finalizing race:", error);
+      toast.error("Error finalizing race.");
+    }
+  };
+
   return {
     addRace,
     getRaces,
@@ -149,6 +187,7 @@ const useCrudRace = () => {
     addParticipants,
     deleteParticipant,
     updateRaceState,
+    finalizeRace,
   };
 };
 
