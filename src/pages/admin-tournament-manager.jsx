@@ -87,7 +87,14 @@ const AdminTournamentManager = () => {
           assignEvent: currentEvent.eventName,
           tournamentMode: selectedMode,
         });
-        sendEmail(forms);
+
+        sendEmail(
+          forms,
+          selectedMode == "bracket"
+            ? selectedTournament.tournament.name
+            : selectedRace.tournament.tournamentName
+        );
+
         toast.success("Successfully created admin.");
       }
       setCreateModal(false);

