@@ -14,6 +14,7 @@ const TmsInput = ({
   error,
   rightIcon,
   disable,
+  accept,
 }) => {
   return (
     <div>
@@ -26,6 +27,7 @@ const TmsInput = ({
         />
       </div>
       <TextInput
+        accept={accept}
         disabled={disable}
         addon={addOn}
         name={name}

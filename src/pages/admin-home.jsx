@@ -262,7 +262,11 @@ const AdminHome = () => {
         )}
         {!loading && (
           <div className="container p-10">
-            <TmsInput onChange={handleImageChange} type={"file"} />
+            <TmsInput
+              onChange={handleImageChange}
+              type={"file"}
+              accept=".jpg,image/jpeg"
+            />
           </div>
         )}
       </TmsModal>
