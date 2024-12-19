@@ -8,22 +8,24 @@ import AddParticipantsTable from "../components/addParticipantsTable";
 import useGetUsers from "../hooks/useGetUsers";
 import { toast } from "react-toastify";
 import RaceTableParticipants from "../components/raceTableParticipants";
+import RaceMatchTable from "../components/raceMatchTable";
 
 const ViewTimeTrial = () => {
   const { id } = useParams();
   const navigation = useNavigate();
   const [race, setRace] = useState();
-  const { getRace, addParticipants } = useCrudRace();
+  const { getRace, addParticipants, updateRaceState } = useCrudRace();
   const { data: users } = useGetUsers();
 
   const [addModal, setAddModal] = useState(false);
+  const [confirmModal, setConfirmModal] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
 
   useEffect(() => {
     getRace(id, setRace);
   }, [id]);
 
-  const handleAddParticpant = async () => {
+  const handleAddParticipant = async () => {
     if (selectedUsers.length < 1) {
       toast.error("Please select at least one participant.");
       return;
@@ -32,12 +34,44 @@ const ViewTimeTrial = () => {
     setAddModal(false);
   };
 
+  const handleStartTournament = () => {
+    setConfirmModal(false);
+    updateRaceState(id);
+    toast.success("Tournament started successfully!");
+  };
+
+  function RenderTable({ status }) {
+    console.log(status);
+    if (status == "Pending") {
+      return (
+        <RaceTableParticipants
+          race={race}
+          participants={race.participants || []}
+        />
+      );
+    }
+
+    if (status == "Underway") {
+      return (
+        <RaceMatchTable race={race} participants={race.participants || []} />
+      );
+    }
+
+    return (
+      <div className="container mx-auto flex justify-center items-center">
+        <h1 className="text-white text-3xl mt-20 opacity-50">
+          There's no race data as of the moment...
+        </h1>
+      </div>
+    );
+  }
+
   return (
     <AdminLayout>
       {race ? (
         <>
           <TmsModal
-            onSubmit={handleAddParticpant}
+            onSubmit={handleAddParticipant}
             title={"Add Participant"}
             size={"5xl"}
             openModal={addModal}
@@ -50,17 +84,22 @@ const ViewTimeTrial = () => {
               users={users}
             />
           </TmsModal>
-          <div className="container mx-auto flex flex-col justify-center items-start min-h-[85vh]">
+
+          <TmsModal
+            onSubmit={handleStartTournament}
+            title={"Confirm Start"}
+            size={"md"}
+            openModal={confirmModal}
+            handleClose={() => setConfirmModal(false)}
+          >
+            <p>Are you sure you want to start the tournament?</p>
+          </TmsModal>
+
+          <div className="container mx-auto flex flex-col justify-starta items-start min-h-[85vh] my-10">
             <div className="flex items-center justify-between w-full mb-2">
-              <div className="wrapper mb-5 flex items-center justify-center f ">
+              <div className="wrapper mb-5 flex items-center justify-center">
                 <Button
                   color={"dark"}
-                  onClick={() => setOpenMenu(!openMenu)}
-                  className="mr-5"
-                >
-                  Menu
-                </Button>
-                <Button
                   onClick={() => navigation("/admin/time-trial")}
                   className="mr-5"
                 >
@@ -86,14 +125,18 @@ const ViewTimeTrial = () => {
                 >
                   Add Participants
                 </Button>
-                <Button color={"success"}>Start Tournament</Button>
+                {race.participants && (
+                  <Button
+                    color={"success"}
+                    onClick={() => setConfirmModal(true)}
+                    disabled={race.participants?.length <= 1}
+                  >
+                    Start Tournament
+                  </Button>
+                )}
               </div>
             </div>
-
-            <RaceTableParticipants
-              race={race}
-              participants={race.participants || []}
-            />
+            <RenderTable status={race.status} />
           </div>
         </>
       ) : (

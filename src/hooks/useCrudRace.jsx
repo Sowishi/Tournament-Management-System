@@ -30,7 +30,11 @@ const useCrudRace = () => {
   const addRace = async (data) => {
     try {
       const colRef = collection(db, "races");
-      await addDoc(colRef, { ...data, timestamp: serverTimestamp() });
+      await addDoc(colRef, {
+        ...data,
+        timestamp: serverTimestamp(),
+        status: "Pending",
+      });
       console.log("Race added successfully");
     } catch (error) {
       console.error("Error adding race:", error);
@@ -132,6 +136,11 @@ const useCrudRace = () => {
     }
   };
 
+  const updateRaceState = (id) => {
+    const docRef = doc(db, "races", id);
+    updateDoc(docRef, { status: "Underway" });
+  };
+
   return {
     addRace,
     getRaces,
@@ -139,6 +148,7 @@ const useCrudRace = () => {
     getRace,
     addParticipants,
     deleteParticipant,
+    updateRaceState,
   };
 };
 
