@@ -1,12 +1,55 @@
 import { Button, Table, Modal } from "flowbite-react";
-import { FaTrophy, FaTrashAlt } from "react-icons/fa";
+import { FaTrophy } from "react-icons/fa";
 import { useState } from "react";
 import useCrudRace from "../hooks/useCrudRace";
+import Datetime from "react-datetime";
+import "react-datetime/css/react-datetime.css";
+import moment from "moment";
+
+const formatTime = (time) => {
+  if (!time) return "---";
+
+  const totalMilliseconds = parseInt(time, 10); // Ensure time is a number
+  const hours = Math.floor(totalMilliseconds / (60 * 60 * 1000));
+  const minutes = Math.floor(
+    (totalMilliseconds % (60 * 60 * 1000)) / (60 * 1000)
+  );
+  const seconds = Math.floor((totalMilliseconds % (60 * 1000)) / 1000);
+  const milliseconds = totalMilliseconds % 1000;
+
+  return `${hours.toString().padStart(2, "0")}:${minutes
+    .toString()
+    .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}.${milliseconds
+    .toString()
+    .padStart(3, "0")}`;
+};
+
+const parseTimeInput = (timeString) => {
+  const [hours, minutes, seconds, milliseconds] = timeString
+    .split(/[:.]/)
+    .map(Number);
+
+  const totalMilliseconds =
+    (hours || 0) * 60 * 60 * 1000 +
+    (minutes || 0) * 60 * 1000 +
+    (seconds || 0) * 1000 +
+    (milliseconds || 0);
+
+  return totalMilliseconds;
+};
 
 const RaceMatchTable = ({ participants, race }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedParticipant, setSelectedParticipant] = useState(null);
+  const [times, setTimes] = useState(
+    participants.reduce((acc, item) => {
+      acc[item.id] = item.time ? formatTime(item.time) : "---";
+      return acc;
+    }, {})
+  );
+
   const { deleteParticipant } = useCrudRace();
+
   const openModal = (participant) => {
     setSelectedParticipant(participant);
     setIsModalOpen(true);
@@ -20,6 +63,23 @@ const RaceMatchTable = ({ participants, race }) => {
   const handleDelete = () => {
     deleteParticipant(race.id, selectedParticipant.id);
     closeModal(); // Close the modal after deletion
+  };
+
+  const handleTimeChange = (id, momentObj) => {
+    if (!momentObj.isValid()) return;
+
+    const timeString = momentObj.format("HH:mm:ss.SSS"); // Format to "HH:mm:ss.SSS"
+    const timeInMs = parseTimeInput(timeString);
+
+    setTimes((prev) => ({
+      ...prev,
+      [id]: timeString,
+    }));
+
+    // Convert the time to "HH-MM-SS-SSS" format
+    const formattedTime = momentObj.format("HH-mm-ss-SSS");
+
+    console.log(`Updated time for participant ${id}: ${formattedTime}`);
   };
 
   return (
@@ -44,9 +104,9 @@ const RaceMatchTable = ({ participants, race }) => {
             </Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y divide-gray-700">
-            {participants.map((item, index) => (
+            {participants.map((item) => (
               <Table.Row
-                key={index}
+                key={item.id}
                 className="bg-gray-800 hover:bg-gray-700 transition-colors duration-200"
               >
                 <Table.Cell className="px-6 py-4 text-lg font-bold">
@@ -56,7 +116,17 @@ const RaceMatchTable = ({ participants, race }) => {
                   {item.collegeName}
                 </Table.Cell>
                 <Table.Cell className="px-6 py-4 text-lg font-bold">
-                  {item.time || "---"}
+                  <Datetime
+                    dateFormat={false}
+                    timeFormat="HH:mm:ss.SSS"
+                    value={times[item.id] === "---" ? "" : times[item.id]}
+                    onChange={(moment) => handleTimeChange(item.id, moment)}
+                    className="text-black"
+                    inputProps={{
+                      placeholder: "hh:mm:ss:ms", // Placeholder text
+                      readOnly: true,
+                    }}
+                  />
                 </Table.Cell>
                 <Table.Cell className="px-6 py-4 text-lg font-bold">
                   {item.diff || "---"}
