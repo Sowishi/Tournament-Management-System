@@ -34,6 +34,8 @@ export default function TournamentCardRace({
     }
   }, [data.categories]);
 
+  console.log(data);
+
   return (
     <Card
       className="max-w-sm min-h-[29rem] border flex flex-col justify-between"

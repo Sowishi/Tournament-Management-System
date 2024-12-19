@@ -1,15 +1,12 @@
-import { Button, Table, Modal } from "flowbite-react";
-import { FaTrophy } from "react-icons/fa";
-import { useState } from "react";
-import useCrudRace from "../hooks/useCrudRace";
-import Datetime from "react-datetime";
-import "react-datetime/css/react-datetime.css";
+import { Button, Table } from "flowbite-react";
+import { FaTrophy, FaMedal } from "react-icons/fa";
+import { useState, useEffect } from "react";
 import moment from "moment";
 
 const RaceRankingTable = ({ participants, race }) => {
   const [rankedParticipants, setRankedParticipants] = useState([]);
 
-  const calculateRankingAndDifference = () => {
+  const calculateRankingAndDifferences = () => {
     if (!participants || participants.length === 0) return;
 
     // Sort participants by time in ascending order
@@ -21,28 +18,63 @@ const RaceRankingTable = ({ participants, race }) => {
     const updatedParticipants = sortedParticipants.map((participant, index) => {
       const bestTime = moment(sortedParticipants[0].time, "HH:mm:ss.SSS");
       const currentTime = moment(participant.time, "HH:mm:ss.SSS");
+
+      // Calculate the difference from the best time
       const difference = moment
         .utc(currentTime.diff(bestTime))
         .format("HH:mm:ss.SSS");
 
+      // Calculate the gap from the previous participant
+      const previousTime =
+        index > 0
+          ? moment(sortedParticipants[index - 1].time, "HH:mm:ss.SSS")
+          : null;
+      const gap = previousTime
+        ? moment.utc(currentTime.diff(previousTime)).format("HH:mm:ss.SSS")
+        : "00:00:00.000";
+
       return {
         ...participant,
         rank: index + 1,
-        diff: index === 0 ? "00:00:00.000" : difference, // No difference for the first-place participant
+        diff: index === 0 ? "00:00:00.000" : difference,
+        gap: index === 0 ? "00:00:00.000" : gap,
       };
     });
 
     setRankedParticipants(updatedParticipants);
   };
 
-  // Recalculate ranking and difference when participants change
-  useState(() => {
-    calculateRankingAndDifference();
+  useEffect(() => {
+    calculateRankingAndDifferences();
   }, [participants]);
 
   const handleFinalize = () => {
-    // Logic to finalize the tournament
     console.log("Finalizing the tournament...");
+  };
+
+  const getRankLabel = (rank) => {
+    if (rank === 1) {
+      return (
+        <span className="flex items-center gap-2 text-yellow-400">
+          <FaMedal className="text-yellow-400" /> Top 1
+        </span>
+      );
+    }
+    if (rank === 2) {
+      return (
+        <span className="flex items-center gap-2 text-gray-400">
+          <FaMedal className="text-gray-400" /> Top 2
+        </span>
+      );
+    }
+    if (rank === 3) {
+      return (
+        <span className="flex items-center gap-2 text-orange-500">
+          <FaMedal className="text-orange-500" /> Top 3
+        </span>
+      );
+    }
+    return rank;
   };
 
   return (
@@ -73,6 +105,9 @@ const RaceRankingTable = ({ participants, race }) => {
               <Table.HeadCell className="px-6 py-3 uppercase tracking-wider p-5 bg-slate-900 text-white">
                 Difference
               </Table.HeadCell>
+              <Table.HeadCell className="px-6 py-3 uppercase tracking-wider p-5 bg-slate-900 text-white">
+                Gap
+              </Table.HeadCell>
             </Table.Head>
             <Table.Body className="divide-y divide-gray-700">
               {rankedParticipants.map((item) => (
@@ -81,7 +116,7 @@ const RaceRankingTable = ({ participants, race }) => {
                   className="bg-gray-800 hover:bg-gray-700 transition-colors duration-200"
                 >
                   <Table.Cell className="px-6 py-4 text-lg font-bold">
-                    {item.rank}
+                    {getRankLabel(item.rank)}
                   </Table.Cell>
                   <Table.Cell className="px-6 py-4 text-lg font-bold">
                     {item.collegeName}
@@ -91,6 +126,9 @@ const RaceRankingTable = ({ participants, race }) => {
                   </Table.Cell>
                   <Table.Cell className="px-6 py-4 text-lg font-bold">
                     {item.diff}
+                  </Table.Cell>
+                  <Table.Cell className="px-6 py-4 text-lg font-bold">
+                    {item.gap}
                   </Table.Cell>
                 </Table.Row>
               ))}
