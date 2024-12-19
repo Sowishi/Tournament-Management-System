@@ -170,6 +170,15 @@ const AdminHome = () => {
     }
   });
 
+  const activeUsersEvent = users.filter((user) => {
+    if (
+      user.status == "Approved" &&
+      user.sportsEvent == currentAdmin?.sportsEvent
+    ) {
+      return user;
+    }
+  });
+
   const handleDeleteEvent = () => {
     const eventName = selectedEvent.eventName;
 
@@ -244,8 +253,6 @@ const AdminHome = () => {
   useEffect(() => {
     getRaces(setRaces);
   }, []);
-
-  console.log(races);
 
   return (
     <AdminLayout>
@@ -355,7 +362,11 @@ const AdminHome = () => {
           >
             <div>
               <h4 className="text-2xl font-bold">Users</h4>
-              <p>{activeUsers?.length}</p>
+              <p>
+                {currentAdmin.role == "Master Admin"
+                  ? activeUsers?.length
+                  : activeUsersEvent?.length}
+              </p>
             </div>
             <Badge color="info" size={"lg"}>
               Active Users
@@ -378,6 +389,7 @@ const AdminHome = () => {
             </Badge>
           </motion.div>
         </div>
+
         <Tabs className="mx-3" aria-label="Default tabs" variant="default">
           {currentAdmin?.role == "Master Admin" && (
             <Tabs.Item active title="Carousel">
