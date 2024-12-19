@@ -14,7 +14,7 @@ import { FaClock } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { data } from "autoprefixer";
 
-const AdminTimeTrial = ({ client }) => {
+const AdminTimeTrial = ({ client, userEvent }) => {
   const [createModal, setCreateModal] = useState(false);
   const [confirmModal, setConfirmModal] = useState(false); // Confirmation modal for add
   const [deleteModal, setDeleteModal] = useState(false); // Confirmation modal for delete
@@ -107,6 +107,51 @@ const AdminTimeTrial = ({ client }) => {
     }
   });
 
+  if (client) {
+    const filterRaces = races.filter((race) => {
+      if (race.tournament.tournamentEvent == userEvent) {
+        return race;
+      }
+    });
+
+    return (
+      <div className="container mx-auto px-5 my-10">
+        <div className="flex flex-wrap">
+          {loading && (
+            <div className="flex justify-center items-center w-full p-20">
+              <Spinner size={"lg"} />
+            </div>
+          )}
+          {!loading &&
+            filterRaces.map((item) => (
+              <motion.div
+                key={item.id}
+                className="basis-full md:basis-3/12 my-5 p-5"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.3 }}
+              >
+                <TournamentCardRace
+                  client={client}
+                  tournament={item}
+                  onDelete={() => {
+                    setSelectedTournament(item);
+                    setDeleteModal(true);
+                  }}
+                />
+              </motion.div>
+            ))}
+          {filterRaces.length === 0 && !loading && (
+            <h1 className="text-white opacity-50 font-bold text-2xl text-center p-20 w-full">
+              There's no tournaments at the moment...
+            </h1>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <AdminLayout client={client}>
       {/* Tournament Creation Modal */}
@@ -192,7 +237,7 @@ const AdminTimeTrial = ({ client }) => {
 
       {/* Tournaments List */}
       <div className="container mx-auto px-5 my-10">
-        {!client && currentAdmin.role !== "Tournament Manager" && (
+        {!client && currentAdmin?.role !== "Tournament Manager" && (
           <div className="flex justify-between items-center mb-5">
             <div className="flex items-center justify-start ">
               <Button
@@ -243,7 +288,7 @@ const AdminTimeTrial = ({ client }) => {
                 />
               </motion.div>
             ))}
-          {races.length === 0 && !loading && (
+          {filterRaces.length === 0 && !loading && (
             <h1 className="text-white opacity-50 font-bold text-2xl text-center p-20 w-full">
               There's no tournaments at the moment...
             </h1>
