@@ -1,5 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
+import DefaultLayout from "../layout/defaultLayout";
 import AdminLayout from "../layout/adminLayout";
+
 import { Badge, Button } from "flowbite-react";
 import { useEffect, useState } from "react";
 import useCrudRace from "../hooks/useCrudRace";
@@ -13,6 +15,10 @@ import RaceRankingTable from "../components/raceRankingTable";
 
 const ViewTimeTrial = () => {
   const { id } = useParams();
+  const queryParams = new URLSearchParams(location.search);
+
+  const client = queryParams.get("client");
+
   const navigation = useNavigate();
   const [race, setRace] = useState();
   const { getRace, addParticipants, updateRaceState } = useCrudRace();
@@ -42,6 +48,16 @@ const ViewTimeTrial = () => {
   };
 
   function RenderTable({ status }) {
+    if (client) {
+      return (
+        <RaceRankingTable
+          client={true}
+          race={race}
+          participants={race.participants || []}
+        />
+      );
+    }
+
     if (status == "Pending") {
       return (
         <RaceTableParticipants
@@ -69,6 +85,70 @@ const ViewTimeTrial = () => {
           There's no race data as of the moment...
         </h1>
       </div>
+    );
+  }
+
+  if (client == "true") {
+    return (
+      <DefaultLayout client={true}>
+        {race ? (
+          <>
+            <div className="container mx-auto flex flex-col justify-starta items-start min-h-screen p-20 ">
+              <div className="flex items-center justify-between w-full mb-2">
+                <div className="wrapper mb-5 flex items-center justify-center">
+                  <Button
+                    color={"dark"}
+                    onClick={() => {
+                      if (client) {
+                        navigation("/events");
+                      } else {
+                        navigation("/admin/time-trial");
+                      }
+                    }}
+                    className="mr-5"
+                  >
+                    Back
+                  </Button>
+                  <div className="flex justify-center items-center">
+                    <h1 className="text-white text-sm md:text-3xl font-bold ">
+                      {race.tournament.tournamentName}
+                    </h1>
+                    <Badge size={"lg"} className="ml-5 text-center">
+                      <span className="text-xs md:text-lg text-center">
+                        {race.status}
+                      </span>
+                    </Badge>
+                  </div>
+                </div>
+                {race.status == "Pending" && !client && (
+                  <div className="flex">
+                    <Button
+                      className="mr-3"
+                      onClick={() => {
+                        setAddModal(true);
+                      }}
+                    >
+                      Add Participants
+                    </Button>
+                    {race.participants && (
+                      <Button
+                        color={"success"}
+                        onClick={() => setConfirmModal(true)}
+                        disabled={race.participants?.length <= 1}
+                      >
+                        Start Tournament
+                      </Button>
+                    )}
+                  </div>
+                )}
+              </div>
+              <RenderTable status={race.status} />
+            </div>
+          </>
+        ) : (
+          <h1>Loading...</h1>
+        )}
+      </DefaultLayout>
     );
   }
 
@@ -101,12 +181,18 @@ const ViewTimeTrial = () => {
             <p>Are you sure you want to start the tournament?</p>
           </TmsModal>
 
-          <div className="container mx-auto flex flex-col justify-starta items-start min-h-screen mt-20">
+          <div className="container mx-auto flex flex-col justify-starta items-start min-h-screen mt-20 ">
             <div className="flex items-center justify-between w-full mb-2">
               <div className="wrapper mb-5 flex items-center justify-center">
                 <Button
                   color={"dark"}
-                  onClick={() => navigation("/admin/time-trial")}
+                  onClick={() => {
+                    if (client) {
+                      navigation("/events");
+                    } else {
+                      navigation("/admin/time-trial");
+                    }
+                  }}
                   className="mr-5"
                 >
                   Back

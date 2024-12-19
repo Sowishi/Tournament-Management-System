@@ -104,11 +104,6 @@ export default function AdminLayout({ children, client }) {
     }
   });
 
-  const playAudio = () => {
-    const audio = new Audio("../assets/mixkit-bell-notification-933.wav");
-    audio.play();
-  };
-
   return (
     <>
       <Drawer open={isOpen} onClose={handleClose}>
@@ -381,7 +376,7 @@ export default function AdminLayout({ children, client }) {
       </Drawer>
       <div
         className={`w-full ${
-          client ? "background-[#FC7F72]" : "bg-slate-950"
+          client ? "bg-[#FDF2F2]" : "bg-slate-950"
         } min-h-screen `}
       >
         {!client && (

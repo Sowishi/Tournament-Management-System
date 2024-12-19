@@ -5,7 +5,7 @@ import moment from "moment";
 import useCrudTally from "../hooks/useCrudTally";
 import useCrudRace from "../hooks/useCrudRace";
 
-const RaceRankingTable = ({ participants, race }) => {
+const RaceRankingTable = ({ participants, race, client }) => {
   const [rankedParticipants, setRankedParticipants] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -95,7 +95,7 @@ const RaceRankingTable = ({ participants, race }) => {
 
   return (
     <>
-      {race.status === "Awaiting_Review" && (
+      {race.status === "Awaiting_Review" && !client && (
         <div className="flex justify-end items-center w-full mb-5">
           <Button color="success" className="mr-3" onClick={handleFinalize}>
             Submit to tally
