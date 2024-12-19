@@ -6,6 +6,9 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import useCrudTally from "../hooks/useCrudTally";
 import { toast } from "react-toastify";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { db } from "../../firebase";
+import { useStore } from "../zustand/store";
 
 export default function RankingTable({
   participants,
@@ -21,6 +24,8 @@ export default function RankingTable({
   const [tallyModal, setTallyModal] = useState(false);
   const [tallyButtonVisible, setTallyButtonVisible] = useState(true);
   const { addTally } = useCrudTally();
+
+  const { currentAdmin } = useStore();
 
   const sortedParticipants = [...participants].sort((a, b) => {
     const rankA = a.participant.final_rank || Infinity;
@@ -42,9 +47,22 @@ export default function RankingTable({
   const handleAddTally = async () => {
     const output = await handleGetParticipants();
     output.data.forEach((item) => {
+      const rank = item.participant.final_rank || "Unranked";
+
+      // Check and log the participant with rank 1
+      if (rank === 1) {
+        addDoc(collection(db, "notifications"), {
+          message: `${item.participant.name} won the tournament: ${tournament.name}`,
+          ownerID: "all",
+          createdAt: serverTimestamp(),
+          read: false,
+          event: currentAdmin.sportsEvent,
+        });
+      }
+
       addTally({
         name: item.participant.name,
-        rank: item.participant.final_rank || "Unranked",
+        rank: rank,
         event: tournament.description,
         tournamentName: tournament.name,
       });
@@ -53,8 +71,6 @@ export default function RankingTable({
     setTallyModal(false);
     toast.success("Successfully added to tally");
   };
-
-  console.log(participants);
 
   return (
     <div className="overflow-x-auto">

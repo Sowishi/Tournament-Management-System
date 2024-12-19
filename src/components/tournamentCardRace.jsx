@@ -80,10 +80,10 @@ export default function TournamentCardRace({
               Time Trial
             </Badge>
           </div>
-          <h1 className="text-white font-bold text-md mt-5 flex items-center">
+          {/* <h1 className="text-white font-bold text-md mt-5 flex items-center">
             <HiOutlineUsers className="mr-1" />
             Participants: {data.participants_count || 0}
-          </h1>
+          </h1> */}
           <h1 className="text-white font-bold text-md flex items-center">
             <HiOutlineSpeakerphone className="mr-1" />
             Event: {data?.tournamentEvent}
