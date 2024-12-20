@@ -393,16 +393,26 @@ export default function AdminLayout({ children, client }) {
             />
             <div className="wrapper mx-10 flex items-center justify-start">
               <div className="flex flex-col">
-                <h1 className="text-white textt-sm md:text-2xl">
+                <div className="flex items-center justify-start">
+                  <h1 className="text-white textt-sm md:text-2xl">
+                    {currentAdmin?.role !== "Master Admin" && (
+                      <>
+                        {currentAdmin?.fullName} |{" "}
+                        {currentAdmin?.sportsEvent
+                          ? currentAdmin?.sportsEvent
+                          : currentAdmin?.assignEvent}
+                      </>
+                    )}
+                  </h1>
                   {currentAdmin?.role !== "Master Admin" && (
-                    <>
-                      {currentAdmin?.fullName} |{" "}
-                      {currentAdmin?.sportsEvent
-                        ? currentAdmin?.sportsEvent
-                        : currentAdmin?.assignEvent}
-                    </>
+                    <Badge size={"lg"} className="ml-3">
+                      {currentEvent?.status
+                        ? currentEvent?.status
+                        : "Active - Ongoing"}
+                    </Badge>
                   )}
-                </h1>
+                </div>
+
                 <p className="text-blue-500 text-lg">
                   Logged in as: {getAdminRole(currentAdmin?.role)}
                 </p>
