@@ -135,19 +135,30 @@ const AdminHome = () => {
   };
 
   const handleUploadCollege = () => {
-    if (collegeName.length >= 1 && selectedEvent.length >= 1) {
-      addCollegeName({
-        collegeName,
-        selectedEventName:
-          currentAdmin?.role == "Master Admin"
-            ? selectedEventName
-            : currentAdmin?.sportsEvent,
-      });
-      setAddCollegeModal(false);
-      toast.success("Successfully Added College Name");
-      setCollegeName("");
+    if (currentAdmin?.role == "Master Admin") {
+      if (collegeName.length >= 1 && selectedEventName?.length >= 1) {
+        addCollegeName({
+          collegeName,
+          selectedEventName: selectedEventName,
+        });
+        setAddCollegeModal(false);
+        toast.success("Successfully Added Delegate Name");
+        setCollegeName("");
+      } else {
+        toast.error("Please fill up the fields.");
+      }
     } else {
-      toast.error("Please fill up the fields.");
+      if (collegeName.length >= 1) {
+        addCollegeName({
+          collegeName,
+          selectedEventName: currentAdmin?.sportsEvent,
+        });
+        setAddCollegeModal(false);
+        toast.success("Successfully Added Delegate Name");
+        setCollegeName("");
+      } else {
+        toast.error("Delegates Name is Missing");
+      }
     }
   };
 
@@ -476,8 +487,18 @@ const AdminHome = () => {
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.5, delay: 0.2 }}
                       >
-                        <td className="text-dark py-3 px-4 text-white">
-                          {event.eventName}
+                        <td className="text-dark py-3 px-4 text-white text-3xl font-bold">
+                          <div className="flex items-center justify-start">
+                            {event.eventName}
+                            <Badge
+                              color={
+                                event.status == "complete" ? "success" : "light"
+                              }
+                              className="ml-5"
+                            >
+                              {event.status ? event.status : "Active - Ongoing"}
+                            </Badge>
+                          </div>
                         </td>
                         <td className="py-3 px-4 text-right items-center flex justify-center">
                           <Button
@@ -518,17 +539,19 @@ const AdminHome = () => {
               </div>
 
               {currentAdmin.role == "Master Admin" && (
-                <TmsSelect
-                  onChange={(event) =>
-                    setSelectedEventFilter(event.target.value)
-                  }
-                  dark
-                  label={"Select Event Name"}
-                  data={["all", ...formatEventNames]}
-                />
+                <div className="flex">
+                  <TmsSelect
+                    onChange={(event) =>
+                      setSelectedEventFilter(event.target.value)
+                    }
+                    dark
+                    label={"Select Event Name"}
+                    data={["all", ...formatEventNames]}
+                  />
+                </div>
               )}
 
-              <table className="min-w-full bg-gray-800 rounded-md shadow-md mt-5">
+              <table className="min-w-full bg-gray-800 rounded-md shadow-md mt-5 mb-20">
                 <thead>
                   <tr className="text-white">
                     <th className="py-3 px-4 text-left">Delegates</th>
@@ -544,8 +567,14 @@ const AdminHome = () => {
                       transition={{ duration: 0.5, delay: 0.2 }}
                     >
                       <td className="text-dark py-3 px-4 text-white">
-                        {college.collegeName}
+                        <div className="flex justify-start items-center">
+                          <h1 className="text-3xl font-bold">
+                            {college.collegeName}
+                          </h1>
+                          <Badge className="ml-3">{college.event}</Badge>
+                        </div>
                       </td>
+
                       <td className="py-3 px-4 text-right flex items-center justify-center">
                         {!currentEvent?.status && (
                           <Button
