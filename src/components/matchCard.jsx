@@ -174,7 +174,7 @@ export default function MatchCard({ match, id, client, tournament }) {
                 onClick={() => openModal(match.player1_id)}
                 className="w-32 hover:bg-blue-700"
               >
-                Player 1
+                {player1?.name}
               </Button>
             </Tooltip>
             <Tooltip content={player2?.name || "Player 2"}>
@@ -183,7 +183,7 @@ export default function MatchCard({ match, id, client, tournament }) {
                 color="pink"
                 className="w-32 hover:bg-pink-700"
               >
-                Player 2
+                {player2?.name}
               </Button>
             </Tooltip>
             {(tournamentMode == "round robin" || tournamentMode == "swiss") && (
