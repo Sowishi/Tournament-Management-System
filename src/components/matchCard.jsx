@@ -187,7 +187,7 @@ export default function MatchCard({ match, id, client, tournament }) {
               </Button>
             </Tooltip>
             {(tournamentMode == "round robin" || tournamentMode == "swiss") && (
-              <Tooltip content={"Draw the game"}>
+              <Tooltip content={"Declare a draw"}>
                 <Button
                   onClick={handleDraw}
                   color="dark"

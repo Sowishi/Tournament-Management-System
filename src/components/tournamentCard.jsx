@@ -163,7 +163,7 @@ export default function TournamentCard({
           {!client && (
             <Button
               className="mt-3"
-              color={"failure"}
+              color={"info"}
               onClick={() => {
                 navigate(`/admin/reports/${data.url}`);
               }}

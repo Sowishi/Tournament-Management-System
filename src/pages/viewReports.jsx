@@ -27,7 +27,7 @@ import MatchCardReport from "../components/matchCardReport";
 import ParticipantsTablesReport from "../components/participantsTableReport";
 import RankingTableReports from "../components/rankingTableReport";
 import { data } from "autoprefixer";
-import { usePDF } from "react-to-pdf";
+import { usePDF, Resolution, Margin } from "react-to-pdf";
 
 const ViewReports = () => {
   const localizer = momentLocalizer(moment);
@@ -57,7 +57,17 @@ const ViewReports = () => {
   const [openMenu, setOpenMenu] = useState(false);
   const [tournaInfo, setTournaInfo] = useState(null);
 
-  const { toPDF, targetRef } = usePDF({ filename: `${tournament?.name}.pdf` });
+  const { toPDF, targetRef } = usePDF({
+    filename: `${tournament?.name}.pdf`,
+    page: {
+      // margin is in MM, default is Margin.NONE = 0
+      margin: Margin.SMALL,
+      // default is 'A4'
+      format: "letter",
+      // default is 'portrait'
+      orientation: "portrait",
+    },
+  });
 
   useEffect(() => {
     if (tournament?.description) {
@@ -245,8 +255,21 @@ const ViewReports = () => {
 
         {/* Generate Reports Content */}
 
-        <div ref={targetRef}>
+        <div
+          style={{
+            border: "1px solid #ccc", // Optional border for visualization
+            backgroundColor: "#f9f9f9", // Optional background color
+            padding: 50,
+          }}
+          ref={targetRef}
+        >
           {/* Mathces Data */}
+
+          <div className="flex justify-between items-center">
+            <h1>Date: {new moment(Date()).format("LLL")}</h1>
+            <h1>Page number: 1 </h1>
+          </div>
+
           <div className="flex flex-col items-center justify-center my-20">
             <h1 className="text-dark text-sm md:text-5xl text-center font-bold mb-5">
               Tournament Name: {tournament?.name}
@@ -314,7 +337,7 @@ const ViewReports = () => {
             </div>
           </>
           <>
-            <div className="wrapper flex items-center my-5">
+            <div className="wrapper flex items-center mb-5 mt-20">
               <h1 className="text-dark text-3xl font-bold">
                 Schedule of Tournament
               </h1>

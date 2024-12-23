@@ -15,26 +15,33 @@ import {
 const SystemLogsComponent = () => {
   const { data: logs } = useCrudLogs();
   const [sortedLogs, setSortedLogs] = useState(logs || []);
-  const [sortOrder, setSortOrder] = useState("asc"); // Default sort order
-
-  // Function to sort logs by createdAt
-  const handleSort = () => {
-    const newSortOrder = sortOrder === "asc" ? "desc" : "asc";
-    const sorted = [...sortedLogs].sort((a, b) => {
-      if (newSortOrder === "asc") {
-        return new Date(a.createdAt.toDate()) - new Date(b.createdAt.toDate());
-      } else {
-        return new Date(b.createdAt.toDate()) - new Date(a.createdAt.toDate());
-      }
-    });
-    setSortedLogs(sorted);
-    setSortOrder(newSortOrder);
-  };
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Sync logs from the hook when it updates
   React.useEffect(() => {
     setSortedLogs(logs);
   }, [logs]);
+
+  // Handle search
+  const handleSearch = (event) => {
+    const term = event.target.value.toLowerCase();
+    setSearchTerm(term);
+
+    if (term === "") {
+      setSortedLogs(logs);
+    } else {
+      const filteredLogs = logs.filter(
+        (log) =>
+          log.label.toLowerCase().includes(term) ||
+          log.user.fullName.toLowerCase().includes(term) ||
+          moment(log.createdAt.toDate())
+            .format("LLL")
+            .toLowerCase()
+            .includes(term)
+      );
+      setSortedLogs(filteredLogs);
+    }
+  };
 
   // Define PDF document structure
   const LogsPDFDocument = () => (
@@ -72,13 +79,6 @@ const SystemLogsComponent = () => {
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-3xl font-bold">System Logs</h3>
           <div className="flex space-x-4">
-            <button
-              onClick={handleSort}
-              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
-            >
-              Sort by Date (
-              {sortOrder === "asc" ? "Oldest First" : "Newest First"})
-            </button>
             <PDFDownloadLink
               document={<LogsPDFDocument />}
               fileName="system_logs_report.pdf"
@@ -87,6 +87,16 @@ const SystemLogsComponent = () => {
               {({ loading }) => (loading ? "Preparing PDF..." : "Export PDF")}
             </PDFDownloadLink>
           </div>
+        </div>
+
+        <div className="mb-4">
+          <input
+            type="text"
+            placeholder="Search logs..."
+            value={searchTerm}
+            onChange={handleSearch}
+            className="w-full p-2 rounded bg-gray-700 text-white focus:outline-none focus:ring focus:ring-green-500"
+          />
         </div>
 
         <div className="overflow-x-auto">
